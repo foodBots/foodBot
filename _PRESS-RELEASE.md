@@ -34,7 +34,6 @@ Once the project moves into development, the press release can be used as a touc
 
   	The overabundance of choice and information has paralyzed consumers. Preparing food requires research, a trip to the store, a search for ingredients, and a willingness to cook. Food Robot takes care of everything but the fun part: cooking.
 
-
 ## Solution ##
 
 	Imagine a personal chef. In your phone. But it goes shopping for you, it knows more recipes than any chef in the world, and it gets smarter the more times you use it.
