@@ -25,6 +25,7 @@
     "gulp-util": "3.0.7",
     "history": "1.12.5",
     "install": "0.1.8",
+    "material-ui": "^0.14.2",
     "re-base": "1.2.1",
     "react": "0.14.0",
     "react-addons-css-transition-group": "0.14.0",
@@ -35,5 +36,10 @@
     "vinyl-buffer": "1.0.0",
     "vinyl-source-stream": "1.1.0",
     "watchify": "3.4.0"
+  },
+  "dependencies": {
+    "jquery": "^2.2.0",
+    "react": "^0.14.6",
+    "react-tap-event-plugin": "^0.2.1"
   }
 }
