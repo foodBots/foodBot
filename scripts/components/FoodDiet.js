@@ -4,72 +4,67 @@
 */
 
 import React from 'react';
-import AppBar from 'material-ui/lib/app-bar';
-import Avatar from 'material-ui/lib/avatar';
-import Card from 'material-ui/lib/card/card';
-import CardActions from 'material-ui/lib/card/card-actions';
-import CardHeader from 'material-ui/lib/card/card-header';
-import CardMedia from 'material-ui/lib/card/card-media';
-import CardTitle from 'material-ui/lib/card/card-title';
-import FlatButton from 'material-ui/lib/flat-button';
-import CardText from 'material-ui/lib/card/card-text';
+import RaisedButton from 'material-ui/lib/raised-button';
+import DropDownMenu from 'material-ui/lib/DropDownMenu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
 class FoodDiet extends React.Component {
   
-  chooseProf() {
-    console.log('hi')
+  constructor(props) {
+    super(props);
+    this.state = {
+      budget: 1,
+      time: 1,
+      diet: "",
+      value: 1
+    };
   }
+
+  handleChangeB = (e, index, value) => { 
+    event.preventDefault();
+    this.setState({budget: value})
+  };
+  
+  handleChangeT = (e, index, value) => { 
+    event.preventDefault();
+    this.setState({time: value})
+  };
+
+  handleClickD = (e, index, value) => {
+    event.preventDefault();
+    this.setState({diet: "Diet"})
+
+  }
+
+  handleClickF = (e, index, value) => {
+    event.preventDefault();
+    this.setState({diet: "Foodie"})
+
+  }
+
+  handleClick = () => {console.log("clicked")}
   
   render() {
-    return (
-      var styleMap = this.mountStyles`
+    injectTapEventPlugin();
+    return (    
+    <div>
+      <h2>Choose a Profile</h2>
+      <RaisedButton label="Diet" primary={true} onClick={this.handleClickD} />
+        
+        <DropDownMenu value={this.state.budget} onChange={this.handleChangeB}>
+          <MenuItem value={1} primaryText="$"/>
+          <MenuItem value={2} primaryText="$$"/>
+          <MenuItem value={3} primaryText="$$$"/>
+        </DropDownMenu>
 
-      .flexbox-container {
-        display: -ms-flex;
-        display: -webkit-flex;
-        display: flex;
-      }
+        <DropDownMenu value={this.state.time} onChange={this.handleChangeT}>
+          <MenuItem value={1} primaryText="20 min"/>
+          <MenuItem value={2} primaryText="1 hour"/>
+          <MenuItem value={3} primaryText="Super Prep"/>
+        </DropDownMenu>
+      <RaisedButton label="Food" primary={true} onClick={this.handleClickF} />        
 
-      .flexbox-container > div {
-        width: 50%;
-        padding: 10px;
-      }
-
-      .flexbox-container > div:first-child {
-        margin-right: 20px;
-      }`
-      <div className={styleMap.flexbox-container}>
-      <h2>Testing</h2>
-       <div>
-        <Card>
-          <CardHeader
-            avatar="http://gourmetculture.com/wp-content/uploads/2014/12/foodie-crossing-close-up.jpg"/>
-          
-          <CardTitle title="Foodie" subtitle="Something Foodie"/>
-          
-          <CardActions>
-            <FlatButton label="Choose" onClick={this.chooseProf}/>
-          </CardActions>
-          
-          <CardText>
-            Choose me!
-          </CardText>
-        </Card>
-      </div>
-
-      <div>
-        <Card>
-          <CardHeader
-            avatar="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSeZltLMUgZrzx_VAM8ZzZqetAHma5lLCEseCO-Xlo1yZRy0I-eog"/>
-          <CardTitle title="Diet" subtitle="Something Diet"/>
-          <CardActions>
-            <FlatButton label="Choose" onClick={this.chooseProf}/>
-          </CardActions>
-          <CardText>
-            No. Choose me
-          </CardText>
-        </Card>
-      </div>
     </div>
     )
   }
