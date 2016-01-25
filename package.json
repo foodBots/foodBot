@@ -1,5 +1,5 @@
 {
-  "name": "catch-of-the-day",
+  "name": "foodrobo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -27,7 +27,6 @@
     "install": "0.1.8",
     "material-ui": "^0.14.2",
     "re-base": "1.2.1",
-    "react": "0.14.0",
     "react-addons-css-transition-group": "0.14.0",
     "react-catalyst": "0.3.0",
     "react-dom": "0.14.0",

@@ -28,7 +28,7 @@ gulp.task('styles',function() {
     .pipe(gulp.dest('build/css/fonts'))
 
   // Compiles CSS
-  gulp.src('css/style.styl')
+  gulp.src('css/styles.css')
     .pipe(stylus())
     .pipe(autoprefixer())
     .pipe(gulp.dest('./build/css/'))

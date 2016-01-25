@@ -6,28 +6,23 @@
 import React from 'react';
 import AppBar from 'material-ui/lib/app-bar';
 import FontIcon from 'material-ui/lib/font-icon';
+import Colors from 'material-ui/lib/styles/colors';
+import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {open: false};
+const iconStyles = {
+    marginRight: 30,
   }
 
+export default class Header extends React.Component {
 
- 
-
+  
   render() {
-    const iconStyles = {
-      marginRight: 24,
-    };
-
     return (  
-        <AppBar
-          title="FoodRobot"
-          iconElementLeft={
-            <FontIcon className="muidocs-icon-action-home"
-            style={iconStyles} />}
-          />
+        <div>
+          <AppBar
+            title="FoodRobot"
+            iconElementLeft={<ActionHome style={iconStyles}/>}/>
+        </div>
     
     )
   }
