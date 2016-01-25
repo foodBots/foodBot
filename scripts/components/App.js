@@ -3,17 +3,12 @@
 */
 
 import React from 'react';
-
 import Header from './Header';
 import FoodDiet from './FoodDiet'
 
-
-
-import Catalyst from 'react-catalyst';
-import reactMixin from 'react-mixin';
-import autobind from 'autobind-decorator';
-
-// Firebase
+// import Catalyst from 'react-catalyst';
+// import reactMixin from 'react-mixin';
+// import autobind from 'autobind-decorator';
 
 class App extends React.Component {
 
