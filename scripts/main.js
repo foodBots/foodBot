@@ -5,15 +5,18 @@ import { createHistory } from 'history';
 
 import NotFound from './components/NotFound';
 import App from './components/App';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
 
 /*
   Routes
 */
 
-var routes = (
+const routes = (
   <Router history={createHistory()}>
     <Route path="/" component={App}/>
-    <Route path="/login" component={App}/>
+    <Route path="/signin" component={SignIn}/>
+    <Route path="/signup" component={SignUp}/>
     <Route path="*" component={NotFound}/>
   </Router>
 )
