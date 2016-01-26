@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "autobind-decorator": "1.3.2",
     "babel": "5.8.23",
     "babelify": "6.4.0",
     "browser-sync": "2.9.11",
