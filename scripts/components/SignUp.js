@@ -6,7 +6,6 @@ import $ from 'jquery';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 
-
 @autobind
 class SignUp extends React.Component {
   constructor(props) {
@@ -17,6 +16,7 @@ class SignUp extends React.Component {
   }
 
   signUp(e) {
+    injectTapEventPlugin();
     e.preventDefault();
     const user = {
       username: this.refs.username.getValue(),
