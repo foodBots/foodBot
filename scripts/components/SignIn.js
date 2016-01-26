@@ -3,10 +3,13 @@ import autobind from 'autobind-decorator';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
 
 @autobind
 class SignIn extends React.Component {
   signIn(e) {
+    injectTapEventPlugin();
     e.preventDefault();
     const user = {
       username: this.refs.username.getValue(),
