@@ -64,21 +64,18 @@ class App extends React.Component {
     this.setState({chosenType: chosenType})
   }
 
-          // <Recipe />
-
   render() {
     return (
       <div>
           <Header />
-          <FoodDiet
-                   choices={this.state.choices}
-                   prep={this.state.prep}
-                   budget={this.state.budget}
-                   setBudget={this.setBudget}
-                   setPrep={this.setPrep}
-                   profSubmit={this.profSubmit} />
-
-
+          <Recipe />
+          <FoodDiet 
+            choices={this.state.choices} 
+            prep={this.state.prep} 
+            budget={this.state.budget} 
+            setBudget={this.setBudget}
+            setPrep={this.setPrep} 
+            profSubmit={this.profSubmit} />        
       </div>
     )
   }
