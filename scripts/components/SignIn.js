@@ -16,8 +16,8 @@ class SignIn extends React.Component {
     //post username and password
     //console.log(user);
     $.post('/api/signin',this.user).done((result) => {
-      console.log('user', this.user);
-      //redirect to landing page
+      console.log('user', this.user);      // redirect to landing page
+
     });
   }
 

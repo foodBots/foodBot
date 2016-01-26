@@ -17,6 +17,7 @@ class SignUp extends React.Component {
     $.post('/api/signup',this.user).done((result) => {
       console.log('user', this.user);
       //redirect to landing page
+      
     });
   }
 
