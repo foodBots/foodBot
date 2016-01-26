@@ -16,11 +16,16 @@ class FoodDiet extends React.Component {
 
   constructor(props) {
     super(props);
+    this.styles = {
+      'display': 'block',
+      'text-align': 'center',
+      'margin': '5px'
+    }
   }
 
   renderButton = (element, index) => {
     return (
-      <RaisedButton label={element} key={element} primary={true} onClick={this.submitForm.bind(this, element)} />
+      <RaisedButton style={this.styles} label={element} key={element} primary={true} onClick={this.submitForm.bind(this, element)} />
       )
   }
 
@@ -35,13 +40,13 @@ class FoodDiet extends React.Component {
       <MenuItem value={index} key={index} primaryText={this.props.choices.prep[element]} />
     )
   }
-  
-  setBudget = (e, index, value) => {    
+
+  setBudget = (e, index, value) => {
     var text = e.target.textContent
     this.props.setBudget({text: text, value: index})
   }
 
-  setPrep = (e, index, value) => {    
+  setPrep = (e, index, value) => {
     var text = e.target.textContent
     this.props.setPrep({text: text, value: index})
   }
@@ -56,18 +61,26 @@ class FoodDiet extends React.Component {
     var budgets = Object.keys(this.props.choices.budget)
     var prep = Object.keys(this.props.choices.prep)
 
-    return (    
-    <div>
-      <h2>Choose a Profile</h2>        
-        <DropDownMenu value={this.props.budget.value} onChange={this.setBudget}>
-          {budgets.map(this.renderBudget)}          
+    return (
+    <div className="profile-container">
+      <div className="profile-item">
+        <h3 className="roboto">Choose a Budget</h3>
+        <DropDownMenu style={this.styles} value={this.props.budget.value} onChange={this.setBudget}>
+          {budgets.map(this.renderBudget)}
         </DropDownMenu>
-
-        <DropDownMenu value={this.props.prep.value} onChange={this.setPrep}>          
+      </div>
+      <br/>
+      <div className="profile-item">
+        <h3 className="roboto">Choose a Prep Time</h3>
+        <DropDownMenu style={this.styles} value={this.props.prep.value} onChange={this.setPrep}>
           {prep.map(this.renderPrep)}
         </DropDownMenu>
-      
-      {choiceButton.map(this.renderButton)}
+      </div>
+      <br/>
+      <div className="profile-item">
+        <h3 className="roboto">Choose a Profile</h3>
+        {choiceButton.map(this.renderButton)}
+      </div>
 
     </div>
     )
