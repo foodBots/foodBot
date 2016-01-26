@@ -5,6 +5,7 @@
 import React from 'react';
 import Header from './Header';
 import FoodDiet from './FoodDiet'
+import Recipe from './RecipeSwipe'
 
 // import Catalyst from 'react-catalyst';
 // import reactMixin from 'react-mixin';
@@ -58,21 +59,23 @@ class App extends React.Component {
   }
 
   profSubmit = (chosenType) => {
-    console.log(chosenType)
     this.setState({chosenType: chosenType})
   }
+
+   // <FoodDiet 
+          //   choices={this.state.choices} 
+          //   prep={this.state.prep} 
+          //   budget={this.state.budget} 
+          //   setBudget={this.setBudget}
+          //   setPrep={this.setPrep} 
+          //   profSubmit={this.profSubmit} />
 
   render() {
     return (
       <div>
           <Header />
-          <FoodDiet 
-            choices={this.state.choices} 
-            prep={this.state.prep} 
-            budget={this.state.budget} 
-            setBudget={this.setBudget}
-            setPrep={this.setPrep} 
-            profSubmit={this.profSubmit} />
+          <Recipe />
+          
       </div>
     )
   }

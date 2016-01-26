@@ -40,9 +40,10 @@
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
     "jquery": "^2.2.0",
-    "react-tap-event-plugin": "^0.2.1",
     "pg": "^4.4.3",
     "react": "^0.14.6",
-    "react-tap-event-plugin": "^0.2.1"
+    "react-swipe": "^3.0.0",
+    "react-tap-event-plugin": "^0.2.1",
+    "swipe-js-iso": "^2.0.1"
   }
 }
