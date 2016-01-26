@@ -6,16 +6,14 @@ import Card from 'material-ui/lib/card/card';
 import CardActions from 'material-ui/lib/card/card-actions';
 import CardText from 'material-ui/lib/card/card-text';
 import CardMedia from 'material-ui/lib/card/card-media';
-
-
 import $ from 'jquery';
 
 @autobind
 class Recipe extends React.Component {
-
+  
   constructor() {
-    super();
-    this.style = {
+  super();
+    this.style = { 
       width: "25%",
       textAlign: "center"
     }
@@ -23,11 +21,18 @@ class Recipe extends React.Component {
     this.cards = [1,2,3,4,5]
   }
 
-  next() {
+  next = (element) => {
     this.refs.ReactSwipe.swipe.next()
+    console.log(element)
   }
 
-  renderCard(element) {
+  yes = (element) => {
+    this.refs.ReactSwipe.swipe.next()
+    console.log(element)
+
+  }
+
+  renderCard = (element) => {
     return (
       <div key={element}>
          <Card style={this.style}>
@@ -39,10 +44,9 @@ class Recipe extends React.Component {
         </CardText>
         <CardActions>
           <button onClick={this.next}>Next</button>
-          <button onClick={this.yes}>Yes</button>
+          <button onClick={this.next}>Yes</button>   
         </CardActions>
-      </Card>
-
+      </Card>     
       </div>
     )
   }
@@ -54,10 +58,12 @@ class Recipe extends React.Component {
     var testArray = this.cards.map(this.renderCard)
     console.log(testArray)
     return (
-      <div>
+      <div> 
       <ReactSwipe
         ref="ReactSwipe"
         continuous={true}
+        speed={800}
+        callback={function(index, elem) {console.log(index, elem)}}
         >
         {this.cards.map(this.renderCard)}
       </ReactSwipe>

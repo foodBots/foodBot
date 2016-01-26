@@ -7,6 +7,7 @@ import Header from './Header';
 import FoodDiet from './FoodDiet'
 import Recipe from './RecipeSwipe'
 import autobind from 'autobind-decorator'
+import Recipe from './RecipeChoose'
 
 // import Catalyst from 'react-catalyst';
 // import reactMixin from 'react-mixin';
@@ -47,7 +48,10 @@ class App extends React.Component {
         value: 0,
         text: ""
       },
-      chosenType: ""
+      chosenType: "",
+
+      recipes: [1,2,3,4,5,6,7,8,9,10]
+  
     }
 
   }
@@ -68,7 +72,10 @@ class App extends React.Component {
     return (
       <div>
           <Header />
-          <Recipe />
+
+          <Recipe 
+            gotRecipes={this.state.recipes}/>
+          
           <FoodDiet 
             choices={this.state.choices} 
             prep={this.state.prep} 
