@@ -36,7 +36,7 @@ class App extends React.Component {
           diet: "diet"
         }
       },
-      
+
       prep: {
         value: 0,
         text: ""
@@ -47,7 +47,7 @@ class App extends React.Component {
       },
       chosenType: ""
     }
-    
+
   }
 
   setBudget = (budget) => {
@@ -62,20 +62,21 @@ class App extends React.Component {
     this.setState({chosenType: chosenType})
   }
 
-   // <FoodDiet 
-          //   choices={this.state.choices} 
-          //   prep={this.state.prep} 
-          //   budget={this.state.budget} 
-          //   setBudget={this.setBudget}
-          //   setPrep={this.setPrep} 
-          //   profSubmit={this.profSubmit} />
+          // <Recipe />
 
   render() {
     return (
       <div>
           <Header />
-          <Recipe />
-          
+          <FoodDiet
+                   choices={this.state.choices}
+                   prep={this.state.prep}
+                   budget={this.state.budget}
+                   setBudget={this.setBudget}
+                   setPrep={this.setPrep}
+                   profSubmit={this.profSubmit} />
+
+
       </div>
     )
   }

@@ -28,8 +28,8 @@ gulp.task('styles',function() {
     .pipe(gulp.dest('build/css/fonts'))
 
   // Compiles CSS
-  gulp.src('css/styles.css')
-    .pipe(stylus())
+  gulp.src('css/style.css')
+    //.pipe(stylus())
     .pipe(autoprefixer())
     .pipe(gulp.dest('./build/css/'))
     .pipe(reload({stream:true}))
@@ -65,14 +65,14 @@ function handleErrors() {
 }
 
 function buildScript(file, watch) {
-  
+
   var props = {
     entries: ['./scripts/' + file],
     debug : true,
     transform:  [babelify.configure({stage : 0 })]
   };
 
-  // watchify() if watch requested, otherwise run browserify() once 
+  // watchify() if watch requested, otherwise run browserify() once
   var bundler = watch ? watchify(browserify(props)) : browserify(props);
 
   function rebundle() {
