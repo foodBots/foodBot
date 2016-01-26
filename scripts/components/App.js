@@ -16,18 +16,63 @@ class App extends React.Component {
     super();
 
     this.state = {
-      diet : {},
-      time : {},
-      meals : {},
-      budget : {}
+      choices: {
+        prep: {
+          0: "Instant",
+          1: "Some prep",
+          2: "Lotta prep",
+          value: 0
+        },
+
+        budget: {
+          0: "$",
+          1: "$$",
+          2: "$$$",
+          value: 0
+        },
+        type: {
+          foodie: "foodie",
+          diet: "diet"
+        }
+      },
+      
+      prep: {
+        value: 0,
+        text: ""
+      },
+      budget: {
+        value: 0,
+        text: ""
+      },
+      chosenType: ""
     }
+    
+  }
+
+  setBudget = (budget) => {
+    this.setState({budget: budget})
+  }
+
+  setPrep = (prep) => {
+    this.setState({prep: prep})
+  }
+
+  profSubmit = (chosenType) => {
+    console.log(chosenType)
+    this.setState({chosenType: chosenType})
   }
 
   render() {
     return (
       <div>
           <Header />
-          <FoodDiet />
+          <FoodDiet 
+            choices={this.state.choices} 
+            prep={this.state.prep} 
+            budget={this.state.budget} 
+            setBudget={this.setBudget}
+            setPrep={this.setPrep} 
+            profSubmit={this.profSubmit} />
       </div>
     )
   }

@@ -7,63 +7,67 @@ import React from 'react';
 import RaisedButton from 'material-ui/lib/raised-button';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-
+import Catalyst from 'react-catalyst';
+import autobind from 'autobind-decorator'
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
+@autobind
 class FoodDiet extends React.Component {
-  
+
   constructor(props) {
     super(props);
-    this.state = {
-      budget: 1,
-      time: 1,
-      diet: "",
-      value: 1
-    };
   }
 
-  handleChangeB = (e, index, value) => { 
-    event.preventDefault();
-    this.setState({budget: value})
-  };
+  renderButton = (element, index) => {
+    return (
+      <RaisedButton label={element} key={element} primary={true} onClick={this.submitForm.bind(this, element)} />
+      )
+  }
+
+  renderBudget = (element, index) => {
+    return (
+      <MenuItem value={index} key={index} primaryText={this.props.choices.budget[element]} />
+    )
+  }
+
+  renderPrep = (element, index) => {
+    return (
+      <MenuItem value={index} key={index} primaryText={this.props.choices.prep[element]} />
+    )
+  }
   
-  handleChangeT = (e, index, value) => { 
-    event.preventDefault();
-    this.setState({time: value})
-  };
-
-  handleClickD = (e, index, value) => {
-    event.preventDefault();
-    this.setState({diet: "Diet"})
-
+  setBudget = (e, index, value) => {    
+    var text = e.target.textContent
+    this.props.setBudget({text: text, value: index})
   }
 
-  handleClickF = (e, index, value) => {
-    event.preventDefault();
-    this.setState({diet: "Foodie"})
-
+  setPrep = (e, index, value) => {    
+    var text = e.target.textContent
+    this.props.setPrep({text: text, value: index})
   }
 
-  handleClick = () => {console.log("clicked")}
-  
+  submitForm = (element) => {
+    this.props.profSubmit({chosenType: element})
+  }
+
   render() {
     injectTapEventPlugin();
+    var choiceButton = Object.keys(this.props.choices.type)
+    var budgets = Object.keys(this.props.choices.budget)
+    var prep = Object.keys(this.props.choices.prep)
+
     return (    
     <div>
-      <h2>Choose a Profile</h2>
-      <RaisedButton label="Diet" primary={true} onClick={this.handleClickD} />
-        
-        <DropDownMenu value={this.state.budget} onChange={this.handleChangeB}>
-          <MenuItem value={1} primaryText="$"/>
-          <MenuItem value={2} primaryText="$$"/>
-          <MenuItem value={3} primaryText="$$$"/>
+      <h2>Choose a Profile</h2>        
+        <DropDownMenu value={this.props.budget.value} onChange={this.setBudget}>
+          {budgets.map(this.renderBudget)}          
         </DropDownMenu>
 
-        <DropDownMenu value={this.state.time} onChange={this.handleChangeT}>
-          <MenuItem value={1} primaryText="20 min"/>
-          <MenuItem value={2} primaryText="1 hour"/>
-          <MenuItem value={3} primaryText="Super Prep"/>
+        <DropDownMenu value={this.props.prep.value} onChange={this.setPrep}>          
+          {prep.map(this.renderPrep)}
         </DropDownMenu>
-      <RaisedButton label="Food" primary={true} onClick={this.handleClickF} />        
+      
+      {choiceButton.map(this.renderButton)}
 
     </div>
     )
