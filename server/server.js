@@ -25,10 +25,11 @@ var client = new pg.Client(connectionString);
 client.connect();
 
 //create db tables
-var createUserTable = client.query(db.createUserTable);
-var createProfileTable = client.query(db.createProfileTable);
-var createRecipeTable = client.query(db.createRecipeTable);
 
-console.log('Listening...');
+var createUsersTable = client.query(db.createUsersTable);
+var createRecipesTable = client.query(db.createRecipesTable);
+var createProfilesTable = client.query(db.createProfilesTable);
+var createUserRecipesTable = client.query(db.createUserRecipesTable);
+
 
 module.exports = app;
