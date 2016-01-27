@@ -1,13 +1,13 @@
-var source = require('vinyl-source-stream');
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 var plug = require('gulp-load-plugins')({ lazy: true });
 var browserify = require('browserify');
 var babelify = require('babelify');
-var watchify = require('watchify');
-var notify = require('gulp-notify');
 var babel = require('babel-core/register');
 var source = require('vinyl-source-stream');
+var gutil = require('gulp-util');
+
+var watchify = require('watchify');
+var notify = require('gulp-notify');
 
 var stylus = require('gulp-stylus');
 var autoprefixer = require('gulp-autoprefixer');
@@ -17,8 +17,7 @@ var buffer = require('vinyl-buffer');
 
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
-var historyApiFallback = require('connect-history-api-fallback')
-
+var historyApiFallback = require('connect-history-api-fallback');
 
 /*
   Styles Task
@@ -109,6 +108,14 @@ gulp.task('scripts', function() {
   return buildScript('main.js', false); // this will once run once because we set watch to false
 });
 
+gulp.task('test', function () {
+  return gulp.src('./specs/**/*.js', { read: false })
+    .pipe(plug.mocha({
+      compilers: {
+        js: babel
+      }
+    }));
+});
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
