@@ -9,11 +9,11 @@ module.exports = {
 		var uid = req.params.id;
 		var amtOfRecipes = req.body.amount || 5;
 
-		// Create Connection
+		// Create Postgress Connection
 		var client = new pg.Client(connectionString);
 		client.connect();
 
-		//Temporary Until Find A Better Way To Decide Which Meals To Send
+		// Temporary Until Find A Better Way To Decide Which Meals To Send
 		// var random = Math.floor(Math.random() * amtOfRecipes) + 1
 
 		// Query allergies for User and Recipes
