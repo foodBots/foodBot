@@ -7,7 +7,7 @@ module.exports = {
     'email VARCHAR(20) NOT NULL' +
     ')',
   //sql command for user profile
-  createRecipeTable: 'CREATE TABLE IF NOT EXISTS Recipe ' +
+  createRecipeTable: 'CREATE TABLE IF NOT EXISTS Recipes ' +
     '(' +
     'id serial NOT NULL PRIMARY KEY, ' +
     'name varchar(20),' + 
@@ -18,7 +18,7 @@ module.exports = {
     'cost int ' +
     ')',
   //sql command for recipe profile
-  createProfileTable: 'CREATE TABLE IF NOT EXISTS Profile' +
+  createProfileTable: 'CREATE TABLE IF NOT EXISTS Profiles' +
     '('+
      'id serial NOT NULL PRIMARY KEY,' +
      'name varchar(20), ' +
