@@ -11,6 +11,7 @@ class SignUp extends React.Component {
     this.buttonStyles = {
       'display': 'block'
     }
+    this.signUp = this.signUp.bind(this);
   }
 
   signUp(e) {
@@ -22,8 +23,8 @@ class SignUp extends React.Component {
     }
     this.refs.signupForm.reset();
     //post username and password
-    $.post('/api/signup',this.user).done((result) => {
-      console.log('user', this.user);
+    $.post('/foodBot/auth/signup', user).done((result) => {
+      console.log('result', result, 'user', user);
       //redirect to landing page
 
     });
