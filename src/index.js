@@ -1,20 +1,16 @@
-import React  from 'react';
-import ReactDOM  from 'react-dom';
+import React from 'react';
+import { render }  from 'react-dom';
 import { Router, Route } from 'react-router';
 import { createHistory } from 'history';
 
 //import API search
 
-import NotFound from './components/NotFound';
-import App from './components/App';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-
+import App from './scripts/components/App';
+import SignIn from './scripts/components/SignIn';
+import SignUp from './scripts/components/SignUp';
+import NotFound from './scripts/components/NotFound';
 
 //incl API key
-
-
-
 
 /*
   Routes
@@ -27,7 +23,6 @@ const routes = (
     <Route path="/signup" component={SignUp}/>
     <Route path="*" component={NotFound}/>
   </Router>
-  )
+)
 
-
-ReactDOM.render(routes, document.querySelector('#main'));
+render(routes, document.getElementById('root'));

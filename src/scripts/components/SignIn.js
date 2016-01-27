@@ -6,27 +6,27 @@ import $ from 'jquery';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 
-@autobind
-class SignUp extends React.Component {
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.buttonStyles = {
-      'display': 'block'
+      'display': 'block',
+      'textAlign': 'center'
     }
   }
 
-  signUp(e) {
+  signIn(e) {
     injectTapEventPlugin();
     e.preventDefault();
     const user = {
       username: this.refs.username.getValue(),
       password: this.refs.password.getValue()
     }
-    this.refs.signupForm.reset();
+    this.refs.signinForm.reset();
     //post username and password
-    $.post('/api/signup',this.user).done((result) => {
-      console.log('user', this.user);
-      //redirect to landing page
+    //console.log(user);
+    $.post('/api/signin',this.user).done((result) => {
+      console.log('user', this.user);      // redirect to landing page
 
     });
   }
@@ -34,13 +34,15 @@ class SignUp extends React.Component {
   render() {
     injectTapEventPlugin();
     return (
+
       <div>
         <Header />
         <div className="signin-container">
-          <form className="sign-up" ref="signupForm" onSubmit={this.signUp}>
+          <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
             <TextField type="text" ref="username" hintText="username" floatingLabelText="Enter username" /><br/>
-            <TextField type="password" ref="password" hintText="password" floatingLabelText="Enter password" /><br/>
-            <RaisedButton style={this.buttonStyles} type="submit" label="Sign Up" />
+            <TextField type="password" ref="password" hintText="password" floatingLabelText="Enter password"  /><br/>
+            <RaisedButton style={this.buttonStyles} type="submit" label="Sign In" /><br/>
+            <RaisedButton style={this.buttonStyles} type="submit" label="Register" secondary={true} linkButton={true} href="/signup"/>
           </form>
         </div>
       </div>
@@ -48,4 +50,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+export default SignIn;
