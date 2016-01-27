@@ -25,9 +25,9 @@ class SignIn extends React.Component {
     this.refs.signinForm.reset();
     //post username and password
     //console.log(user);
-    $.post('/api/signin',this.user).done((result) => {
-      console.log('user', this.user);      // redirect to landing page
-
+    $.post('/foodBot/auth/signin',this.user).done((result) => {
+      console.log('user', this.user);
+      this.props.history.pushState(user, '/')
     });
   }
 

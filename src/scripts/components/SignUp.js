@@ -17,6 +17,7 @@ class SignUp extends React.Component {
   signUp(e) {
     injectTapEventPlugin();
     e.preventDefault();
+    const router = this.context.router;
     const user = {
       username: this.refs.username.getValue(),
       password: this.refs.password.getValue()
@@ -26,7 +27,9 @@ class SignUp extends React.Component {
     $.post('/foodBot/auth/signup', user).done((result) => {
       console.log('result', result, 'user', user);
       //redirect to landing page
-
+      console.log('props',this.props);
+      // this.setState({user: user});
+      this.props.history.pushState(user, '/')
     });
   }
 
@@ -46,5 +49,9 @@ class SignUp extends React.Component {
     )
   }
 }
+
+// SignUp.contextTypes = {
+//   router: React.propTypes.func.isRequired
+// };
 
 export default SignUp;
