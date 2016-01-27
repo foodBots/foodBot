@@ -8,10 +8,11 @@ var helpers = require('./helpers.js');
 
 module.exports = function(app, express) {
 
-	// app.get('/foodBot/user/:id', userController.getUser); // Add AuthChecker
-	// app.post('/foodBot/user/signup', userController.signup);
-	// app.post('/foodBot/user/signin', userController.signout); // Add AuthChecker
-	// app.get('/foodBot/user/signedin', userController.signedin);
+	app.get('/foodBot/profile/:id', userController.retrieveOneUser); // Add AuthChecker
+  app.get('/foodBot/profile', userController.retrieveAllUsers); // Add AuthChecker
+	app.post('/foodBot/auth/signup', userController.signup);
+	app.post('/foodBot/auth/signin', userController.signin); // Add AuthChecker
+	// app.get('/foodBot/auth/signedin', userController.signedin);
 
 	// app.post('/foodBot/recipes/', recipeController.addMeal); // Add AuthChecker
 	app.get('/foodBot/recipes/:id',  recipeController.retrieveSuggestedRecipes) // Add AuthChecker
