@@ -1,5 +1,4 @@
 import React from 'react';
-import autobind from 'autobind-decorator';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
@@ -13,6 +12,7 @@ class SignIn extends React.Component {
       'display': 'block',
       'textAlign': 'center'
     }
+    this.signIn = this.signIn.bind(this);
   }
 
   signIn(e) {
@@ -25,9 +25,9 @@ class SignIn extends React.Component {
     this.refs.signinForm.reset();
     //post username and password
     //console.log(user);
-    $.post('/api/signin',this.user).done((result) => {
-      console.log('user', this.user);      // redirect to landing page
-
+    $.post('/foodBot/auth/signin',this.user).done((result) => {
+      console.log('user', this.user);
+      this.props.history.pushState(user, '/')
     });
   }
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import autobind from 'autobind-decorator';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
@@ -12,21 +11,25 @@ class SignUp extends React.Component {
     this.buttonStyles = {
       'display': 'block'
     }
+    this.signUp = this.signUp.bind(this);
   }
 
   signUp(e) {
     injectTapEventPlugin();
     e.preventDefault();
+    const router = this.context.router;
     const user = {
       username: this.refs.username.getValue(),
       password: this.refs.password.getValue()
     }
     this.refs.signupForm.reset();
     //post username and password
-    $.post('/api/signup',this.user).done((result) => {
-      console.log('user', this.user);
+    $.post('/foodBot/auth/signup', user).done((result) => {
+      console.log('result', result, 'user', user);
       //redirect to landing page
-
+      console.log('props',this.props);
+      // this.setState({user: user});
+      this.props.history.pushState(user, '/')
     });
   }
 
@@ -46,5 +49,9 @@ class SignUp extends React.Component {
     )
   }
 }
+
+// SignUp.contextTypes = {
+//   router: React.propTypes.func.isRequired
+// };
 
 export default SignUp;
