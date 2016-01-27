@@ -20,6 +20,7 @@ const routes = (
     <Route path="/signup" component={SignUp}/>
     <Route path="*" component={NotFound}/>
   </Router>
-)
+  )
+
 
 ReactDOM.render(routes, document.querySelector('#main'));

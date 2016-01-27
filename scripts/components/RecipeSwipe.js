@@ -12,10 +12,10 @@ import $ from 'jquery';
 
 @autobind
 class Recipe extends React.Component {
-  
+
   constructor() {
-  super();
-    this.style = { 
+    super();
+    this.style = {
       width: "25%",
       textAlign: "center"
     }
@@ -23,11 +23,11 @@ class Recipe extends React.Component {
     this.cards = [1,2,3,4,5]
   }
 
-  next = () => {
+  next() {
     this.refs.ReactSwipe.swipe.next()
   }
 
-  renderCard = (element) => {
+  renderCard(element) {
 
     return (
       <div>
@@ -40,10 +40,10 @@ class Recipe extends React.Component {
         </CardText>
         <CardActions>
           <button onClick={this.next}>Next</button>
-          <button onClick={this.yes}>Yes</button>   
+          <button onClick={this.yes}>Yes</button>
         </CardActions>
-      </Card>     
-   
+      </Card>
+
       </div>
     )
   }
@@ -55,7 +55,7 @@ class Recipe extends React.Component {
     var testArray = this.cards.map(this.renderCard)
     console.log(testArray)
     return (
-      <div> 
+      <div>
       <ReactSwipe
         ref="ReactSwipe"
         continuous={true}

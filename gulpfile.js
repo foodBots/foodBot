@@ -1,10 +1,13 @@
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var plug = require('gulp-load-plugins')({ lazy: true });
 var browserify = require('browserify');
 var babelify = require('babelify');
 var watchify = require('watchify');
 var notify = require('gulp-notify');
+var babel = require('babel-core/register');
+var source = require('vinyl-source-stream');
 
 var stylus = require('gulp-stylus');
 var autoprefixer = require('gulp-autoprefixer');
@@ -69,7 +72,10 @@ function buildScript(file, watch) {
   var props = {
     entries: ['./scripts/' + file],
     debug : true,
-    transform:  [babelify.configure({stage : 0 })]
+    transform:  [babelify.configure({
+      presets: ['stage-1','react', 'es2015'],
+      plugins: ['transform-decorators-legacy']
+    })]
   };
 
   // watchify() if watch requested, otherwise run browserify() once
@@ -102,6 +108,7 @@ function buildScript(file, watch) {
 gulp.task('scripts', function() {
   return buildScript('main.js', false); // this will once run once because we set watch to false
 });
+
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
