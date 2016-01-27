@@ -5,7 +5,7 @@ module.exports = {
   signup: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("INSERT INTO Users (password, email) VALUES ('"+req.body.password+"','"+req.body.email+"');");
+    var query = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"');");
     // currently not rejecting signup attempts for existing users, instead creates new items if email already exists
     query.on('end', function(results) {
       res.send(201);
@@ -42,20 +42,13 @@ module.exports = {
   signin: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("SELECT password FROM Users where email ='"+req.body.email+"'", function(err, data) {
+    var query = client.query("SELECT * FROM Users where email ='"+req.body.email+"' AND password = crypt('"+req.body.password+"', password);", function(err, data) {
       if (err) {
         res.status(500).json("We're sorry, an error has occurred");
-      } else if (data.rowCount === 0) {
-        res.status(400).json("User does not exist in our records");
-      }
-    });
-     query.on('row', function(results) {
-      //input password does not match password in database
-      if (results.password !== req.body.password) {
-        res.status(400).json("Incorrect password");
-      }
-      else if (results.password === req.body.password) {
-        res.status(201).json("User signed in");
+      } else if (data.rows.length < 1) {
+        res.status(400).json("Username or password is incorrect");
+      } else {
+        res.status(201).json("Sign in successful");
       }
     });
     query.on('end', function() {

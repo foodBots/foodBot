@@ -3,8 +3,8 @@ module.exports = {
   createUsersTable: 'CREATE TABLE IF NOT EXISTS Users' + 
     '(' +
     'id SERIAL NOT NULL PRIMARY KEY,' +
-    'password VARCHAR(20) NOT NULL,' +
-    'email VARCHAR(20) NOT NULL' +
+    'password VARCHAR(255) NOT NULL,' +
+    'email VARCHAR(25) NOT NULL' +
     ')',
   //sql command for user profile
   createRecipesTable: 'CREATE TABLE IF NOT EXISTS Recipes' +
