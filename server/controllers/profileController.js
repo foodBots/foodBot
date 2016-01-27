@@ -45,5 +45,27 @@ module.exports = {
 			res.send(sendData);
 		});
 
+	},
+
+	addUserMeal : function (req, res){
+
+		// Get Client Data
+		var uid = req.params.id;
+		var recipeAdded = req.body.mealID;
+
+		// Create Postgress Connection
+		var client = new pg.Client(connectionString);
+		client.connect();
+
+		// Create Insert Meal Query 
+		var addUserRecipeQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created) VALUES (" + uid + "," + recipeAdded + ", false)") ;
+		//TODO: MAKE RESTRAINT TO NOT ALLOW DUPLICATES
+
+		// After Added Send Client 200 Status Code
+		addUserRecipeQuery.on("end", function (){
+			res.sendStatus(200);
+		})
+		res.sendStatus(409)
+
 	}
 }
