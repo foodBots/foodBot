@@ -14,7 +14,7 @@ module.exports = {
 		client.connect();
 
 		//Temporary Until Find A Better Way To Decide Which Meals To Send
-		var random = Math.floor(Math.random() * amtOfRecipes) + 1
+		// var random = Math.floor(Math.random() * amtOfRecipes) + 1
 
 		// Query allergies for User and Recipes
 		var allergiesQuery = client.query("SELECT allergies FROM Profiles WHERE id = " + uid + "");
@@ -29,11 +29,11 @@ module.exports = {
 			userAllergies = row.allergies;
 		});
 
-		// On row add if no user allergys in recipe ingredients add recipe to results
+		// On row add if no user allergies in recipe ingredients add recipe to results
 		foodQuery.on("row", function (row) {
-			var foodIngredients = row.ingredients;
-			if (foodIngredients) {
-				var allergyInFood =  foodIngredients.some(function (food) {
+			var recipeIngredients = row.ingredients;
+			if (recipeIngredients) {
+				var allergyInFood =  recipeIngredients.some(function (food) {
 					return userAllergies.indexOf(food) !== -1;
 				});
 				if (!allergyInFood) {
