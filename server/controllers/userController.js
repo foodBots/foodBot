@@ -1,7 +1,8 @@
+var pg = require('pg');
+var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
+
 module.exports = {
   signup: function(req, res) {
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
     var client = new pg.Client(connectionString);
     client.connect();
     var query = client.query("INSERT INTO Users (password, email) VALUES ('"+req.body.password+"','"+req.body.email+"');");
@@ -12,8 +13,6 @@ module.exports = {
     });
   }, 
   retrieveOneUser: function(req, res) {
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
     var client = new pg.Client(connectionString);
     client.connect();
     var query = client.query("SELECT * FROM Users WHERE id = "+req.params.id+";");
@@ -27,8 +26,6 @@ module.exports = {
     }); 
   },
   retrieveAllUsers: function(req, res) {
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
     var client = new pg.Client(connectionString);
     client.connect();
     var allUsers = [];
@@ -43,25 +40,25 @@ module.exports = {
     });
   },
   signin: function(req, res) {
-    var password = req.body.password;
-    var email = req.body.email;
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("SELECT password FROM Users where email ='"+req.body.email+"'");
+    var query = client.query("SELECT password FROM Users where email ='"+req.body.email+"'", function(err, data) {
+      if (err) {
+        res.status(500).json("We're sorry, an error has occurred");
+      } else if (data.rowCount === 0) {
+        res.status(400).json("User does not exist in our records");
+      }
+    });
      query.on('row', function(results) {
       //input password does not match password in database
       if (results.password !== req.body.password) {
         res.status(400).json("Incorrect password");
       }
-      else {
+      else if (results.password === req.body.password) {
         res.status(201).json("User signed in");
       }
     });
     query.on('end', function() {
-      //if no email was found and res.status was not set, declare error to client
-      res.status(400).json("USER does not exist");
       client.end();
     });
   }
