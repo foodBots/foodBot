@@ -29,7 +29,6 @@ var createUserTable = client.query(db.createUserTable);
 var createProfileTable = client.query(db.createProfileTable);
 var createRecipeTable = client.query(db.createRecipeTable);
 
-
-var addUserToTable = client.query(User.signUpUser);
+console.log('Listening...');
 
 module.exports = app;
