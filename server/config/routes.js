@@ -14,7 +14,7 @@ module.exports = function(app, express) {
 	// app.get('/foodBot/user/signedin', userController.signedin);
 
 	// app.post('/foodBot/recipes/', recipeController.addMeal); // Add AuthChecker
-	// app.get('/foodBot/recipes/:id', recipeController.getSuggestedMeals); // Add AuthChecker
+	app.get('/foodBot/recipes/:id',  recipeController.retrieveSuggestedRecipes) // Add AuthChecker
 
 	// app.get('/foodBot/user/home/:id', dashboardController.getUserMeals) // Add AuthChecker
 	// app.post('/foodBot/user/home/:id', dashboardController.addMeal); // Add AuthChecker
