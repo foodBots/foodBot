@@ -20,46 +20,46 @@ class FoodDiet extends React.Component {
       'display': 'block',
       'text-align': 'center',
       'margin': '5px'
-    }
+    };
   }
 
-  renderButton = (element, index) => {
+  renderButton(element, index){
     return (
       <RaisedButton style={this.styles} label={element} key={element} primary={true} onClick={this.submitForm.bind(this, element)} />
       )
   }
 
-  renderBudget = (element, index) => {
+  renderBudget(element, index) {
     return (
       <MenuItem value={index} key={index} primaryText={this.props.choices.budget[element]} />
     )
   }
 
-  renderPrep = (element, index) => {
+  renderPrep(element, index) {
     return (
       <MenuItem value={index} key={index} primaryText={this.props.choices.prep[element]} />
     )
   }
 
-  setBudget = (e, index, value) => {
+  setBudget(e, index, value) {
     var text = e.target.textContent
     this.props.setBudget({text: text, value: index})
   }
 
-  setPrep = (e, index, value) => {
+  setPrep(e, index, value) {
     var text = e.target.textContent
     this.props.setPrep({text: text, value: index})
   }
 
-  submitForm = (element) => {
+  submitForm(element)   {
     this.props.profSubmit({chosenType: element})
   }
 
   render() {
     injectTapEventPlugin();
-    var choiceButton = Object.keys(this.props.choices.type)
-    var budgets = Object.keys(this.props.choices.budget)
-    var prep = Object.keys(this.props.choices.prep)
+    const choiceButton = Object.keys(this.props.choices.type)
+    const budgets = Object.keys(this.props.choices.budget)
+    const prep = Object.keys(this.props.choices.prep)
 
     return (
     <div className="profile-container">

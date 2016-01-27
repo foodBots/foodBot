@@ -6,11 +6,13 @@ import React from 'react';
 import Header from './Header';
 import FoodDiet from './FoodDiet'
 import Recipe from './RecipeSwipe'
+import autobind from 'autobind-decorator'
 
 // import Catalyst from 'react-catalyst';
 // import reactMixin from 'react-mixin';
 // import autobind from 'autobind-decorator';
 
+@autobind
 class App extends React.Component {
 
   constructor() {
@@ -50,15 +52,15 @@ class App extends React.Component {
 
   }
 
-  setBudget = (budget) => {
+  setBudget(budget) {
     this.setState({budget: budget})
   }
 
-  setPrep = (prep) => {
+  setPrep(prep) {
     this.setState({prep: prep})
   }
 
-  profSubmit = (chosenType) => {
+  profSubmit(chosenType) {
     this.setState({chosenType: chosenType})
   }
 
