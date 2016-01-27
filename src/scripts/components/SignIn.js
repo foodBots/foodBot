@@ -1,5 +1,4 @@
 import React from 'react';
-import autobind from 'autobind-decorator';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
