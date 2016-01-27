@@ -12,6 +12,7 @@ class SignIn extends React.Component {
       'display': 'block',
       'textAlign': 'center'
     }
+    this.signIn = this.signIn.bind(this);
   }
 
   signIn(e) {

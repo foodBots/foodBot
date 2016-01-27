@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var plug = require('gulp-load-plugins')({ lazy: true });
+var nodemon = require('gulp-nodemon');
 var browserify = require('browserify');
 var babelify = require('babelify');
 var babel = require('babel-core/register');
@@ -48,12 +49,20 @@ gulp.task('images',function(){
 /*
   Browser Sync
 */
+
+var paths = {
+  // all our client app js files, not including 3rd party js files
+  scripts: ['build/**/*.js'],
+  html: ['build//*.html', 'build/index.html'],
+  styles: ['build/css/style.css']
+};
 gulp.task('browser-sync', function() {
     browserSync({
         // we need to disable clicks and forms for when we test multiple rooms
-        server : {},
+        proxy: 'localhost:8000',
         middleware : [ historyApiFallback() ],
-        ghostMode: false
+        ghostMode: false,
+        files: paths.scripts.concat(paths.html, paths.styles)
     });
 });
 
@@ -117,8 +126,15 @@ gulp.task('test', function () {
     }));
 });
 
+gulp.task('serve', function () {
+  nodemon({
+    script: './server/server.js',
+    ignore: 'node_modules/**/*.js'
+  });
+});
+
 // run 'scripts' task first, then watch for future changes
-gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
+gulp.task('default', ['images','styles','scripts','browser-sync','serve'], function() {
   gulp.watch('css/**/*', ['styles']); // gulp watch for stylus changes
   return buildScript('main.js', true); // browserify watch for JS changes
 });
