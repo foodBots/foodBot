@@ -12,6 +12,7 @@ import AppBar from 'material-ui/lib/app-bar';
 import FontIcon from 'material-ui/lib/font-icon';
 import Colors from 'material-ui/lib/styles/colors';
 import ActionHome from 'material-ui/lib/svg-icons/action/home';
+import FlatButton from 'material-ui/lib/flat-button';
 
 
 //NavBar
@@ -19,6 +20,7 @@ import IconButton from 'material-ui/lib/icon-button';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/lib/menus/menu-item';
+import { Router, Route, Link } from 'react-router'
 
 const iconStyles = {
     marginRight: 30,
@@ -28,13 +30,14 @@ export default class Header extends React.Component {
 
   render() {
     injectTapEventPlugin();
-    return (  
+    return (
           <div>
           <AppBar
             title="FoodRobot"
             iconElementLeft={<ActionHome style={iconStyles}/>}
             iconElementRight={
-          <IconMenu
+          <FlatButton label="Profile" linkButton={true} href="/makeprofile"/>
+          /*<IconMenu
             iconButtonElement={
           <IconButton><MoreVertIcon /></IconButton>
              }
@@ -45,9 +48,10 @@ export default class Header extends React.Component {
         <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="View Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Sign out" onClick={(event) => this.props.redirect(event.target.textContent)} />
-      </IconMenu>}/>
+        <Link to="/makeprofile"><MenuItem primaryText="test"/></Link>
+      </IconMenu>*/}/>
       </div>
-    
+
     )
   }
 }

@@ -1,6 +1,6 @@
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
-var auth = require('../config/authOperations.js');
+//var auth = require('../config/authOperations.js');
 
 module.exports = {
   signup: function(req, res) {
@@ -11,32 +11,32 @@ module.exports = {
       if (err) {
         res.status(500).json("We're sorry, an error has occurred");
       } else if (data.rows.length > 0) {
-        //res.status(400).json('User with that email already exists');
-        res.redirect('/foodBot/auth/signup');
+        res.status(400).json('User with that email already exists');
+        // res.redirect('/foodBot/auth/signup');
         // res.send({
         //   // status: 400,
         //   // json: 'User with that email already exists',
         //   redirect: '/signup'
         // });
       } else {
-      var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
-        var userId = data.rows[0].id;
-        res.status(201).json(userId);
-      });    
-      createUserQuery.on('end', function(results) {
-        console.log('USER Q:', createUserQuery);
-        console.log('results:', results);
-        auth.createSession(req, res, req.body.email)
-        res.status(201).json('User session created');
-        client.end();
-      });
+        var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
+          var userId = data.rows[0].id;
+          res.status(201).json(userId);
+        });
+      // createUserQuery.on('end', function(results) {
+      //   console.log('USER Q:', createUserQuery);
+      //   console.log('results:', results);
+      //   auth.createSession(req, res, req.body.email)
+      //   res.status(201).json('User session created');
+      //   client.end();
+      // });
 
       }
     });
-    checkUserQuery.on('end', function(results) {
-      client.end();
-    });
-  }, 
+    // checkUserQuery.on('end', function(results) {
+    //   client.end();
+    // });
+  },
   retrieveOneUser: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
@@ -48,7 +48,7 @@ module.exports = {
       //if no id  was found and res.status was not set, declare error to client
       res.status(400).json("USER does not exist");
       client.end();
-    }); 
+    });
   },
   retrieveAllUsers: function(req, res) {
     var client = new pg.Client(connectionString);

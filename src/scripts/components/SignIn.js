@@ -13,23 +13,42 @@ class SignIn extends React.Component {
       'display': 'block',
       'textAlign': 'center'
     }
+    this.state = {
+      'error': ''
+    }
     this.signIn = this.signIn.bind(this);
+    this.clearError = this.clearError.bind(this);
   }
 
   signIn(e) {
     injectTapEventPlugin();
     e.preventDefault();
     const user = {
-      username: this.refs.username.getValue(),
+      email: this.refs.email.getValue(),
       password: this.refs.password.getValue()
     }
     this.refs.signinForm.reset();
-    //post username and password
+    //post email and password
     //console.log(user);
-    $.post('/foodBot/auth/signin',this.user).done((result) => {
-      console.log('user', this.user);
-      this.props.history.pushState(user, '/recipechoose')
+    $.post('/foodBot/auth/signin',user).done((result) => {
+      console.log('user', user);
+      this.props.history.pushState(user, '/')
+    })
+    .fail((error) => {
+      if(error.status === 400) {
+        this.setState({error:error.responseText});
+        // console.log(error.responseText);
+        // this.refs.signupForm.reset();
+      }
     });
+  }
+
+  clearError() {
+    // this.setState({error: ''});
+    // console.log(this.state);
+    if (this.state.error.length > 0) {
+      this.setState({error:''});
+    }
   }
 
   render() {
@@ -40,7 +59,7 @@ class SignIn extends React.Component {
         <Header />
         <div className="signin-container">
           <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
-            <TextField type="text" ref="username" hintText="username" floatingLabelText="Enter username" /><br/>
+            <TextField type="text" ref="email" hintText="email" floatingLabelText="Enter email" errorText={this.state.error} onChange={this.clearError}/><br/>
             <TextField type="password" ref="password" hintText="password" floatingLabelText="Enter password"  /><br/>
             <RaisedButton style={this.buttonStyles} type="submit" label="Sign In" /><br/>
             <RaisedButton style={this.buttonStyles} type="submit" label="Register" secondary={true} linkButton={true} href="/signup"/>

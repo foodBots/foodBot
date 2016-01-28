@@ -32,19 +32,19 @@ class App extends React.Component {
       //Recipes from GET request go here
       recipes: [1,2,3,4,5,6,7,8,9,10],
       messages: [],
-  
+
       componentRoute: {
         "Profile Settings": "makeprofile",
         "Swipe Recipes": "recipechoose",
         "View Recipes": "recipeview",
         "Sign out": "signout"
       },
-    
+
       redirect: (text) => {
         console.log("route is", this.state.componentRoute[text])
         this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
       },
-    
+
       setBudget: (budget) => {
         this.setState({budget})
       },
@@ -67,7 +67,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-      <Header 
+      <Header
         redirect={this.state.redirect.bind(this)}/>
       </div>
     )
@@ -75,19 +75,19 @@ class App extends React.Component {
 
 };
 export default App;
- 
+
 
      //  <Recipe recipes={this.state.recipes} />
 
       // <ProfileMake
-      // choices={this.state.choices} 
-      // prep={this.state.prep} 
+      // choices={this.state.choices}
+      // prep={this.state.prep}
       // budget={this.state.budget}
 
       // setBudget={this.setBudget.bind(this)}
       // setPrep={this.setPrep.bind(this)}
-      // profSubmit={this.profSubmit.bind(this)}/> 
+      // profSubmit={this.profSubmit.bind(this)}/>
 
-     //<PairChatRoom 
+     //<PairChatRoom
     // messages={this.state.messages}
     // submitChat={this.submitChat.bind(this)}/>

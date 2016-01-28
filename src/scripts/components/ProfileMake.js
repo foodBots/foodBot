@@ -51,7 +51,7 @@ class ProfileMake extends React.Component {
     <div className="profile-container">
       <div className="profile-item">
         <h3 className="roboto">Choose a Budget</h3>
-        <DropDownMenu style={this.styles} value={this.props.location.state.budget.value} 
+        <DropDownMenu style={this.styles} value={this.props.location.state.budget.value}
             onChange={(event, index, value) => this.props.location.state.setBudget({value: index, text: event.target.textContent})}>
           {budgets.map((budgetItem, index) => this.renderBudget(budgetItem, index))}
         </DropDownMenu>
@@ -66,7 +66,7 @@ class ProfileMake extends React.Component {
       <div className="profile-item">
         <h3 className="roboto">Choose a Profile</h3>
         {choiceButton.map((typeItem, index) => this.renderChoice(typeItem, index))}
-      </div>     
+      </div>
       </div>
     </div>
     )
