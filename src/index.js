@@ -1,3 +1,5 @@
+import './css/styles.css'
+
 import React from 'react';
 import { render }  from 'react-dom';
 import { Router, Route } from 'react-router';
@@ -11,6 +13,10 @@ import SignUp from './scripts/components/SignUp';
 import NotFound from './scripts/components/NotFound';
 
 //incl API key
+
+//some kind of state defined here
+
+
 
 /*
   Routes

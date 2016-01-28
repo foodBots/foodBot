@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header.js'
 import ProfileMake from './ProfileMake'
 import Recipe from './RecipeChoose'
+import RecipeView from './RecipeView'
 import SignIn from './SignIn'
 import PairChatRoom from './PairChatRoom'
 
@@ -52,22 +53,26 @@ class App extends React.Component {
     return (
       <div>
       <Header />
-      <PairChatRoom 
-        messages={this.state.messages}
-        submitChat={this.submitChat.bind(this)}/>
+
       </div>
     )
   }
 
 };
 export default App;
-     // <ProfileMake
-     //  choices={this.state.choices} 
-     //  prep={this.state.prep} 
-     //  budget={this.state.budget}
-
-     //  setBudget={this.setBudget.bind(this)}
-     //  setPrep={this.setPrep.bind(this)}
-     //  profSubmit={this.profSubmit.bind(this)}/>   
+ 
 
      //  <Recipe recipes={this.state.recipes} />
+
+      // <ProfileMake
+      // choices={this.state.choices} 
+      // prep={this.state.prep} 
+      // budget={this.state.budget}
+
+      // setBudget={this.setBudget.bind(this)}
+      // setPrep={this.setPrep.bind(this)}
+      // profSubmit={this.profSubmit.bind(this)}/> 
+
+     //<PairChatRoom 
+    // messages={this.state.messages}
+    // submitChat={this.submitChat.bind(this)}/>
