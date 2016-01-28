@@ -67,5 +67,28 @@ module.exports = {
 		})
 		res.sendStatus(409)
 
-	}
-}
+	},
+  retrieveOneUser: function(req, res, next) {
+    var client = new pg.Client(connectionString);
+    client.connect();
+    var userId = req.body.id;
+    var query = client.query('SELECT NAME, RESTRICTIONS, ALLERGIES, BUDGET, MATCH FROM Users INNER JOIN Users ON'+userId+'= Profiles.ID;')
+    query.on('row', function(userData) {
+      res.status(200).json(userData);
+    });
+    query.on('end', function() {
+      client.end();
+    });
+  },
+  retrieveAllUsers: function(req, res, next) {
+    var client = new pg.Client(connectionString);
+    client.connect();
+    var query = client.query('SELECT * FROM Profiles;');
+    query.on('row', function(allUserData) {
+      res.status(200).json(allUserData);
+    });
+    query.on('end', function() {
+      client.end();
+    });
+  }
+};
