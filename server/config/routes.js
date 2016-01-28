@@ -3,7 +3,6 @@ var matchController = require('../controllers/matchController.js');
 var recipeController = require('../controllers/recipeController.js');
 var userController = require('../controllers/userController.js');
 
-var dashboardController = require('../controllers/dashboardController.js');
 var profileController = require('../controllers/profileController.js');
 var mealController = require('../controllers/mealController.js');
 
