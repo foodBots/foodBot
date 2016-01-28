@@ -66,5 +66,4 @@ var createProfilesTable = client.query(db.createProfilesTable);
 var createUserRecipesTable = client.query(db.createUserRecipesTable);
 var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
 
-
 module.exports = app;
