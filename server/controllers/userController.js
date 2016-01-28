@@ -1,14 +1,39 @@
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
+var auth = require('../config/authOperations.js');
 
 module.exports = {
   signup: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("INSERT INTO Users (password, email) VALUES ('"+req.body.password+"','"+req.body.email+"');");
-    // currently not rejecting signup attempts for existing users, instead creates new items if email already exists
-    query.on('end', function(results) {
-      res.send(201);
+    //check if username already exists
+    var checkUserQuery = client.query("SELECT * FROM Users where email ='"+req.body.email+"';", function(err, data) {
+      if (err) {
+        res.status(500).json("We're sorry, an error has occurred");
+      } else if (data.rows.length > 0) {
+        //res.status(400).json('User with that email already exists');
+        res.redirect('/foodBot/auth/signup');
+        // res.send({
+        //   // status: 400,
+        //   // json: 'User with that email already exists',
+        //   redirect: '/signup'
+        // });
+      } else {
+      var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
+        var userId = data.rows[0].id;
+        res.status(201).json(userId);
+      });    
+      createUserQuery.on('end', function(results) {
+        console.log('USER Q:', createUserQuery);
+        console.log('results:', results);
+        auth.createSession(req, res, req.body.email)
+        res.status(201).json('User session created');
+        client.end();
+      });
+
+      }
+    });
+    checkUserQuery.on('end', function(results) {
       client.end();
     });
   }, 
@@ -42,20 +67,18 @@ module.exports = {
   signin: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("SELECT password FROM Users where email ='"+req.body.email+"'", function(err, data) {
+    var query = client.query("SELECT * FROM Users where email ='"+req.body.email+"' AND password = crypt('"+req.body.password+"', password);", function(err, data) {
       if (err) {
         res.status(500).json("We're sorry, an error has occurred");
-      } else if (data.rowCount === 0) {
-        res.status(400).json("User does not exist in our records");
-      }
-    });
-     query.on('row', function(results) {
-      //input password does not match password in database
-      if (results.password !== req.body.password) {
-        res.status(400).json("Incorrect password");
-      }
-      else if (results.password === req.body.password) {
-        res.status(201).json("User signed in");
+      } else if (data.rows.length < 1) {
+        res.status(400).json("Username or password is incorrect");
+      } else {
+        var userData = {
+          id: data.rows[0].id,
+          email: data.rows[0].email
+        }
+      console.log("DATA ON SIGNIN", data);
+      res.status(201).json(userData);
       }
     });
     query.on('end', function() {
@@ -63,5 +86,6 @@ module.exports = {
     });
   }
 }
+
 
 //)
