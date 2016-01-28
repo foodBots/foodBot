@@ -23,8 +23,8 @@ module.exports = function(app, express) {
 
 	app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); // Add 4th argument to direct to matchController
   app.get('/foodBot/profile', auth.checkUser, profileController.retrieveAllUsers); 
-	app.post('/foodBot/auth/signup', auth.checkUser, userController.signup);
-	app.post('/foodBot/auth/signin', auth.checkUser, userController.signin); 
+	app.post('/foodBot/auth/signup', userController.signup);
+	app.post('/foodBot/auth/signin', userController.signin); 
 	// app.get('/foodBot/auth/signedin', userController.signedin);
 
 	// app.post('/foodBot/recipes/', auth.checkUser, recipeController.addMeal); // Add AuthChecker

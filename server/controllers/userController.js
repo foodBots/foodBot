@@ -19,12 +19,18 @@ module.exports = {
         //   redirect: '/signup'
         // });
       } else {
-      var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"');");    
+      var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
+        var userId = data.rows[0].id;
+        res.status(201).json(userId);
+      });    
       createUserQuery.on('end', function(results) {
+        console.log('USER Q:', createUserQuery);
+        console.log('results:', results);
         auth.createSession(req, res, req.body.email)
         res.status(201).json('User session created');
         client.end();
       });
+
       }
     });
     checkUserQuery.on('end', function(results) {
@@ -67,7 +73,12 @@ module.exports = {
       } else if (data.rows.length < 1) {
         res.status(400).json("Username or password is incorrect");
       } else {
-        res.status(201).json("Sign in successful");
+        var userData = {
+          id: data.rows[0].id,
+          email: data.rows[0].email
+        }
+      console.log("DATA ON SIGNIN", data);
+      res.status(201).json(userData);
       }
     });
     query.on('end', function() {
