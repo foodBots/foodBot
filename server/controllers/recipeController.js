@@ -1,5 +1,7 @@
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
+var request = require('request');
+var apiKeys = require('../config/apiKeys');
 
 module.exports = {
 
@@ -12,6 +14,24 @@ module.exports = {
 		// Create Postgress Connection
 		var client = new pg.Client(connectionString);
 		client.connect();
+
+		// var cooking = {
+		// 	1: 1800, // half hour in secs
+		// 	2: 3600, // hour in secs
+		// 	3: 7200 // two hour in secs
+		// }
+
+		// var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
+		// 	request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id + "&_app_key=" + apiKeys.yummly_key + "&requirePictures=true&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] + "" , function (error, response, body) {
+		// 		if (!error && response.statusCode == 200) {
+		// 			console.log(body) // Show the HTML for the Google homepage. 
+		// 		}
+		// 	})
+		// });
+
+
+
+		
 
 		// Temporary Until Find A Better Way To Decide Which Meals To Send
 		// var random = Math.floor(Math.random() * amtOfRecipes) + 1
