@@ -6,6 +6,7 @@ import $ from 'jquery';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 
+
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +37,7 @@ class SignIn extends React.Component {
     return (
 
       <div>
-        <Header />
+        <Header redirect={this.props.location.state.redirect}/>
         <div className="signin-container">
           <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
             <TextField type="text" ref="username" hintText="username" floatingLabelText="Enter username" /><br/>

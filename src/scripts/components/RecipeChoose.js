@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactSwipe from 'react-swipe'
+import Header from './Header.js'
 import {Card, CardActions, CardText, CardMedia} from 'material-ui/lib/card';
 
 class Recipe extends React.Component {
@@ -43,9 +44,11 @@ class Recipe extends React.Component {
   }
 
   render() {
-    var recipes = this.props.recipes
+    var recipes = this.props.location.state.recipes
+    console.log(this.props.location.state)
     return (
       <div> 
+      <Header redirect={this.props.location.state.redirect}/>
       <ReactSwipe
         ref="ReactSwipe"
         continuous={true}

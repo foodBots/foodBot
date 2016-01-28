@@ -8,6 +8,9 @@ module.exports = {
     'webpack-hot-middleware/client',
     './src/index'
   ],
+  resolve: {
+    root: [path.join(__dirname, "bower_components")]
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -15,7 +18,10 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.ResolverPlugin(
+        new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
+        )
   ],
   module: {
     loaders: [{
@@ -26,7 +32,7 @@ module.exports = {
     {
      test: /\.css$/,
      exclude: /node_modules/,
-     loader: 'style!css'
+     loader: "style-loader!css-loader"
    }]
   }
 };

@@ -1,7 +1,7 @@
 {
-  "name": "react-webpack-hot-transform",
+  "name": "FoodRobot",
   "version": "1.0.0",
-  "description": "A new Webpack boilerplate with hot reloading React components, and error handling on module and component level.",
+  "description": "Food Robot",
   "scripts": {
     "clean": "rimraf dist",
     "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
@@ -26,7 +26,7 @@
     "babel",
     "react-transform"
   ],
-  "author": "Devin Pastoor <devin.pastoor@gmail.com>",
+  "author": "Gisela Kottmeier, Anthony Chung, Liza Lopez, Byron Rau",
   "license": "CC0-1.0",
   "bugs": {
     "url": "https://github.com/dpastoor/react-webpack-hot-transform/issues"
@@ -41,6 +41,7 @@
     "babel-preset-react-hmre": "^1.0.0",
     "babel-preset-stage-1": "^6.3.13",
     "cross-env": "^1.0.6",
+    "css-loader": "^0.23.1",
     "eslint": "^1.10.3",
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-react": "^3.11.3",
@@ -50,6 +51,7 @@
     "react-catalyst": "0.3.0",
     "react-router": "1.0.0-rc3",
     "rimraf": "^2.4.3",
+    "style-loader": "^0.13.0",
     "webpack": "^1.12.9",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0"
