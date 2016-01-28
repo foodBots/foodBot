@@ -29,7 +29,7 @@ class SignUp extends React.Component {
       //redirect to landing page
       console.log('props',this.props);
       // this.setState({user: user});
-      this.props.history.pushState(user, '/')
+      this.props.history.pushState(user, '/makeprofile')
     });
   }
 

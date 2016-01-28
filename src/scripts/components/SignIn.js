@@ -28,7 +28,7 @@ class SignIn extends React.Component {
     //console.log(user);
     $.post('/foodBot/auth/signin',this.user).done((result) => {
       console.log('user', this.user);
-      this.props.history.pushState(user, '/')
+      this.props.history.pushState(user, '/recipechoose')
     });
   }
 
@@ -37,7 +37,7 @@ class SignIn extends React.Component {
     return (
 
       <div>
-        <Header redirect={this.props.location.state.redirect}/>
+        <Header />
         <div className="signin-container">
           <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
             <TextField type="text" ref="username" hintText="username" floatingLabelText="Enter username" /><br/>
