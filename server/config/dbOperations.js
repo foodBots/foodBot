@@ -15,7 +15,8 @@ module.exports = {
     'directions varchar(255)[], ' +
     'cookingTime int, ' +
     'region varchar(25), '+
-    'cost int ' +
+    'cost int ,' +
+    'complexity int' +
     ')',
   //sql command for recipe profile
   createProfilesTable: 'CREATE TABLE IF NOT EXISTS Profiles' +
@@ -24,7 +25,9 @@ module.exports = {
      'name varchar(20), ' +
      'restrictions varchar(50)[], ' +
      'allergies varchar(50)[], ' +
-     'match varchar(50)' +
+     'match int,' + 
+     'cookingTime int,' +
+     'foodie bool' +
      ')',
   //sql command for recipe profile join table
   createUserRecipesTable: 'CREATE TABLE IF NOT EXISTS UserRecipes' +
@@ -34,10 +37,9 @@ module.exports = {
      'created bool' +
      ')',
   // sql command for match join table
-  createMatchesTable: 'CREATE TABLE IF NOT EXISTS Matches' +
+  createMatchesQueueTable: 'CREATE TABLE IF NOT EXISTS MatchesQueue' +
     '('+
-     'userOne int references Profiles(id),' +
-     'userTwo int references Profiles(id) ' +
+     'userOne int references Profiles(id)'+
      ')'
 
 }
