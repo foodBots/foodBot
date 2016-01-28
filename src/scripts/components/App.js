@@ -6,6 +6,7 @@ import RecipeView from './RecipeView'
 import SignIn from './SignIn'
 import PairChatRoom from './PairChatRoom'
 
+
 class App extends React.Component {
 
   constructor() {
@@ -30,30 +31,44 @@ class App extends React.Component {
 
       //Recipes from GET request go here
       recipes: [1,2,3,4,5,6,7,8,9,10],
-      messages: []
+      messages: [],
+  
+      componentRoute: {
+        "Profile Settings": "makeprofile",
+        "Swipe Recipes": "recipechoose",
+        "View Recipes": "recipeview",
+        "Sign out": "signout"
+      },
+    
+      redirect: (text) => {
+        console.log("route is", this.state.componentRoute[text])
+        this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
+      },
+    
+      setBudget: (budget) => {
+        this.setState({budget})
+      },
+
+      setPrep: (prep) => {
+        this.setState({prep})
+      },
+
+      profSubmit: (chosenType) => {
+        this.setState({chosenType})
+      },
+
+      submitChat: (message) => {
+        this.setState({messages: this.state.messages.concat(message)})
+      }
     }
   }
-    setBudget(budget) {
-      this.setState({budget})
-    }
 
-    setPrep(prep){
-      this.setState({prep})
-    }
-
-    profSubmit(chosenType){
-      this.setState({chosenType})
-    }
-
-    submitChat(message) {
-      this.setState({messages: this.state.messages.concat(message)})
-    }
 
   render() {
     return (
       <div>
-      <Header />
-
+      <Header 
+        redirect={this.state.redirect.bind(this)}/>
       </div>
     )
   }

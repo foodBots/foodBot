@@ -13,11 +13,13 @@ export default class PairMessagesList extends React.Component {
   }
 
   render() {
-    return (
+    return (      
       <div>
-      <ul>
-      {this.props.messages.map((message, index) => this.renderMessage(message, index))}
-      </ul>
+        <div>      
+          <ul>
+            {this.props.messages.map((message, index) => this.renderMessage(message, index))}
+          </ul>
+        </div>
       </div>
     )
   }
