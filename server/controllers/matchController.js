@@ -16,7 +16,9 @@ module.exports = {
 			if(result.rowCount === 0){
 				var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ");");
 				addToMatchQueueQuery.on("end", function (){
-					res.sendStatus(200);
+					if (res) {
+						res.sendStatus(200);
+					}
 				})
 			}
 		});
@@ -25,7 +27,9 @@ module.exports = {
 			var addMatchToPairsProfileQuery = client.query("UPDATE Profiles SET match = '" + row.userone + "' WHERE id ='" + uid + "'")
 			var addMatchToUsersProfileQuery = client.query("UPDATE Profiles SET match = '" + uid + "' WHERE id ='" + row.userone + "'")
 			var removePairFromMatchesQueueQuery = client.query("DELETE FROM matchesQueue WHERE userone = '" + row.userone + "'")
-			res.sendStatus(200);
+			if (res) {
+				res.sendStatus(200);
+			}
 		})
 
 	// res.sendStatus(500);
