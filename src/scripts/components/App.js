@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './Header.js'
 import ProfileMake from './ProfileMake'
-import Recipe from './RecipeChoose'
+import RecipeChoose from './RecipeChoose'
 import RecipeView from './RecipeView'
 import SignIn from './SignIn'
 import PairChatRoom from './PairChatRoom'
@@ -9,8 +9,8 @@ import PairChatRoom from './PairChatRoom'
 
 class App extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       choices: {
@@ -27,6 +27,7 @@ class App extends React.Component {
         value: 0,
         text: ""
       },
+      currentView: this.props.location.state.route,
       chosenType: "",
 
       //Recipes from GET request go here
@@ -34,15 +35,19 @@ class App extends React.Component {
       messages: [],
 
       componentRoute: {
-        "Profile Settings": "makeprofile",
-        "Swipe Recipes": "recipechoose",
-        "View Recipes": "recipeview",
-        "Sign out": "signout"
+        "Profile Settings": "ProfileMake",
+        "Swipe Recipes": "RecipeChoose",
+        "View Recipes": "RecipeView",
+        "Sign out": "SignIn",
+        "PairChatRoom": "PairChatRoom"
       },
 
       redirect: (text) => {
+
         console.log("route is", this.state.componentRoute[text])
-        this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
+        this.setState({currentView: text});
+
+        // this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
       },
 
       setBudget: (budget) => {
@@ -65,12 +70,56 @@ class App extends React.Component {
 
 
   render() {
-    return (
-      <div>
-      <Header
-        redirect={this.state.redirect.bind(this)}/>
-      </div>
-    )
+    if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
+     return (
+       <div>
+        <Header redirect={this.state.redirect.bind(this)}/>
+        <ProfileMake
+          choices={this.state.choices}
+          prep={this.state.prep}
+          budget={this.state.budget}
+          setBudget={this.state.setBudget.bind(this)}
+          setPrep={this.state.setPrep.bind(this)}
+          profSubmit={this.state.profSubmit.bind(this)}/>
+       </div>
+     )
+    }
+    else if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
+      return (
+        <div>
+          <Header redirect={this.state.redirect.bind(this)}/>
+          <RecipeChoose recipes={this.state.recipes}/>
+        </div>
+      )
+    }
+    else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
+      return (
+        <div>
+          <Header redirect={this.state.redirect.bind(this)}/>
+          <RecipeView />
+        </div>
+      )
+    }
+    else if (this.state.componentRoute[this.state.currentView] === "PairChatRoom") {
+      return (
+        <div>
+          <Header redirect={this.state.redirect.bind(this)}/>
+          <PairChatRoom
+            messages={this.state.messages}
+            submitChat={this.submitChat.bind(this)}/>
+        </div>
+      )
+    }
+    else if (this.state.componentRoute[this.state.currentView] === "SignIn") {
+      return <SignIn />
+    }
+    else {
+      return (
+        <div>
+        Error!
+        </div>
+      )
+    }
   }
 
 };

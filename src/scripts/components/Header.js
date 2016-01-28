@@ -36,8 +36,7 @@ export default class Header extends React.Component {
             title="FoodRobot"
             iconElementLeft={<ActionHome style={iconStyles}/>}
             iconElementRight={
-          <FlatButton label="Profile" linkButton={true} href="/makeprofile"/>
-          /*<IconMenu
+          <IconMenu
             iconButtonElement={
           <IconButton><MoreVertIcon /></IconButton>
              }
@@ -48,8 +47,7 @@ export default class Header extends React.Component {
         <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="View Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Sign out" onClick={(event) => this.props.redirect(event.target.textContent)} />
-        <Link to="/makeprofile"><MenuItem primaryText="test"/></Link>
-      </IconMenu>*/}/>
+      </IconMenu>}/>
       </div>
 
     )

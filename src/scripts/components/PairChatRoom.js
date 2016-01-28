@@ -7,12 +7,11 @@ class PairChatRoom extends React.Component {
   render() {
     return (
       <div>
-      <Header redirect={this.props.location.state.redirect}/>
         <div>
             You paired son
-           <PairMatch 
-            messages={this.props.location.state.messages} 
-            submitChat={this.props.location.state.submitChat}/>        
+           <PairMatch
+            messages={this.props.messages}
+            submitChat={this.props.submitChat}/>
         </div>
       </div>
     )

@@ -35,6 +35,7 @@ class SignUp extends React.Component {
       // console.log('props',this.props);
       // this.setState({user: user});
       user.id = result;
+      user.route= 'Profile Settings';
       this.props.history.pushState(user, '/');
     })
     .fail((error) => {
@@ -69,9 +70,5 @@ class SignUp extends React.Component {
     )
   }
 }
-
-// SignUp.contextTypes = {
-//   router: React.propTypes.func.isRequired
-// };
 
 export default SignUp;

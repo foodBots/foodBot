@@ -31,7 +31,9 @@ class SignIn extends React.Component {
     //post email and password
     //console.log(user);
     $.post('/foodBot/auth/signin',user).done((result) => {
-      console.log('user', user);
+      console.log('user', user, 'props', this.props);
+      user.id = result;
+      user.route = 'Swipe Recipes';
       this.props.history.pushState(user, '/')
     })
     .fail((error) => {

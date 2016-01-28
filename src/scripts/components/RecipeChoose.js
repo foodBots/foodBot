@@ -4,10 +4,10 @@ import Header from './Header.js'
 import {Card, CardActions, CardText, CardMedia} from 'material-ui/lib/card';
 
 class Recipe extends React.Component {
-  
+
   constructor() {
   super();
-    this.style = { 
+    this.style = {
       width: "25%",
       textAlign: "center"
     }
@@ -17,7 +17,7 @@ class Recipe extends React.Component {
 
   //TODO: Next and yes need to be different.
   next() {
-    this.refs.ReactSwipe.swipe.next()    
+    this.refs.ReactSwipe.swipe.next()
   }
 
   yes () {
@@ -36,19 +36,18 @@ class Recipe extends React.Component {
         </CardText>
         <CardActions>
           <button onClick={this.next.bind(this)}>Next</button>
-          <button onClick={this.next.bind(this)}>Yes</button>   
+          <button onClick={this.next.bind(this)}>Yes</button>
         </CardActions>
-      </Card>     
+      </Card>
       </div>
     )
   }
 
   render() {
-    var recipes = this.props.location.state.recipes
-    console.log(this.props.location.state)
+    var recipes = this.props.recipes
+    console.log(this.props)
     return (
-      <div> 
-      <Header redirect={this.props.location.state.redirect}/>
+      <div>
       <ReactSwipe
         ref="ReactSwipe"
         continuous={true}
