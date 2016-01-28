@@ -70,6 +70,7 @@
     "react-dom": "latest",
     "react-swipe": "^3.0.0",
     "react-tap-event-plugin": "^0.2.1",
+    "request": "^2.69.0",
     "swipe-js-iso": "^2.0.1"
   }
 }

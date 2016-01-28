@@ -35,6 +35,7 @@ class ProfileMake extends React.Component {
   }
 
   submitForm(element)   {
+    console.log(element)
     this.props.location.state.profSubmit({chosenType: element})
   }
 
@@ -58,7 +59,7 @@ class ProfileMake extends React.Component {
       <br/>
      <div className="profile-item">
         <h3 className="roboto">Choose a Prep Time</h3>
-        <DropDownMenu style={this.styles} value={this.props.location.state.prep.value} onChange={(event, index, value) => this.props.setPrep({value: index, text: event.target.textContent})}>
+        <DropDownMenu style={this.styles} value={this.props.location.state.prep.value} onChange={(event, index, value) => this.props.location.state.setPrep({value: index, text: event.target.textContent})}>
           {prep.map((prepItem, index) => this.renderPrep(prepItem, index))}
         </DropDownMenu>
       </div>

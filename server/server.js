@@ -15,6 +15,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true }
 }))
+
 app.use(express.static(__dirname + '/../client'));
 
 require('./config/routes.js')(app, express);
