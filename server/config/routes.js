@@ -23,7 +23,8 @@ module.exports = function(app, express) {
 	app.post('/foodBot/meals/:id', mealController.addUserMeal); // Add AuthChecker
 
 	app.get('/foodBot/match/:id', matchController.createMatch);
-	// app.get('/foodBot/match/:id', matchController.)
+	app.post('/foodBot/match/:id', matchController.createMatch);
+	app.delete('/foodBot/match/:id', matchController.deleteMatch);
 	// app.get('/foodBot/users/home/:username', dashboardController.getUserProfile) // Add AuthChecker
 
 	app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); // Add 4th argument to direct to matchController
