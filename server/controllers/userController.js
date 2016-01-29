@@ -24,8 +24,6 @@ module.exports = {
           res.status(201).json(userId);
         });
         createUserQuery.on('end', function(results) {
-          console.log('USER Q:', createUserQuery);
-          console.log('results:', results);
           auth.createSession(req, res, req.body.email)
           // res.status(201).json('User session created');
           client.end();

@@ -15,15 +15,41 @@ module.exports = {
       client.end();
     });
   },
-  addUserProfile: function() {
+  addUserProfile: function(req, res, next) {
   	//on sign up
-
+  	console.log('Adding user profile', req.body);
+  	var prep = req.body.prep;
+  	var budget = req.body.budget;
+  	var type = req.body.type;
+  	var userId = req.params.id;
+  	var client = new pg.Client(connectionString);
+  	client.connect();
+  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, budget) VALUES ('"+userId+"','"+prep+"','"+!!type+"','"+budget+"')");
+  	query.on('end', function() {
+  		client.end();
+  	});
+  	// res.send(
+  	// 	{
+  	// 	id: userId,
+  	// 	cookingTime: prep,
+  	// 	foodie: type,
+  	// 	budget: budget
+  	// 	}
+  	// 	)
+  	next(
+  	// {
+  	// 	id: userId,
+  	// 	cookingTime: prep,
+  	// 	foodie: type,
+  	// 	budget: budget
+  	// }
+  	)
   },
   updateUserProfile: function(req, res, next) {
   	var prep = req.body.prep;
   	var budget = req.body.budget;
   	var type = req.body.type;
-  	var userId = req.body.id;
+  	var userId = req.params.id;
   	var client = new pg.Client(connectionString);
   	client.connect();
   	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, budget) VALUES ('"+userId+"','"+prep+"','"+type+"','"+budget+"')");

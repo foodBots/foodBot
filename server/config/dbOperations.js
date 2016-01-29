@@ -28,8 +28,9 @@ module.exports = {
   //sql command for recipe profile
   createProfilesTable: 'CREATE TABLE IF NOT EXISTS Profiles' +
     '('+
-     'id int references Users(id) PRIMARY KEY,' +
+     'id int references Users(id) NOT NULL PRIMARY KEY,' +
      'name varchar(20), ' +
+     'budget int,' +
      'restrictions varchar(50)[], ' +
      'allergies varchar(50)[], ' +
      'match int,' + 

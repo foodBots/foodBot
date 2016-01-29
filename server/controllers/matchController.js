@@ -4,6 +4,7 @@ var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/
 module.exports = {
 
 	createMatch : function (req, res){
+		console.log('AT CREATE MATCH:', req.body, ':::::', req.params.id);
 		// TODO: Remove (Temporary for testing)
 		var uid = req.params.id;
 
