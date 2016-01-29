@@ -14,7 +14,7 @@ module.exports = {
 		// Create Query for all recipes user has created or eaten
 		var matchesQuery = client.query("SELECT * FROM MatchesQueue LIMIT 1", function (err, result){
 			if(result.rowCount === 0){
-				var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ");");
+				var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ")");
 				addToMatchQueueQuery.on("end", function (){
 					if (res) {
 						res.sendStatus(200);
@@ -49,6 +49,18 @@ module.exports = {
 		res.sendStatus(200);
 
 
-	}
+	},
 
+	retrieveMatch: function (req, res){
+
+		var uid = req.params.id;
+
+		var client = new pg.Client(connectionString);
+		client.connect();
+
+		var matchIDQuery = client.query("SELECT Name FROM Profiles WHERE id = (SELECT Match FROM Profiles WHERE id = " + uid + ")", function (err, result){
+			res.send(result.rows[0].name)
+		})
+
+	}
 }
