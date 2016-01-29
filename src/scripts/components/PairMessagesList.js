@@ -25,22 +25,21 @@ export default class PairMessagesList extends React.Component {
   renderChats() {
     console.log("render chats done")
     return(    
-          <ul>
+          <div>
             {this.props.messages.map((message, index) => this.renderMessage(message, index))}
-          </ul>
+          </div>
     )
   }
 
   renderMessage(message, index){
-    console.log("render messages done")
     return (
-      <li key={index}>{index}: {message}</li>
+      <p className="bubble" key={index}>{this.props.username}: {message}</p>
     )
   }
 
   render() {
     return (      
-      <div className="chatBox">
+      <div className="comment-area">
       {this.renderInput()}
       {this.renderChats()}
       </div>

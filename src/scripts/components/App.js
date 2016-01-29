@@ -37,12 +37,14 @@ class App extends React.Component {
       allergies: [],
       
       currentView: this.props.location.state.route,
+      username: this.props.location.state.email,
+      userMatch: "Tom",
       chosenType: "",
 
       //Recipes from GET request go here
       recipes: [],
       chosenRecipes: ["a", "b", "c", "d", "d"],
-      partnerRecipes: ["d", "e", "f", "g", "h"],
+      matchRecipes: ["d", "e", "f", "g", "h"],
 
       messages: [],
 
@@ -91,7 +93,7 @@ class App extends React.Component {
 
       profSubmit: (chosenType) => {                
         this.setState({chosenType})
-         console.log(this.props.location.state)
+        console.log(this.props.location.state)
         const id = this.props.location.state.id.id
         console.log('ID POST PROPS:', id);
         const prof = {
@@ -136,15 +138,16 @@ class App extends React.Component {
       )
     }
     else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
-      console.log("You're in Recipe View")
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <PairChatRoom
             messages={this.state.messages}
+            username ={this.state.username}
+            match={this.state.userMatch}
             submitChat={this.state.submitChat.bind(this)}
             chosenRecipes={this.state.chosenRecipes}
-            partnerRecipes={this.state.partnerRecipes}/>
+            matchRecipes={this.state.matchRecipes}/>
         </div>
       )
     }

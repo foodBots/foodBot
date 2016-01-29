@@ -16,7 +16,8 @@ class PairChatRoom extends React.Component {
     this.style = {
         flexWrap: "wrap",
         textAlign: "center",
-        backgroundColor: "red"
+        backgroundColor: "lightblue",
+        margin: "5 0 5 0"
     }
   }
 
@@ -25,36 +26,41 @@ class PairChatRoom extends React.Component {
     <div>
     <View column className="border" height="60vh">
         <View row>
-          <View column>Your pair! Make Friends! Be Merry</View>         
+          <View column><h2>Your pair! Make Friends! Be Merry! ETC</h2></View>         
         </View>
 
-        <View row>
-          <View auto row>
-            <View column width="20%"><View className="red"><PairMatch/></View></View>            
-          </View>
+        <View row style={this.style} >
+        
             <View column width="10%" className="green">
             <PairMessagesList                
                 style={this.style}
                 messages={this.props.messages}
+                username={this.props.username}
                 submitChat={this.props.submitChat}/>
             </View>
 
           <View auto row>
-            <View column width="20%"><View className="red"><PairMatch/></View></View>
+            <View column width="20%"><View className="bubble">
+                <PairMatch
+                  username={this.props.username} />
+            </View></View>
           </View>          
-          <View column width="30%" className="green">
-                This is where your recipes go
+          <View column width="30%">
                 <RecipeView 
+                  username={this.props.username}
                   recipes={this.props.chosenRecipes}/>
           </View>
           
           <View auto row>
-            <View column width="20%"><View className="red"><PairMatch/></View></View>
+            <View column width="20%"><View>
+              <PairMatch
+                  username={this.props.match}/>
+            </View></View>
           </View>
-          <View column width="30%" className="green">
-          This is where your PARTNER GOES go
+          <View column width="30%">
             <RecipeView 
-              recipes={this.props.partnerRecipes}/>          
+              username={this.props.match}
+              recipes={this.props.matchRecipes}/>          
           </View>
         
         </View>

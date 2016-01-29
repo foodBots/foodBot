@@ -142,5 +142,17 @@
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.bubble {
+  float: left;
+  background-color: aquamarine;
+
+}
+
+.comment-area {
+  background-color: blue;
+  color: red;
+
 
 }

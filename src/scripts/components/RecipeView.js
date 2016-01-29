@@ -10,7 +10,8 @@ export default class RecipeView extends React.Component {
       this.style = {
       textAlign: "center",
       width: "100%",
-      height: "100%"
+      height: "100%",
+      margin: "10px, 0, 10px, 0"
     }
 
   }
@@ -44,7 +45,7 @@ export default class RecipeView extends React.Component {
   render() {
     return (
       <div>
-      <h2>Recipes/Partner Recipes</h2>
+      <h2>{this.props.username}'s Recipes</h2>
       {this.props.recipes.map((item, index) => this.renderRecipeCard(item, index))}
       </div>
     ) 
