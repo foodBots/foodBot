@@ -87,8 +87,16 @@ class App extends React.Component {
         this.setState({prep})
       },
 
-      profSubmit: (chosenType) => {        
+      profSubmit: (chosenType) => {                
         this.setState({chosenType})
+        console.log(this.props.location.state)
+        const id = this.props.location.state.id.id
+        const prof = {
+          restrictions: this.state.diet,
+          cookingTime: this.state.prep.value,
+          foodie: this.state.chosenType === "foodie"
+        }
+        $.post('/foodBot/profile/'+id, prof)
         this.state.redirect("Swipe Recipes")
       },
 
@@ -144,30 +152,3 @@ class App extends React.Component {
 
 };
 export default App;
-
-
-  // <Recipe recipes={this.state.recipes} />
-  // <ProfileMake
-  // choices={this.state.choices}
-  // prep={this.state.prep}
-  // budget={this.state.budget}
-
-  // setBudget={this.setBudget.bind(this)}
-  // setPrep={this.setPrep.bind(this)}
-  // profSubmit={this.profSubmit.bind(this)}/>
-
- //<PairChatRoom
-// messages={this.state.messages}
-// submitChat={this.submitChat.bind(this)}/>
-     //  <Recipe recipes={this.state.recipes} />
-
-      // <ProfileMake
-      // choices={this.state.choices}
-      // prep={this.state.prep}
-      // diet={this.state.diet}
-
-      // setDiet={this.setDiet.bind(this)}
-      // setPrep={this.setPrep.bind(this)}
-      // profSubmit={this.profSubmit.bind(this)}/>
-
-   
