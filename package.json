@@ -88,8 +88,6 @@
     "webpack-hot-middleware": "^2.6.0"
   },
   "dependencies": {
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.3.13",
     "bluebird": "^3.1.5",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.1",
