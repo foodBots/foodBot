@@ -14,9 +14,11 @@ module.exports = {
 		// Create Query for all recipes user has created or eaten
 		var matchesQuery = client.query("SELECT * FROM MatchesQueue LIMIT 1", function (err, result){
 			if(result.rowCount === 0){
-				var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ");");
+				var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ")");
 				addToMatchQueueQuery.on("end", function (){
-					res.sendStatus(200);
+					if (res) {
+						res.sendStatus(200);
+					}
 				})
 			}
 		});
@@ -25,7 +27,9 @@ module.exports = {
 			var addMatchToPairsProfileQuery = client.query("UPDATE Profiles SET match = '" + row.userone + "' WHERE id ='" + uid + "'")
 			var addMatchToUsersProfileQuery = client.query("UPDATE Profiles SET match = '" + uid + "' WHERE id ='" + row.userone + "'")
 			var removePairFromMatchesQueueQuery = client.query("DELETE FROM matchesQueue WHERE userone = '" + row.userone + "'")
-			res.sendStatus(200);
+			if (res) {
+				res.sendStatus(200);
+			}
 		})
 
 	// res.sendStatus(500);
@@ -45,6 +49,18 @@ module.exports = {
 		res.sendStatus(200);
 
 
-	}
+	},
 
+	retrieveMatch: function (req, res){
+
+		var uid = req.params.id;
+
+		var client = new pg.Client(connectionString);
+		client.connect();
+
+		var matchIDQuery = client.query("SELECT Name FROM Profiles WHERE id = (SELECT Match FROM Profiles WHERE id = " + uid + ")", function (err, result){
+			res.send(result.rows[0].name)
+		})
+
+	}
 }
