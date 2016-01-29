@@ -1,4 +1,5 @@
 var pg = require('pg');
+var Promise = require('bluebird');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
 
 module.exports = {
@@ -27,16 +28,19 @@ module.exports = {
 
 			// Instantiate Created and Eaten Array
 			var created = [];
-			var eaten = [];
+			var eaten = {liked:[] , rejected:[]};
 
 			// Sort All Recipes By Eaten & Created
 			userRecipes.forEach(function (recipe){
-				
+				console.log("recipe:",recipe)
 				if (recipe.created){
 					created.push(recipe)
 				}
 				else {
-					eaten.push(recipe)
+					if (recipe.liked) {
+						eaten.liked.push(recipe)
+					}
+					eaten.rejected.push(recipe)
 				}
 			})
 
@@ -48,24 +52,36 @@ module.exports = {
 	},
 
 	addUserMeal : function (req, res){
-
+		var rejected = JSON.parse(req.body.rejected);
+		var liked = JSON.parse(req.body.liked)
+		// console.log(typeof rejected)
 		// Get Client Data
 		var uid = req.params.id;
-		var recipeAdded = req.body.mealID;
+
 
 		// Create Postgress Connection
 		var client = new pg.Client(connectionString);
 		client.connect();
 
 		// Create Insert Meal Query 
-		var addUserRecipeQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created) VALUES (" + uid + "," + recipeAdded + ", false)") ;
+
+		rejected.forEach(function (recipeID){
+		// console.log("trying...", recipe)
+			// var recipeID = recipe.mealID;
+			var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)") ;
+			
+		})
+
+		liked.forEach(function (recipeID){
+			// var recipeID = recipe.mealID; 
+			var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;	
+		})
+		// var liked = req.body.liked;
+		res.sendStatus(200);
 		//TODO: MAKE RESTRAINT TO NOT ALLOW DUPLICATES
 
 		// After Added Send Client 200 Status Code
-		addUserRecipeQuery.on("end", function (){
-			res.sendStatus(200);
-		})
-		res.sendStatus(409)
+		// res.sendStatus(409)
 
 	},
   retrieveOneUser: function(req, res, next) {
