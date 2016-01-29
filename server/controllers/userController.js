@@ -1,6 +1,6 @@
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
-//var auth = require('../config/authOperations.js');
+var auth = require('../config/authOperations.js');
 
 module.exports = {
   signup: function(req, res) {
@@ -23,14 +23,13 @@ module.exports = {
           var userId = data.rows[0].id;
           res.status(201).json(userId);
         });
-      // createUserQuery.on('end', function(results) {
-      //   console.log('USER Q:', createUserQuery);
-      //   console.log('results:', results);
-      //   auth.createSession(req, res, req.body.email)
-      //   res.status(201).json('User session created');
-      //   client.end();
-      // });
-
+        createUserQuery.on('end', function(results) {
+          console.log('USER Q:', createUserQuery);
+          console.log('results:', results);
+          auth.createSession(req, res, req.body.email)
+          // res.status(201).json('User session created');
+          client.end();
+        });
       }
     });
     // checkUserQuery.on('end', function(results) {
@@ -77,7 +76,10 @@ module.exports = {
           id: data.rows[0].id,
           email: data.rows[0].email
         }
-      console.log("DATA ON SIGNIN", data);
+      // console.log("DATA ON SIGNIN", data);
+      auth.createSession(req, res, req.body.email)
+      // console.log('req session sign in', req.session);
+      // res.redirect('/foodBot/profile')
       res.status(201).json(userData);
       }
     });

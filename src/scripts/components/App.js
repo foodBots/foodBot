@@ -7,6 +7,7 @@ import SignIn from './SignIn'
 import PairChatRoom from './PairChatRoom'
 
 
+
 class App extends React.Component {
 
   constructor(props) {
@@ -31,7 +32,7 @@ class App extends React.Component {
       chosenType: "",
 
       //Recipes from GET request go here
-      recipes: [1,2,3,4,5,6,7,8,9,10],
+      recipes: [],
       messages: [],
 
       componentRoute: {
@@ -41,12 +42,31 @@ class App extends React.Component {
         "Sign out": "SignIn",
         "PairChatRoom": "PairChatRoom"
       },
+      // getRecipes: () => {
+      //   $.get('http://api.yummly.com/v1/api/recipes?_app_id=99092447&_app_key=3059252f9c071f0adaea0a1d4c6e79a5&chicken')
+      //   .done((result) => {
+      //     // console.log(result.matches);
+      //     let r = [];
+      //     r = result.matches.map((currElement)=>{
+      //       let obj = {};
+      //       obj.id = currElement.id;
+      //       obj.name = currElement.recipeName;
+      //       obj.img = currElement.imageUrlsBySize['90'];
+      //       obj.ingredients = currElement.ingredients;
+      //       obj.cookingtime = currElement.totalTimeInSeconds;
+      //       obj.rating = currElement.rating
+      //       return obj;
+      //     });
+      //     console.log('recipes in App', r);
+      //     this.setState({
+      //       recipes: r
+      //     });
+      //   });
+      // },
 
       redirect: (text) => {
-
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
-
         // this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
       },
 
@@ -66,8 +86,8 @@ class App extends React.Component {
         this.setState({messages: this.state.messages.concat(message)})
       }
     }
+    // this.state.getRecipes();
   }
-
 
   render() {
     if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
@@ -87,15 +107,15 @@ class App extends React.Component {
     else if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
       return (
         <div>
-          <Header redirect={this.state.redirect.bind(this)}/>
-          <RecipeChoose recipes={this.state.recipes}/>
+          <Header redirect={this.state.redirect.bind(this)} />
+          <RecipeChoose />
         </div>
       )
     }
     else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
       return (
         <div>
-          <Header redirect={this.state.redirect.bind(this)}/>
+          <Header redirect={this.state.redirect.bind(this)} />
           <RecipeView />
         </div>
       )
@@ -103,22 +123,15 @@ class App extends React.Component {
     else if (this.state.componentRoute[this.state.currentView] === "PairChatRoom") {
       return (
         <div>
-          <Header redirect={this.state.redirect.bind(this)}/>
+          <Header redirect={this.state.redirect.bind(this)} />
           <PairChatRoom
             messages={this.state.messages}
             submitChat={this.submitChat.bind(this)}/>
         </div>
       )
     }
-    else if (this.state.componentRoute[this.state.currentView] === "SignIn") {
-      return <SignIn />
-    }
     else {
-      return (
-        <div>
-        Error!
-        </div>
-      )
+      <NotFound />
     }
   }
 
@@ -126,17 +139,16 @@ class App extends React.Component {
 export default App;
 
 
-     //  <Recipe recipes={this.state.recipes} />
+  // <Recipe recipes={this.state.recipes} />
+  // <ProfileMake
+  // choices={this.state.choices}
+  // prep={this.state.prep}
+  // budget={this.state.budget}
 
-      // <ProfileMake
-      // choices={this.state.choices}
-      // prep={this.state.prep}
-      // budget={this.state.budget}
+  // setBudget={this.setBudget.bind(this)}
+  // setPrep={this.setPrep.bind(this)}
+  // profSubmit={this.profSubmit.bind(this)}/>
 
-      // setBudget={this.setBudget.bind(this)}
-      // setPrep={this.setPrep.bind(this)}
-      // profSubmit={this.profSubmit.bind(this)}/>
-
-     //<PairChatRoom
-    // messages={this.state.messages}
-    // submitChat={this.submitChat.bind(this)}/>
+ //<PairChatRoom
+// messages={this.state.messages}
+// submitChat={this.submitChat.bind(this)}/>

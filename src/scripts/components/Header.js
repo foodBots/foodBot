@@ -20,14 +20,12 @@ import IconButton from 'material-ui/lib/icon-button';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
 import MenuItem from 'material-ui/lib/menus/menu-item';
-import { Router, Route, Link } from 'react-router'
 
 const iconStyles = {
-    marginRight: 30,
-  }
+  marginRight: 30,
+}
 
 export default class Header extends React.Component {
-
   render() {
     injectTapEventPlugin();
     return (
@@ -46,7 +44,7 @@ export default class Header extends React.Component {
         <MenuItem primaryText="Profile Settings" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="View Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="Sign out" onClick={(event) => this.props.redirect(event.target.textContent)} />
+        <MenuItem primaryText="Sign out" href="/signin" />
       </IconMenu>}/>
       </div>
 
