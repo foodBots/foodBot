@@ -26,7 +26,7 @@ module.exports = {
   	var userId = req.body.id;
   	var client = new pg.Client(connectionString);
   	client.connect();
-  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, budget) VALUES ('"+userId+"','"+prep+"','"+type+"','"+budget"')");
+  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, budget) VALUES ('"+userId+"','"+prep+"','"+type+"','"+budget+"')");
   	query.on('end', function() {
   		client.end();
   	});
