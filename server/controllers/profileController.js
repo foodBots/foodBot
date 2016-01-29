@@ -31,7 +31,7 @@ module.exports = {
 
 			// Sort All Recipes By Eaten & Created
 			userRecipes.forEach(function (recipe){
-				
+
 				if (recipe.created){
 					created.push(recipe)
 				}
@@ -57,7 +57,7 @@ module.exports = {
 		var client = new pg.Client(connectionString);
 		client.connect();
 
-		// Create Insert Meal Query 
+		// Create Insert Meal Query
 		var addUserRecipeQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created) VALUES (" + uid + "," + recipeAdded + ", false)") ;
 		//TODO: MAKE RESTRAINT TO NOT ALLOW DUPLICATES
 
@@ -81,6 +81,7 @@ module.exports = {
     });
   },
   retrieveAllUsers: function(req, res, next) {
+    console.log('logged in user!', req.session.user);
     var client = new pg.Client(connectionString);
     client.connect();
     var query = client.query('SELECT * FROM Profiles;');
