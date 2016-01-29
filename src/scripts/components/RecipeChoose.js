@@ -49,11 +49,13 @@ class Recipe extends React.Component {
 
 
   //TODO: Next and yes need to be different.
-  next() {
+  next() {    
     this.refs.ReactSwipe.swipe.next()
   }
 
   yes () {
+    //save to this.state cache
+    //give some indication that the user said yes.
     this.refs.ReactSwipe.swipe.next()
   }
 

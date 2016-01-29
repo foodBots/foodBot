@@ -1,11 +1,12 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Header from './Header.js'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
 import RecipeView from './RecipeView'
 import SignIn from './SignIn'
 import PairChatRoom from './PairChatRoom'
-
+import $ from 'jquery';
 
 
 class App extends React.Component {
@@ -16,23 +17,33 @@ class App extends React.Component {
     this.state = {
       choices: {
         prep: ["Instant","Some prep","Lotta prep"],
-        budget: ["$","$$", "$$$"],
-        type: ["foodie", "diet"]
-        },
+        diet: ["None", "Lacto vegetarian", "Ovo vegetarian", "Pescetarian", "Vegan", "Vegetarian"],
+        type: ["Foodie", "Diet"],
+        allergies: ["Dairy", "Egg", "Gluten", "Peanut", "Seafood"]
+      },
 
       prep: {
         value: 0,
         text: ""
       },
-      budget: {
+
+      diet: {
         value: 0,
         text: ""
       },
+
+      allergies: [],
+      
       currentView: this.props.location.state.route,
       chosenType: "",
 
       //Recipes from GET request go here
+<<<<<<< f8298867749c0753780b91ad53173831c3c42a75
       recipes: [],
+=======
+      recipes: [1,2,3,4,5,6,7,8,9,10],
+      chosenRecipes: ["a", "b", "c", "d", "d"],
+>>>>>>> more commits
       messages: [],
 
       componentRoute: {
@@ -70,19 +81,21 @@ class App extends React.Component {
         // this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
       },
 
-      setBudget: (budget) => {
-        this.setState({budget})
+      setDiet: (diet) => {
+        this.setState({diet})
       },
 
       setPrep: (prep) => {
         this.setState({prep})
       },
 
-      profSubmit: (chosenType) => {
+      profSubmit: (chosenType) => {        
         this.setState({chosenType})
+        this.state.redirect("Swipe Recipes")
       },
 
       submitChat: (message) => {
+        console.log(message)
         this.setState({messages: this.state.messages.concat(message)})
       }
     }
@@ -95,10 +108,11 @@ class App extends React.Component {
        <div>
         <Header redirect={this.state.redirect.bind(this)}/>
         <ProfileMake
+          redirect={this.state.redirect}
           choices={this.state.choices}
           prep={this.state.prep}
-          budget={this.state.budget}
-          setBudget={this.state.setBudget.bind(this)}
+          diet={this.state.diet}
+          setDiet={this.state.setDiet.bind(this)}
           setPrep={this.state.setPrep.bind(this)}
           profSubmit={this.state.profSubmit.bind(this)}/>
        </div>
@@ -113,8 +127,10 @@ class App extends React.Component {
       )
     }
     else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
+      console.log("You're in Recipe View")
       return (
         <div>
+<<<<<<< f8298867749c0753780b91ad53173831c3c42a75
           <Header redirect={this.state.redirect.bind(this)} />
           <RecipeView />
         </div>
@@ -127,6 +143,12 @@ class App extends React.Component {
           <PairChatRoom
             messages={this.state.messages}
             submitChat={this.submitChat.bind(this)}/>
+=======
+          <Header redirect={this.state.redirect.bind(this)}/>
+            <PairChatRoom
+              messages={this.state.messages}
+              submitChat={this.state.submitChat.bind(this)}/>
+>>>>>>> more commits
         </div>
       )
     }
@@ -139,6 +161,7 @@ class App extends React.Component {
 export default App;
 
 
+<<<<<<< f8298867749c0753780b91ad53173831c3c42a75
   // <Recipe recipes={this.state.recipes} />
   // <ProfileMake
   // choices={this.state.choices}
@@ -152,3 +175,17 @@ export default App;
  //<PairChatRoom
 // messages={this.state.messages}
 // submitChat={this.submitChat.bind(this)}/>
+=======
+     //  <Recipe recipes={this.state.recipes} />
+
+      // <ProfileMake
+      // choices={this.state.choices}
+      // prep={this.state.prep}
+      // diet={this.state.diet}
+
+      // setDiet={this.setDiet.bind(this)}
+      // setPrep={this.setPrep.bind(this)}
+      // profSubmit={this.profSubmit.bind(this)}/>
+
+   
+>>>>>>> more commits

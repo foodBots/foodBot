@@ -1,9 +1,17 @@
 import React from 'react';
-import {RaisedButton, DropDownMenu, MenuItem} from 'material-ui'
+import {RaisedButton, DropDownMenu, MenuItem, Checkbox} from 'material-ui'
 import Catalyst from 'react-catalyst';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 
+const styles = {
+  block: {
+    maxWidth: 250,
+  },
+  checkbox: {
+    marginBottom: 16
+  },
+};
 
 class ProfileMake extends React.Component {
 
@@ -22,9 +30,20 @@ class ProfileMake extends React.Component {
       )
   }
 
-  renderBudget(element, index) {
+  renderDiet(element, index) {
     return (
-      <MenuItem value={index} key={index} primaryText={this.props.choices.budget[element]} />
+      <MenuItem value={index} key={index} primaryText={this.props.choices.diet[element]} />
+    )
+  }
+
+  handleCheck(element, index, value) {
+    console.log(element, index, value, "testing")
+  }
+
+  renderAllergies(element, index) {
+    injectTapEventPlugin();
+    return (
+      <td key={index}><Checkbox ref={element} label={element} style={styles.checkbox} onCheck={this.handleCheck} /></td>          
     )
   }
 
@@ -34,32 +53,38 @@ class ProfileMake extends React.Component {
     )
   }
 
-  submitForm(element)   {
-    this.props.profSubmit({chosenType: element})
-  }
-
   render() {
     injectTapEventPlugin();
     const choiceButton = this.props.choices.type
-    const budgets = Object.keys(this.props.choices.budget)
+    const diets = Object.keys(this.props.choices.diet)
     const prep = Object.keys(this.props.choices.prep)
+    const allergies = this.props.choices.allergies
 
     return (
     <div>
     <div className="profile-container">
       <div className="profile-item">
-        <h3 className="roboto">Choose a Budget</h3>
-        <DropDownMenu style={this.styles} value={this.props.budget.value}
-            onChange={(event, index, value) => this.props.setBudget({value: index, text: event.target.textContent})}>
-          {budgets.map((budgetItem, index) => this.renderBudget(budgetItem, index))}
+        <h3 className="roboto">Choose a Diet!</h3>
+        <DropDownMenu style={this.styles} value={this.props.diet.value}
+            onChange={(event, index, value) => this.props.setDiet({value: index, text: event.target.textContent})}>
+          {diets.map((dietItem, index) => this.renderDiet(dietItem, index))}
         </DropDownMenu>
       </div>
-      <br/>
      <div className="profile-item">
-        <h3 className="roboto">Choose a Prep Time</h3>
+        <h3 className="roboto">Choose a Prep Time!</h3>
         <DropDownMenu style={this.styles} value={this.props.prep.value} onChange={(event, index, value) => this.props.setPrep({value: index, text: event.target.textContent})}>
           {prep.map((prepItem, index) => this.renderPrep(prepItem, index))}
         </DropDownMenu>
+      </div>
+      <div className="profile-item">
+      <h3 className="roboto">Allergies?</h3>
+        <table>
+        <tbody>
+        <tr>
+          {allergies.map((allergyItem, index) => this.renderAllergies(allergyItem, index))}          
+        </tr>
+        </tbody>
+        </table>
       </div>
       <div className="profile-item">
         <h3 className="roboto">Choose a Profile</h3>

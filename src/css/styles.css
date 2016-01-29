@@ -115,10 +115,11 @@
   left: 0;
 }
 .profile-item {
-  width: 300px;
+  width: 400px;
   margin: 5px;
   text-align: left;
 }
+
 .card-container {
   display: -webkit-box;
   display: -webkit-flex;
