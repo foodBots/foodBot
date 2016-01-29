@@ -15,6 +15,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      id: this.props.location.state.id,
+
       choices: {
         prep: ["Instant","Some prep","Lotta prep"],
         diet: ["None", "Lacto vegetarian", "Ovo vegetarian", "Pescetarian", "Vegan", "Vegetarian"],
@@ -128,7 +130,7 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose />
+          <RecipeChoose id={this.state.id}/>
         </div>
       )
     }
