@@ -11,9 +11,14 @@ class Recipe extends React.Component {
     super(props);
     this.style = {
       // width: "25%",
-      textAlign: "center",
-      width: "450px",
-      height: "520px"
+      textAlign: 'center',
+      width: '450px',
+      height: '520px'
+    }
+    this.buttonStyles = {
+      display: 'block',
+      textAlign: 'center',
+      width: '450px'
     }
     //This is an array of objects we get from the server
     //id ,name, ingredients, directions, cookingtime, region, cost
@@ -21,6 +26,10 @@ class Recipe extends React.Component {
     // this.getRecipes();
     this.state = {
       recipes: []
+    }
+    this.recipesObj = {
+      liked: [],
+      rejected: []
     }
   }
 
@@ -46,17 +55,29 @@ class Recipe extends React.Component {
     }
     this.getRecipes();
   }
-
-
-  //TODO: Next and yes need to be different.
-  next() {    
+  //takes in recipeId and like bool
+  likeOrReject(recipeId, like) {
+    // const id = this.props.id
+    console.log(recipeId, like);
+    like ? this.recipesObj.liked.push(recipeId) : this.recipesObj.rejected.push(recipeId);
+    // console.log('save recipeObj', this.recipesObj);
+  }
+  next(element) {
+    this.likeOrReject(element.id, false);
     this.refs.ReactSwipe.swipe.next()
   }
 
-  yes () {
-    //save to this.state cache
-    //give some indication that the user said yes.
+  yes (element) {
+    this.likeOrReject(element.id, true);
     this.refs.ReactSwipe.swipe.next()
+  }
+  saveMatch() {
+    console.log(this.recipesObj);
+    // $.post('/foodBot/meals/' + this.props.id.id, this.recipesObj)
+    // .done((result) =>{
+    //   console.log('posted!')
+    //   //redirect to main view
+    // })
   }
 
   renderCard (element, index) {
@@ -69,10 +90,12 @@ class Recipe extends React.Component {
           <img src = {element.img}/>
         </CardMedia>
         <CardActions>
-          <RaisedButton label="No" primary={true} onClick={this.next.bind(this)} />
-          <RaisedButton label="Yes" secondary={true} onClick={this.next.bind(this)} />
+          <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
+          <RaisedButton label="Yes" secondary={true} onClick={this.yes.bind(this, element)} /><br/><br/>
+          <RaisedButton  label="Save and Match!" primary={true} onClick={this.saveMatch.bind(this)} />
         </CardActions>
         </Card>
+
       </div>
     )
   }
@@ -81,7 +104,8 @@ class Recipe extends React.Component {
     const recipes = this.state.recipes;
     console.log('recipe choose render', recipes);
     return (
-      <div>
+      <div >
+        <div>
         <ReactSwipe
         key={recipes.length}
         ref="ReactSwipe"
@@ -90,7 +114,9 @@ class Recipe extends React.Component {
         >
           {recipes.map((elem, index) => this.renderCard(elem, index))}
         </ReactSwipe>
-        <RaisedButton className="card-container" label="Save and Match!" primary={true} onClick={console.log('do something')} />
+
+        </div>
+
       </div>
     )
   }
