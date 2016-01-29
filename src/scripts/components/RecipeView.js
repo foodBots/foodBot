@@ -17,8 +17,8 @@ export default class RecipeView extends React.Component {
 
   renderRecipeCard (item, index) {
     return (
-      <Card style={this.style}>
-        <CardMedia overlay={<CardTitle title={item}/>}>
+      <Card key={index} style={this.style}>
+        <CardMedia overlay={<CardTitle subtitle={item}/>}>
           <img src ="http://freshbynorthwest.com/wp-content/uploads/2012/01/Sauteed-Cod-with-Basic-Lemon-Herb-Sauce.jpg"/>
         </CardMedia>
         <CardText
@@ -34,8 +34,8 @@ export default class RecipeView extends React.Component {
         </CardText>
         <CardActions>
           <button>Comment</button>
-          <button>Save for later</button>
-          <button>Rate</button>
+          <button>Complete</button>
+          <button>Save</button>
         </CardActions>
       </Card>
     )
