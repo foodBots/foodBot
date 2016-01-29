@@ -77,8 +77,6 @@ class Recipe extends React.Component {
     )
   }
 
-
-
   render() {
     const recipes = this.state.recipes;
     console.log('recipe choose render', recipes);

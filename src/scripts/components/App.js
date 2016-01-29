@@ -38,12 +38,8 @@ class App extends React.Component {
       chosenType: "",
 
       //Recipes from GET request go here
-<<<<<<< f8298867749c0753780b91ad53173831c3c42a75
       recipes: [],
-=======
-      recipes: [1,2,3,4,5,6,7,8,9,10],
       chosenRecipes: ["a", "b", "c", "d", "d"],
->>>>>>> more commits
       messages: [],
 
       componentRoute: {
