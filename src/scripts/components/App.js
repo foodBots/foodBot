@@ -40,6 +40,8 @@ class App extends React.Component {
       //Recipes from GET request go here
       recipes: [],
       chosenRecipes: ["a", "b", "c", "d", "d"],
+      partnerRecipes: ["d", "e", "f", "g", "h"],
+
       messages: [],
 
       componentRoute: {
@@ -129,7 +131,9 @@ class App extends React.Component {
           <Header redirect={this.state.redirect.bind(this)} />
           <PairChatRoom
             messages={this.state.messages}
-            submitChat={this.state.submitChat.bind(this)}/>
+            submitChat={this.state.submitChat.bind(this)}
+            chosenRecipes={this.state.chosenRecipes}
+            partnerRecipes={this.state.partnerRecipes}/>
         </div>
       )
     }

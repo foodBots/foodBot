@@ -1,11 +1,13 @@
 import React from 'react'
 import Header from './Header'
 import PairMatch from './PairMatch'
+import PairMessagesList from './PairMessagesList'
+import RecipeView from './RecipeView'
+
+
 import ReactDOM from 'react-dom';
 import {FlexColumn, FlexRow} from 'react-flexbox';
 import View from 'react-flexbox';
-import PairMessagesList from './PairMessagesList'
-import {Card, CardActions, CardText, CardMedia} from 'material-ui/lib/card';
 
 class PairChatRoom extends React.Component {
   
@@ -42,21 +44,8 @@ class PairChatRoom extends React.Component {
           </View>          
           <View column width="30%" className="green">
                 This is where your recipes go
-
-                 <Card style={this.style}>
-                  <CardMedia>
-                  <img src ="http://freshbynorthwest.com/wp-content/uploads/2012/01/Sauteed-Cod-with-Basic-Lemon-Herb-Sauce.jpg"/>
-                  </CardMedia>
-                  <CardText>
-                    Title of Food<br/>
-                    Top Three Ingredients<br/>
-                    Hello
-                  </CardText>
-                  <CardActions>
-                    <button>Next</button>
-                    <button>Yes</button>
-                  </CardActions>
-                </Card>
+                <RecipeView 
+                  recipes={this.props.chosenRecipes}/>
           </View>
           
           <View auto row>
@@ -64,30 +53,12 @@ class PairChatRoom extends React.Component {
           </View>
           <View column width="30%" className="green">
           This is where your PARTNER GOES go
-             <Card style={this.style}>
-                  <CardMedia>
-                  <img src ="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT9YQ1m4Hgi4YazU04e7DD1tstgs1ce4AoFv-IoDk0yqRHylMSBiMoUSg3h"/>
-                  </CardMedia>
-                  <CardText>
-                    Title of Food<br/>
-                    Top Three Ingredients<br/>
-                    Hello
-                  </CardText>
-                  <CardActions>
-                    <button>Next</button>
-                    <button>Yes</button>
-                  </CardActions>
-                </Card>
+            <RecipeView 
+              recipes={this.props.partnerRecipes}/>          
           </View>
         
         </View>
-              <View column height="200px">
-              <View column auto>
-            <View className="green" height="20px">Green</View>
-            <View className="red" height="20px">Red</View>
-          </View>
-          <View className="green">All the rest</View>
-        </View>
+          
       </View>
         
       </div>
