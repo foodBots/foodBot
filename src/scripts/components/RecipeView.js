@@ -1,34 +1,52 @@
 import React from 'react'
-// import Slider from 'react-slick'
+import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib/card';
+import RaisedButton from 'material-ui/lib/raised-button';
+
 
 export default class RecipeView extends React.Component {
 
   constructor(props) {
     super(props)
+      this.style = {
+      textAlign: "center",
+      width: "100%",
+      height: "100%"
+    }
 
   }
 
+  renderRecipeCard (item, index) {
+    return (
+      <Card style={this.style}>
+        <CardMedia overlay={<CardTitle title={item}/>}>
+          <img src ="http://freshbynorthwest.com/wp-content/uploads/2012/01/Sauteed-Cod-with-Basic-Lemon-Herb-Sauce.jpg"/>
+        </CardMedia>
+        <CardText
+          actAsExpander={true}
+          showExpandableButton={true}>
+        {index}: Top Three Ingredients<br/>
+        </CardText>
+        <CardText expandable={true}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+          Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+          Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+        </CardText>
+        <CardActions>
+          <button>Comment</button>
+          <button>Save for later</button>
+          <button>Rate</button>
+        </CardActions>
+      </Card>
+    )
+  }
+  
   render() {
-    const settings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1
-    };
-
     return (
       <div>
-      Hi
-      <Slider {...settings}>
-        <div><h3>1</h3></div>
-        <div><h3>2</h3></div>
-        <div><h3>3</h3></div>
-        <div><h3>4</h3></div>
-        <div><h3>5</h3></div>
-        <div><h3>6</h3></div>
-      </Slider>
+      <h2>Recipes/Partner Recipes</h2>
+      {this.props.recipes.map((item, index) => this.renderRecipeCard(item, index))}
       </div>
-    )
+    ) 
   }
 }

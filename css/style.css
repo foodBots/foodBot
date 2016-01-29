@@ -1,3 +1,15 @@
+.red {
+  background: red;
+}
+
+.green {
+  background: green;
+}
+
+.border {
+  border: 1px solid black;
+}
+
 .order-enter {
   -webkit-transition: 0.5s;
   transition: 0.5s;
