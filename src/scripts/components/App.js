@@ -126,25 +126,10 @@ class App extends React.Component {
       console.log("You're in Recipe View")
       return (
         <div>
-<<<<<<< f8298867749c0753780b91ad53173831c3c42a75
-          <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeView />
-        </div>
-      )
-    }
-    else if (this.state.componentRoute[this.state.currentView] === "PairChatRoom") {
-      return (
-        <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <PairChatRoom
             messages={this.state.messages}
-            submitChat={this.submitChat.bind(this)}/>
-=======
-          <Header redirect={this.state.redirect.bind(this)}/>
-            <PairChatRoom
-              messages={this.state.messages}
-              submitChat={this.state.submitChat.bind(this)}/>
->>>>>>> more commits
+            submitChat={this.state.submitChat.bind(this)}/>
         </div>
       )
     }
@@ -157,7 +142,6 @@ class App extends React.Component {
 export default App;
 
 
-<<<<<<< f8298867749c0753780b91ad53173831c3c42a75
   // <Recipe recipes={this.state.recipes} />
   // <ProfileMake
   // choices={this.state.choices}
@@ -171,7 +155,6 @@ export default App;
  //<PairChatRoom
 // messages={this.state.messages}
 // submitChat={this.submitChat.bind(this)}/>
-=======
      //  <Recipe recipes={this.state.recipes} />
 
       // <ProfileMake
@@ -184,4 +167,3 @@ export default App;
       // profSubmit={this.profSubmit.bind(this)}/>
 
    
->>>>>>> more commits
