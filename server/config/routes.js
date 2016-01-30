@@ -27,8 +27,10 @@ module.exports = function(app, express) {
 	app.delete('/foodBot/match/:id', matchController.deleteMatch);
 	// app.get('/foodBot/users/home/:username', dashboardController.getUserProfile) // Add AuthChecker
 
-	app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); // Add 4th argument to direct to matchController
-  app.get('/foodBot/profile', auth.checkUser, profileController.retrieveAllUsers);
+	app.get('/foodBot/profile/:id', profileController.retrieveOneUser); // Add 4th argument to direct to matchController, Add AuthChecker
+  app.post('/foodBot/profile/:id', profileController.addUserProfile); // Add 4th argument to direct to matchController, Add AuthChecker
+  app.put('/foodBot/profile/:id', profileController.updateUserProfile); // Add 4th argument to direct to matchController, Add AuthChecker
+  app.get('/foodBot/profile', profileController.retrieveAllUsers); //Add AuthChecker
 	// app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); // Add 4th argument to direct to matchController
   // app.get('/foodBot/profile', auth.checkUser, profileController.retrieveAllUsers);
 	app.post('/foodBot/auth/signup', userController.signup);
