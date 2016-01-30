@@ -17,30 +17,27 @@ module.exports = {
   },
   addUserProfile: function(req, res, next) {
   	//on sign up
+    console.log('ADD USER PROFILE');
   	var cookingTime = req.body.cookingTime;
   	var diet = req.body.diet.text;
   	var foodie = req.body.foodie;
   	var userId = req.params.id;
   	var client = new pg.Client(connectionString);
   	client.connect();
-  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+diet+"')");
-  	query.on('end', function() {
+    var updateOrNewQuery = client.query("SELECT match FROM Profiles WHERE id='"+userId+"';", function(err, data) {
+      if (data.rowCount > 0) {
+        console.log("UPDATING", req.body);
+        var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+!!foodie+",'"+diet+"') WHERE id = "+userId+";");
+      } else {
+        console.log("creating");
+
+  	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+diet+"')");
+      }
+    });
+  	updateOrNewQuery.on('end', function() {
     res.status(200);
       client.end();
-    });
-  
-  },
-  updateUserProfile: function(req, res, next) {
-  	var cookingTime = req.body.cookingTime;
-  	var diet = req.body.diet.text;
-  	var type = req.body.type;
-  	var userId = req.params.id;
-  	var client = new pg.Client(connectionString);
-  	client.connect();
-  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+type+"','"+diet+"')");
-  	query.on('end', function() {
-  		client.end();
-  	});
+    }); 
   },
   retrieveAllUsers: function(req, res, next) {
     var client = new pg.Client(connectionString);
