@@ -37,30 +37,22 @@ var cooking = {
 			})
 		}
 
-		foodQ().then(function (yummlyRecipes){
-			var insertRecipesIntoDB = function (){
+		foodQ().then(function (yummlyRecipes) {
+			var insertRecipesIntoDB = function () {
 				yummlyRecipes = JSON.parse(yummlyRecipes);
 				yummlyRecipes.matches.forEach(function (recipe, index) {
 					if (recipe.totalTimeInSeconds >= cooking[2]) {
 						recipe.cookingTime = 3;
-						console.log(recipe.cookingTime)
 					} else if (recipe.totalTimeInSeconds >= cooking[1] && recipe.totalTimeInSeconds < cooking[2]) {
 						recipe.cookingTime = 2;
-						console.log(recipe.cookingTime)
 					} else {
 						recipe.cookingTime = 1;
-						console.log(recipe.cookingTime)
 					}
-
-					// console.log("time: ",recipe.cookingtime)
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', '"+ recipe.cookingtime+"') ")
-
-				})
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', '" + recipe.cookingTime+ "')")
+				});
 			};
-
 			insertRecipesIntoDB();
-
-		})
+		});
 	}
 
 module.exports = {
