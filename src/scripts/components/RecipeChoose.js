@@ -60,7 +60,6 @@ class Recipe extends React.Component {
   constructor(props) {
     super(props);
     this.style = {
-      // width: "25%",
       textAlign: 'center',
       width: '380px',
       height: '560px'
@@ -70,10 +69,6 @@ class Recipe extends React.Component {
       textAlign: 'center',
       width: '450px'
     }
-    //This is an array of objects we get from the server
-    //id ,name, ingredients, directions, cookingtime, region, cost
-    //TODO: pass this down via the props
-    // this.getRecipes();
     this.state = {
       recipes: []
     }
@@ -83,22 +78,20 @@ class Recipe extends React.Component {
     }
   }
 
-  //.get('http://api.yummly.com/v1/api/recipes?_app_id=99092447&_app_key=3059252f9c071f0adaea0a1d4c6e79a5&q=bacon&requirePictures=true')
-
   componentWillMount() {
     this.getRecipes = () => {
       $.get('/foodBot/recipes/' + this.props.id.id)
       .done((result) => {
-        console.log('api results', result.matches);
+        console.log('api results', result.recipes);
         let r = [];
-        r = result.matches.map((currElement)=>{
+        r = result.recipes.map((currElement)=>{
           let obj = {};
           obj.id = currElement.id;
-          obj.name = currElement.recipeName;
-          obj.img = currElement.imageUrlsBySize['90'].replace('s90-c', 's300-c');
+          obj.name = currElement.name;
+          obj.img = currElement.image.replace('s90', 's300-c');
           obj.ingredients = currElement.ingredients;
-          obj.cookingtime = currElement.totalTimeInSeconds;
-          obj.rating = currElement.rating
+          obj.cookingtime = currElement.cookingtime;
+          // obj.rating = currElement.rating
           return obj;
         });
         // console.log('recipes choose', r);
@@ -126,11 +119,15 @@ class Recipe extends React.Component {
   saveMatch() {
     console.log('Your match is', this.props.userMatch)
     this.openModal();
-    // $.post('/foodBot/meals/' + this.props.id.id, this.recipesObj)
-    // .done((result) =>{
-    //   console.log('posted!')
-    //   //redirect to main view
-    // })
+
+    console.log(this.recipesObj);
+    this.props.setChosenRecipes(this.recipesObj.liked);
+    $.post('/foodBot/meals/' + this.props.id.id, this.recipesObj)
+    .done((result) => {
+      console.log('posted!')
+      //redirect to main view
+
+    })
   }
 
   renderCard (element, index) {
@@ -149,27 +146,23 @@ class Recipe extends React.Component {
           <RaisedButton  label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
         </CardActions>
         </Card>
-
       </div>
     )
   }
 
   render() {
     const recipes = this.state.recipes;
-
-
     return (
       <div >
         <div>
         <ReactSwipe
-        key={recipes.length}
-        ref="ReactSwipe"
-        continuous={true}
-        speed={800}
+          key={recipes.length}
+          ref="ReactSwipe"
+          continuous={true}
+          speed={800}
         >
           {recipes.map((elem, index) => this.renderCard(elem, index))}
         </ReactSwipe>
-
         </div>
       </div>
     )

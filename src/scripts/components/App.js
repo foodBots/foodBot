@@ -35,7 +35,7 @@ class App extends React.Component {
       },
 
       allergies: [],
-      
+
       currentView: this.props.location.state.route,
       username: this.props.location.state.email,
       userMatch: "Tom", //$.get('/foodBot/match/ + this.location.state.id.id'
@@ -43,8 +43,9 @@ class App extends React.Component {
 
       //Recipes from GET request go here
       recipes: [],
-      chosenRecipes: ["a", "b", "c", "d", "d"],
-      matchRecipes: ["d", "e", "f", "g", "h"],
+
+      chosenRecipes: [],
+      partnerRecipes: ["d", "e", "f", "g", "h"],
 
       messages: [],
 
@@ -55,32 +56,11 @@ class App extends React.Component {
         "Sign out": "SignIn",
         "PairChatRoom": "PairChatRoom"
       },
-      // getRecipes: () => {
-      //   $.get('http://api.yummly.com/v1/api/recipes?_app_id=99092447&_app_key=3059252f9c071f0adaea0a1d4c6e79a5&chicken')
-      //   .done((result) => {
-      //     // console.log(result.matches);
-      //     let r = [];
-      //     r = result.matches.map((currElement)=>{
-      //       let obj = {};
-      //       obj.id = currElement.id;
-      //       obj.name = currElement.recipeName;
-      //       obj.img = currElement.imageUrlsBySize['90'];
-      //       obj.ingredients = currElement.ingredients;
-      //       obj.cookingtime = currElement.totalTimeInSeconds;
-      //       obj.rating = currElement.rating
-      //       return obj;
-      //     });
-      //     console.log('recipes in App', r);
-      //     this.setState({
-      //       recipes: r
-      //     });
-      //   });
-      // },
+
 
       redirect: (text) => {
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
-        // this.props.history.pushState(this.state, "/" + this.state.componentRoute[text])
       },
 
       setDiet: (diet) => {
@@ -91,7 +71,11 @@ class App extends React.Component {
         this.setState({prep})
       },
 
-      profSubmit: (chosenType) => {                
+      setChosenRecipes: (chosenRecipes) => {
+        this.setState({chosenRecipes})
+      },
+
+      profSubmit: (chosenType) => {
         this.setState({chosenType})
         console.log(this.props.location.state)
         const id = this.props.location.state.id.id
@@ -105,7 +89,6 @@ class App extends React.Component {
         this.state.redirect("Swipe Recipes")
       },
     }
-    // this.state.getRecipes();
   }
 
   render() {
@@ -128,9 +111,9 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose 
-              id={this.state.id}
-              userMatch={this.state.userMatch}/>
+
+          <RecipeChoose id={this.state.id} setChosenRecipes={this.state.setChosenRecipes.bind(this)} userMatch={this.state.userMatch}/>
+
         </div>
       )
     }
@@ -140,7 +123,7 @@ class App extends React.Component {
           <Header redirect={this.state.redirect.bind(this)} />
           <PairChatRoom
             username ={this.state.username}
-            match={this.state.userMatch}            
+            match={this.state.userMatch}
             chosenRecipes={this.state.chosenRecipes}
             matchRecipes={this.state.matchRecipes}
             messages={this.state.messages}

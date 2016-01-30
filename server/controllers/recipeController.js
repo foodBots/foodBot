@@ -38,18 +38,22 @@ var cooking = {
 		}
 
 		foodQ().then(function (yummlyRecipes){
-
 			var insertRecipesIntoDB = function (){
 				yummlyRecipes = JSON.parse(yummlyRecipes);
 				yummlyRecipes.matches.forEach(function (recipe, index) {
-					if (recipe.totalTimeInSeconds <= cooking[1]) {
-						recipe.cookingTime = 1;
-					} else if (recipe.totalTimeInSeconds <= cooking[2]) {
-						recipe.cookingTime = 2;
-					} else {
+					if (recipe.totalTimeInSeconds >= cooking[2]) {
 						recipe.cookingTime = 3;
+						console.log(recipe.cookingTime)
+					} else if (recipe.totalTimeInSeconds >= cooking[1] && recipe.totalTimeInSeconds < cooking[2]) {
+						recipe.cookingTime = 2;
+						console.log(recipe.cookingTime)
+					} else {
+						recipe.cookingTime = 1;
+						console.log(recipe.cookingTime)
 					}
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, yummly_id) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', 1, '" + recipe.id + "') ")
+
+					// console.log("time: ",recipe.cookingtime)
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', '"+ recipe.cookingtime+"') ")
 
 				})
 			};
@@ -66,7 +70,7 @@ module.exports = {
 		// Get User ID & amt of recipes
 		var uid = req.params.id;
 		uid = parseInt(uid);
-		var amtOfRecipes = req.body.amount || 3;
+		var amtOfRecipes = req.body.amount || 10;
 
 		console.log('getting recipes', uid)
 
