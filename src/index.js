@@ -1,4 +1,6 @@
 import './css/styles.css'
+import './css/bootstrap.min.css'
+
 
 import React from 'react';
 import { render }  from 'react-dom';
@@ -20,9 +22,6 @@ import PairChatRoom from './scripts/components/PairChatRoom'
 
 //incl API key
 
-/*
-  Routes
-*/
 
 const routes = (
   <Router history={createHistory()}>

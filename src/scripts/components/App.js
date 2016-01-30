@@ -104,11 +104,6 @@ class App extends React.Component {
         $.post('/foodBot/profile/'+id, prof)
         this.state.redirect("Swipe Recipes")
       },
-
-      submitChat: (message) => {
-        console.log(message)
-        this.setState({messages: this.state.messages.concat(message)})
-      }
     }
     // this.state.getRecipes();
   }
@@ -144,12 +139,12 @@ class App extends React.Component {
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <PairChatRoom
-            messages={this.state.messages}
             username ={this.state.username}
-            match={this.state.userMatch}
-            submitChat={this.state.submitChat.bind(this)}
+            match={this.state.userMatch}            
             chosenRecipes={this.state.chosenRecipes}
-            matchRecipes={this.state.matchRecipes}/>
+            matchRecipes={this.state.matchRecipes}
+            messages={this.state.messages}
+            submitChat={this.state.submitChat}/>
         </div>
       )
     }

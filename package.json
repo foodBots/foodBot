@@ -93,9 +93,11 @@
     "cookie-parser": "^1.4.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "file-loader": "^0.8.5",
     "pg": "^4.4.3",
     "react-flexbox": "^3.0.0",
     "react-flexbox-grid": "^0.9.4",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "url-loader": "^0.5.7"
   }
 }
