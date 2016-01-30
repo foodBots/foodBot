@@ -4,41 +4,36 @@ var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
 
-		// Create Postgress Connection
+		
+var cooking = {
+	1: 1800, // half hour in secs
+	2: 3600, // hour in secs
+	3: 7200 // two hour in secs
+}
+	getRecipesFromYummly = function (uid) {
 		var client = new pg.Client(connectionString);
 		client.connect();
-				var cooking = {
-			1: 1800, // half hour in secs
-			2: 3600, // hour in secs
-			3: 7200 // two hour in secs
-		}
-	getRecipesFromYummly = function (uid) {
 		var yummlyRecipes;
 
 		var foodQ = function (){
 			return new Promise (function (resolve, reject) {
-				// foodQuery.on("end", function () {
-					// if (recipeResults.length < amtOfRecipes){
-						var randomTaste = Math.random().toFixed(1);
-						var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
-							request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id + 
-							"&_app_key=" + apiKeys.yummly_key + 
-							"&requirePictures=true" +
-							"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] + 
-							"&flavor.sweet.min=" + Math.random().toFixed(1) + 
-							"&flavor.piquant.min=" + Math.random().toFixed(1) + 
-							"&flavor.meaty.min=" + Math.random().toFixed(1) + 
-							"&flavor.sour.min=" + Math.random().toFixed(1) + 
-							"&flavor.bitter.min=" + Math.random().toFixed(1), function (error, response, body) {
-								if (!error && response.statusCode == 200) {
-									yummlyRecipes = body
-									resolve(yummlyRecipes);
-								} 
-							})
+				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
+					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id + 
+					"&_app_key=" + apiKeys.yummly_key + 
+					"&requirePictures=true" +
+					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] + 
+					"&flavor.sweet.min=" + Math.random().toFixed(1) + 
+					"&flavor.piquant.min=" + Math.random().toFixed(1) + 
+					"&flavor.meaty.min=" + Math.random().toFixed(1) + 
+					"&flavor.sour.min=" + Math.random().toFixed(1) + 
+					"&flavor.bitter.min=" + Math.random().toFixed(1), function (error, response, body) {
+						if (!error && response.statusCode == 200) {
+							yummlyRecipes = body
+							resolve(yummlyRecipes);
+						} 
+					})
 
-						});
-					// };
-				// })
+				});
 			})
 		}
 
@@ -53,9 +48,8 @@ var apiKeys = require('../config/apiKeys');
 						recipe.cookingTime = 2;
 					} else {
 						recipe.cookingTime = 3;
-					}			
-					// console.log("time: ",recipe.cookingtime)		
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', 1) ")		
+					}
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, yummly_id) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', 1, '" + recipe.id + "') ")		
 				})
 			};
 		
@@ -66,6 +60,8 @@ var apiKeys = require('../config/apiKeys');
 
 module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {
+		var client = new pg.Client(connectionString);
+		client.connect();
 		// Get User ID & amt of recipes
 		var uid = req.params.id;
 		var amtOfRecipes = req.body.amount || 3;
@@ -107,24 +103,15 @@ module.exports = {
 			});
 
 			foodQuery.on("end", function (){
-				console.log("sending to client")
 				var sendData = {recipes: recipeResults }
 				res.status(200).json(sendData);
-					console.log("matches: ",totalMatches)
-				if (totalMatches < 50) {
+				console.log("Sent to client")
+				var lowOnViableRecipes = 50;
+				if (totalMatches < lowOnViableRecipes) {
+					client.end();
 					getRecipesFromYummly(uid);
 				}
-				console.log("send")
 			})
 		})
 	}
-
-			// After recieved all recipes return all which do not contain user allergies
-	// 			console.log("sent to client")
-
-	// 		});
-	// 		// console.log(recipeResults);
-
-	// 	});
-	// }
 }
