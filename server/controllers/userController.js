@@ -73,20 +73,35 @@ module.exports = {
       } else if (data.rows.length < 1) {
         res.status(400).json("Username or password is incorrect");
       } else {
+        var id = data.rows[0].id
         var userData = {
           id: data.rows[0].id,
           email: data.rows[0].email
         }
-      // console.log("DATA ON SIGNIN", data);
-      auth.createSession(req, res, req.body.email)
-      // console.log('req session sign in', req.session);
-      // res.redirect('/foodBot/profile')
-      res.status(201).json(userData);
+        var profileQuery = client.query("SELECT * FROM  PROFILES where id='"+id+"';");
+        profileQuery.on('row', function(data) {
+          var profileData = data;
+          var userRecipesQuery = client.query("SELECT * FROM UserRecipes WHERE profileid='"+id+"';", function(err,data) {
+            auth.createSession(req, res, req.body.email);
+            // console.log('req session sign in', req.session);
+            // res.redirect('/foodBot/profile')
+            res.status(201).json(profileData);
+          });
+          userRecipesQuery.on('row', function(data) {
+            console.log(" USER RECIPES ON SIGNIN:", data);
+            var userRecipeData = data;
+            var allUserData = {
+              profileData: profileData,
+              recipesData: userRecipeData
+            }
+            res.status(201).json(allUserData);
+          }); 
+        })
       }
     });
-    query.on('end', function() {
-      client.end();
-    });
+    // query.on('end', function() {
+    //   client.end();
+    // });
   }
 }
 
