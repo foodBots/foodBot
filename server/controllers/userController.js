@@ -99,9 +99,6 @@ module.exports = {
         })
       }
     });
-    // query.on('end', function() {
-    //   client.end();
-    // });
   }
 }
 
