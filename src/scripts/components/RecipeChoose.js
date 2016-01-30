@@ -83,9 +83,11 @@ class Recipe extends React.Component {
     }
   }
 
+  //.get('http://api.yummly.com/v1/api/recipes?_app_id=99092447&_app_key=3059252f9c071f0adaea0a1d4c6e79a5&q=bacon&requirePictures=true')
+
   componentWillMount() {
     this.getRecipes = () => {
-      $.get('http://api.yummly.com/v1/api/recipes?_app_id=99092447&_app_key=3059252f9c071f0adaea0a1d4c6e79a5&q=bacon&requirePictures=true')
+      $.get('/foodBot/recipes/' + this.props.id.id)
       .done((result) => {
         console.log('api results', result.matches);
         let r = [];
@@ -99,7 +101,7 @@ class Recipe extends React.Component {
           obj.rating = currElement.rating
           return obj;
         });
-        console.log('recipes choose', r);
+        // console.log('recipes choose', r);
         this.setState({recipes: r});
       });
     }
