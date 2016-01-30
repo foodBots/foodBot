@@ -17,7 +17,6 @@ module.exports = {
   },
   addUserProfile: function(req, res, next) {
   	//on sign up
-  	// console.log('Adding user profile', req.body.diet.text, "PARAMS ID:", req.params.id);
   	var cookingTime = req.body.cookingTime;
   	var diet = req.body.diet.text;
   	var foodie = req.body.foodie;
@@ -26,24 +25,10 @@ module.exports = {
   	client.connect();
   	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+diet+"')");
   	query.on('end', function() {
-  		client.end();
-  	});
-  	// res.send(
-  	// 	{
-  	// 	id: userId,
-  	// 	cookingTime: prep,
-  	// 	foodie: type,
-  	// 	budget: budget
-  	// 	}
-  	// 	)
-  	next(
-  	// {
-  	// 	id: userId,
-  	// 	cookingTime: prep,
-  	// 	foodie: type,
-  	// 	budget: budget
-  	// }
-  	)
+    res.status(200);
+      client.end();
+    });
+  
   },
   updateUserProfile: function(req, res, next) {
   	var cookingTime = req.body.cookingTime;
@@ -56,14 +41,6 @@ module.exports = {
   	query.on('end', function() {
   		client.end();
   	});
-  	next(
-  	// {
-  	// 	id: userId,
-  	// 	cookingTime: cookingTime,
-  	// 	foodie: type,
-  	// 	budget: budget
-  	// }
-  	);
   },
   retrieveAllUsers: function(req, res, next) {
     var client = new pg.Client(connectionString);
