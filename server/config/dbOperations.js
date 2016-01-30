@@ -20,8 +20,9 @@ module.exports = {
     'cookingTime int, ' +
     'region varchar(25), '+
     'cost int ,' +
-    'image varchar(255), ' +
-    'complexity int' +
+    'image varchar(255),' +
+    'complexity int,' +
+    'yummly_id varchar(255)' +
     ')',
 
   //sql command for recipe profile
