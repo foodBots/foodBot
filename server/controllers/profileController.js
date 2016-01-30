@@ -66,7 +66,6 @@ module.exports = {
   	);
   },
   retrieveAllUsers: function(req, res, next) {
-    console.log('logged in user!', req.session.user);
     var client = new pg.Client(connectionString);
     client.connect();
     var query = client.query('SELECT * FROM Profiles;');
