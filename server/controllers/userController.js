@@ -21,6 +21,7 @@ module.exports = {
       } else {
         var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
           var userId = data.rows[0].id;
+          console.log("AFTER USER SIGNS UP ID:", userId);
           res.status(201).json(userId);
         });
         createUserQuery.on('end', function(results) {

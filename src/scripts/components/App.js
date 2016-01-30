@@ -92,9 +92,10 @@ class App extends React.Component {
       profSubmit: (chosenType) => {                
         this.setState({chosenType})
         console.log(this.props.location.state)
-        const id = this.props.location.state.id.id
+        const id = this.props.location.state.id
+        console.log('ID FROM CLIENT:', this.props.location.state.id)
         const prof = {
-          restrictions: this.state.diet,
+          diet: this.state.diet,
           cookingTime: this.state.prep.value,
           foodie: this.state.chosenType === "foodie"
         }

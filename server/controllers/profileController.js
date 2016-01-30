@@ -17,14 +17,14 @@ module.exports = {
   },
   addUserProfile: function(req, res, next) {
   	//on sign up
-  	console.log('Adding user profile', req.body);
+  	// console.log('Adding user profile', req.body.diet.text, "PARAMS ID:", req.params.id);
   	var cookingTime = req.body.cookingTime;
-  	var restrictions = req.body.restrictions;
+  	var diet = req.body.diet.text;
   	var foodie = req.body.foodie;
   	var userId = req.params.id;
   	var client = new pg.Client(connectionString);
   	client.connect();
-  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, restrictions) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+restrictions+"')");
+  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+diet+"')");
   	query.on('end', function() {
   		client.end();
   	});
@@ -46,24 +46,24 @@ module.exports = {
   	)
   },
   updateUserProfile: function(req, res, next) {
-  	var prep = req.body.prep;
-  	var budget = req.body.budget;
+  	var cookingTime = req.body.cookingTime;
+  	var diet = req.body.diet.text;
   	var type = req.body.type;
   	var userId = req.params.id;
   	var client = new pg.Client(connectionString);
   	client.connect();
-  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, budget) VALUES ('"+userId+"','"+prep+"','"+type+"','"+budget+"')");
+  	var query = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+type+"','"+diet+"')");
   	query.on('end', function() {
   		client.end();
   	});
   	next(
   	// {
   	// 	id: userId,
-  	// 	cookingTime: prep,
+  	// 	cookingTime: cookingTime,
   	// 	foodie: type,
   	// 	budget: budget
   	// }
-  	)
+  	);
   },
   retrieveAllUsers: function(req, res, next) {
     console.log('logged in user!', req.session.user);
