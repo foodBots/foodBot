@@ -9,18 +9,15 @@ export default class RecipeView extends React.Component {
     super(props)
       this.style = {
       textAlign: "center",
-      width: "100%",
-      height: "100%"
+      margin: "10px, 0, 10px, 0"
     }
 
   }
 
   renderRecipeCard (item, index) {
     return (
-      <Card key={index} style={this.style}>
-        <CardMedia overlay={<CardTitle subtitle={item}/>}>
-          <img src ="http://freshbynorthwest.com/wp-content/uploads/2012/01/Sauteed-Cod-with-Basic-Lemon-Herb-Sauce.jpg"/>
-        </CardMedia>
+      <div>
+      <Card key={index} style={this.style}>        
         <CardText
           actAsExpander={true}
           showExpandableButton={true}>
@@ -38,13 +35,13 @@ export default class RecipeView extends React.Component {
           <button>Save</button>
         </CardActions>
       </Card>
+      </div>
     )
   }
   
   render() {
     return (
       <div>
-      <h2>Recipes/Partner Recipes</h2>
       {this.props.recipes.map((item, index) => this.renderRecipeCard(item, index))}
       </div>
     ) 

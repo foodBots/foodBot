@@ -142,5 +142,56 @@
   right: 0;
   bottom: 0;
   left: 0;
+}
 
+.slick-slider {
+    @include reset(ul);
+
+    /* almost fill the viewport */
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 80px;
+    white-space: nowrap; /* inline elements will go on forever */
+    overflow: hidden;
+}
+
+.slick-slide {
+      position: relative; /* position things inside */
+      display: inline-block; /* act as an inline element */
+      height: 100%; /* take up whole height of slider parent */
+      width: 100vw !important; /* be as wide as the viewport */
+}
+
+/*.bubble {
+  text-align: left;
+  background-color: aquamarine;
+
+}
+.comment-area 
+.message
+
+
+li {
+  list-style-type: none;
+}
+*/
+ul {
+  height: 100px; 
+  border: solid;
+  border-color: gray; 
+  max-height: 100px;
+  overflow-y:scroll;
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+  
+}
+
+ul > li {
+  flex: 0 0 auto;
+  -moz-transform: rotate(-180deg);
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
 }

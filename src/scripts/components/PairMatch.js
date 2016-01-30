@@ -6,20 +6,18 @@ import styles from 'material-ui/lib/styles';
 
 const colors = styles.Colors;
 
+
+//Eventually we want some kind of avatar or prfile pic here
 export default class PairMatch extends React.Component {
 
   render() {
+    var name = this.props.username
     return (
       <div>
         <Avatar
             color={colors.deepOrange300}
-            backgroundColor={colors.purple500}>A
-          </Avatar>
-
-         <Avatar
-            color={colors.blue300}
-            backgroundColor={colors.indigo900}>B
-          </Avatar>            
+            backgroundColor={colors.purple500}>{name[0]}
+          </Avatar>         
       </div>           
     )
   }
