@@ -20,9 +20,11 @@ module.exports = {
         // });
       } else {
         var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
-          var userId = data.rows[0].id;
-          console.log("AFTER USER SIGNS UP ID:", userId);
-          res.status(201).json(userId);
+          var userData = {
+            id: data.rows[0].id,
+            email: data.rows[0].email
+          }
+          res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {
           auth.createSession(req, res, req.body.email)
