@@ -6,9 +6,9 @@ var apiKeys = require('../config/apiKeys');
 
 
 var cooking = {
-	1: 1800, // half hour in secs
-	2: 3600, // hour in secs
-	3: 7200 // two hour in secs
+	1: 600, // half hour in secs
+	2: 1800, // hour in secs
+	3: 3600 // two hour in secs
 }
 	getRecipesFromYummly = function (uid) {
 		var client = new pg.Client(connectionString);
@@ -48,8 +48,12 @@ var cooking = {
 					} else {
 						recipe.cookingTime = 1;
 					}
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', '" + recipe.cookingTime+ "')")
-				});
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, yummly_id, rating) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "0-c', 'http://www.yummly.com/recipe/external/" + recipe.id + "', " + recipe.cookingTime + ", '" + recipe.id + "', " + recipe.rating + ") " , function (err) {
+						if (err){
+							console.log("yummly recipe already saved in db")
+						}
+					})		
+				})
 			};
 			insertRecipesIntoDB();
 		});
@@ -60,28 +64,27 @@ module.exports = {
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
-		var uid = req.params.id;
-		uid = parseInt(uid);
+		var uid = parseInt(req.params.id);
+
 		var amtOfRecipes = req.body.amount || 10;
 
-		console.log('getting recipes', uid)
-
-
 		// Query allergies for User and Recipes
-		console.log('type uid', typeof uid)
-		var profileQuery = client.query("SELECT * FROM Profiles WHERE id = $1", [uid]);
+		var profileQuery = client.query("SELECT * FROM Profiles WHERE id = " + uid + "", function (err, result){
+			if (err) {
+				console.log(err)
+			}
+			// console.log("THIS:",result)
+		});
 
 		// Instantiate User Allergies Array & Results
 		var userAllergies = [];
 		var recipeResults = [];
 
-
-
 		// On row add allergies recieved from db to userAllergies
 		profileQuery.on("row", function (profileRow) {
 			userAllergies = profileRow.allergies;
 			var totalMatches = 0;
-			var foodQuery = client.query("SELECT * FROM Recipes WHERE cookingtime = '" + profileRow.cookingtime + "'");
+			var foodQuery = client.query("SELECT * FROM Recipes WHERE cookingtime = " +  profileRow.cookingtime +" AND (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ")");
 			// On row add if no user allergies in recipe ingredients add recipe to results
 			foodQuery.on("row", function (foodRow) {
 				var recipeIngredients = foodQuery.ingredients;
@@ -105,7 +108,6 @@ module.exports = {
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
 				res.status(200).json(sendData);
-				console.log("Sent to client")
 				var lowOnViableRecipes = 50;
 				if (totalMatches < lowOnViableRecipes) {
 					client.end();
