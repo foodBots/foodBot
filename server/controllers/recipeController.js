@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
 
-		
+
 var cooking = {
 	1: 1800, // half hour in secs
 	2: 3600, // hour in secs
@@ -18,44 +18,41 @@ var cooking = {
 		var foodQ = function (){
 			return new Promise (function (resolve, reject) {
 				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
-					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id + 
-					"&_app_key=" + apiKeys.yummly_key + 
+					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id +
+					"&_app_key=" + apiKeys.yummly_key +
 					"&requirePictures=true" +
-					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] + 
-					"&flavor.sweet.min=" + Math.random().toFixed(1) + 
-					"&flavor.piquant.min=" + Math.random().toFixed(1) + 
-					"&flavor.meaty.min=" + Math.random().toFixed(1) + 
-					"&flavor.sour.min=" + Math.random().toFixed(1) + 
+					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
+					"&flavor.sweet.min=" + Math.random().toFixed(1) +
+					"&flavor.piquant.min=" + Math.random().toFixed(1) +
+					"&flavor.meaty.min=" + Math.random().toFixed(1) +
+					"&flavor.sour.min=" + Math.random().toFixed(1) +
 					"&flavor.bitter.min=" + Math.random().toFixed(1), function (error, response, body) {
 						if (!error && response.statusCode == 200) {
 							yummlyRecipes = body
 							resolve(yummlyRecipes);
-						} 
+						}
 					})
 
 				});
 			})
 		}
 
-		foodQ().then(function (yummlyRecipes){
-
-			var insertRecipesIntoDB = function (){
+		foodQ().then(function (yummlyRecipes) {
+			var insertRecipesIntoDB = function () {
 				yummlyRecipes = JSON.parse(yummlyRecipes);
 				yummlyRecipes.matches.forEach(function (recipe, index) {
-					if (recipe.totalTimeInSeconds <= cooking[1]) {
-						recipe.cookingTime = 1;
-					} else if (recipe.totalTimeInSeconds <= cooking[2]) {
+					if (recipe.totalTimeInSeconds >= cooking[2]) {
+						recipe.cookingTime = 3;
+					} else if (recipe.totalTimeInSeconds >= cooking[1] && recipe.totalTimeInSeconds < cooking[2]) {
 						recipe.cookingTime = 2;
 					} else {
-						recipe.cookingTime = 3;
+						recipe.cookingTime = 1;
 					}
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, yummly_id) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', 1, '" + recipe.id + "') ")		
-				})
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "', 'http://www.yummly.com/recipe/external/" + recipe.id + "', '" + recipe.cookingTime+ "')")
+				});
 			};
-		
 			insertRecipesIntoDB();
-	
-		})
+		});
 	}
 
 module.exports = {
@@ -64,12 +61,15 @@ module.exports = {
 		client.connect();
 		// Get User ID & amt of recipes
 		var uid = req.params.id;
-		var amtOfRecipes = req.body.amount || 3;
+		uid = parseInt(uid);
+		var amtOfRecipes = req.body.amount || 10;
 
+		console.log('getting recipes', uid)
 
 
 		// Query allergies for User and Recipes
-		var profileQuery = client.query("SELECT * FROM Profiles WHERE id = " + uid + "");
+		console.log('type uid', typeof uid)
+		var profileQuery = client.query("SELECT * FROM Profiles WHERE id = $1", [uid]);
 
 		// Instantiate User Allergies Array & Results
 		var userAllergies = [];

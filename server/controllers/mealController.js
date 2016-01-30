@@ -52,8 +52,8 @@ module.exports = {
 	},
 
 	addUserMeal : function (req, res){
-		var rejected = JSON.parse(req.body.rejected);
-		var liked = JSON.parse(req.body.liked)
+		var rejected = req.body.rejected;
+		var liked = req.body.liked;
 		// console.log(typeof rejected)
 		// Get Client Data
 		var uid = req.params.id;
@@ -63,19 +63,19 @@ module.exports = {
 		var client = new pg.Client(connectionString);
 		client.connect();
 
-		// Create Insert Meal Query 
+		// Create Insert Meal Query
 
-		rejected.forEach(function (recipeID){
+		rejected.forEach(function (recipeID) {
 		// console.log("trying...", recipe)
 			// var recipeID = recipe.mealID;
 			var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)") ;
-			
-		})
 
-		liked.forEach(function (recipeID){
-			// var recipeID = recipe.mealID; 
-			var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;	
-		})
+		});
+
+		liked.forEach(function (recipeID) {
+			// var recipeID = recipe.mealID;
+			var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;
+		});
 		// var liked = req.body.liked;
 		res.sendStatus(200);
 		//TODO: MAKE RESTRAINT TO NOT ALLOW DUPLICATES
