@@ -12,27 +12,66 @@ module.exports = {
 		client.connect();
 
 		// Create Query for all recipes user has created or eaten
-		var matchesQuery = client.query("SELECT * FROM MatchesQueue LIMIT 1", function (err, result){
-			if(result.rowCount === 0){
-				var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ")");
-				addToMatchQueueQuery.on("end", function (){
-					if (res) {
-						res.sendStatus(200);
-					}
-				})
-			}
-		});
+		var newMatch = function (){
+			var matchesQuery = client.query("SELECT * FROM MatchesQueue LIMIT 1", function (err, result){
+				var addToMatchesQueue = function () {
+					var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ")");
+					addToMatchQueueQuery.on("end", function (){
+						if (res) {
+							res.sendStatus(200);
+						}
+					})
+				}
 
-		matchesQuery.on("row", function (row, result){
-			var addMatchToPairsProfileQuery = client.query("UPDATE Profiles SET match = '" + row.userone + "' WHERE id ='" + uid + "'")
-			var addMatchToUsersProfileQuery = client.query("UPDATE Profiles SET match = '" + uid + "' WHERE id ='" + row.userone + "'")
-			var removePairFromMatchesQueueQuery = client.query("DELETE FROM matchesQueue WHERE userone = '" + row.userone + "'")
-			if (res) {
-				res.sendStatus(200);
+				var foundMatch = function () {
+					var numberUID = Number(uid);
+					var matchUserID = result.rows[0].userone;
+					if ( numberUID !== matchUserID) {
+					// console.log("found a match!", "userone: ", typeof row.userone, "uid: ", typeof uid)
+						var addMatchToPairsProfileQuery = client.query("UPDATE Profiles SET match = '" + matchUserID + "' WHERE id ='" + numberUID + "'")
+						var addMatchToUsersProfileQuery = client.query("UPDATE Profiles SET match = '" + numberUID + "' WHERE id ='" + matchUserID + "'")
+						var removePairFromMatchesQueueQuery = client.query("DELETE FROM matchesQueue WHERE userone = '" + matchUserID + "'")
+						if (res) {
+							res.sendStatus(200);
+						}
+					}
+				}
+
+				var checkIfInMatchesQueue = function (){
+					var checkIfInMatchesQueueQuery = client.query("SELECT * from MatchesQueue WHERE userone = " + uid + "", function (err, MQResult){
+						if (MQResult.rowCount >= 1) {
+							res.sendStatus(409)
+						}
+						else {
+							if (result.rowCount === 0) {
+								addToMatchesQueue();
+							}
+							else {
+								foundMatch();
+							}
+						}
+					})
+				}
+				
+				checkIfInMatchesQueue();
+
+			});
+	
+		}
+
+		var alreadyMatched = false;
+		var checkIfMatch = client.query("SELECT match FROM Profiles WHERE id =" + uid + "", function (err, result){
+			if (result.rows[0].match !== null) {
+				alreadyMatched = true;
+				res.sendStatus(409);
+
+			}
+			else{
+				newMatch();
 			}
 		})
 
-	// res.sendStatus(500);
+
 	},
 
 	deleteMatch: function (req, res){
