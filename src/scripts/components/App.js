@@ -38,7 +38,7 @@ class App extends React.Component {
       
       currentView: this.props.location.state.route,
       username: this.props.location.state.email,
-      userMatch: "Tom",
+      userMatch: "Tom", //$.get('/foodBot/match/ + this.location.state.id.id'
       chosenType: "",
 
       //Recipes from GET request go here
@@ -133,7 +133,9 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose id={this.state.id}/>
+          <RecipeChoose 
+              id={this.state.id}
+              userMatch={this.state.userMatch}/>
         </div>
       )
     }

@@ -145,9 +145,13 @@
 }
 
 .bubble {
-  float: left;
+  text-align: left;
   background-color: aquamarine;
 
+}
+
+li {
+  list-style-type: none;
 }
 
 .comment-area {

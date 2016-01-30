@@ -72,7 +72,8 @@ class Recipe extends React.Component {
     this.refs.ReactSwipe.swipe.next()
   }
   saveMatch() {
-    console.log(this.recipesObj);
+    console.log(this.recipesObj, this.props.userMatch);
+    alert('Your match is', this.props.userMatch)
     // $.post('/foodBot/meals/' + this.props.id.id, this.recipesObj)
     // .done((result) =>{
     //   console.log('posted!')

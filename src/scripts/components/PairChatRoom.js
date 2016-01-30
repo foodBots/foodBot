@@ -31,7 +31,7 @@ class PairChatRoom extends React.Component {
 
         <View row style={this.style} >
         
-            <View column width="10%" className="green">
+            <View column width="20%" className="green">
             <PairMessagesList                
                 style={this.style}
                 messages={this.props.messages}
