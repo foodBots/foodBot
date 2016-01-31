@@ -38,7 +38,7 @@ class App extends React.Component {
 
       currentView: this.props.location.state.route,
       username: this.props.location.state.email,
-      userMatch: "Tom", //$.get('/foodBot/match/ + this.location.state.id.id'
+      userMatch: $.get('/foodBot/match/ + this.location.state.id.id'),
       chosenType: "",
 
       //Recipes from GET request go here

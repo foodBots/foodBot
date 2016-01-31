@@ -119,7 +119,7 @@ class Recipe extends React.Component {
   }
   saveMatch() {
     console.log('Your match is', this.props.userMatch)
-    this.openModal();
+    // this.openModal();
 
     console.log(this.recipesObj);
     this.props.setChosenRecipes(this.recipesObj.liked);
@@ -136,7 +136,6 @@ class Recipe extends React.Component {
     // console.log('in rendercard', element, index)
     return (
       <div key={index} className="card-container">
-        {this.renderModal()}
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
           <img src = {element.img}/>
@@ -144,7 +143,7 @@ class Recipe extends React.Component {
         <CardActions>
           <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
           <RaisedButton label="Yes" secondary={true} onClick={this.yes.bind(this, element)} /><br/><br/>
-          <RaisedButton  label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
+          <RaisedButton label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
         </CardActions>
         </Card>
       </div>

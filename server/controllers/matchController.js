@@ -97,7 +97,8 @@ module.exports = {
 		var client = new pg.Client(connectionString);
 		client.connect();
 
-		var matchIDQuery = client.query("SELECT Name FROM Profiles WHERE id = (SELECT Match FROM Profiles WHERE id = " + uid + ")", function (err, result){
+		var matchIDQuery = 
+		client.query("SELECT Name FROM Profiles WHERE id = (SELECT Match FROM Profiles WHERE id = " + uid + ")", function (err, result){
 			res.send(result.rows[0].name)
 		})
 
