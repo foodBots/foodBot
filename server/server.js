@@ -16,7 +16,7 @@ app.use(session({
   cookie: { secure: true }
 }))
 
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.static(__dirname + '/../build'));
 
 require('./config/routes.js')(app, express);
