@@ -52,8 +52,9 @@ var cooking = {
 						if (err){
 							console.log("yummly recipe already saved in db")
 						}
-					})		
+					})
 				})
+
 			};
 			insertRecipesIntoDB();
 		});
