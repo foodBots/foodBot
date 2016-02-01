@@ -86,9 +86,9 @@ module.exports = {
           recipesData: []
         };
 
-
+        var count = 0
         var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
-          if (data.rowCount == 0) {
+          if (data.rowCount === 0) {
             var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
             profileOnlyQuery.on('row', function(data) {
               allUserData.profileData.name = data.name;
@@ -97,19 +97,17 @@ module.exports = {
               allUserData.profileData.match = data.match;
               allUserData.profileData.cookingtime = data.cookingtime;
               allUserData.profileData.foodie = data.foodie;
-
-
-              res.status(201).json(allUserData);
             });
           } else {
             userQuery.on('row', function(data) {
-              if (data.liked) {
+                console.log("I LIKE YEWWW", data, count)
+              if (data.liked) { 
+                count++
                 allUserData.recipesData.push({
                   'recipeid' :data.recipeid,
                   'created' :data.created
                 });
               }
-
               allUserData.profileData.name = data.name;
               allUserData.profileData.budget =data.budget;
               allUserData.profileData.diet = data.diet;
@@ -117,8 +115,7 @@ module.exports = {
               allUserData.profileData.cookingtime = data.cookingtime;
               allUserData.profileData.foodie = data.foodie;
               allUserData.profileData.id = data.profileid;
-
-              res.status(201).json(allUserData);
+              res.status(201).json(allUserData)
             });
           }
         });
@@ -137,6 +134,7 @@ module.exports = {
             // res.status(201).json(profileData);
           // });
           userQuery.on('end', function(data) {
+            res.status(201).json(allUserData);
             client.end();
           });
         // });

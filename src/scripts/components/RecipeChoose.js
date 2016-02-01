@@ -106,7 +106,7 @@ class Recipe extends React.Component {
 
     console.log(this.recipesObj);
     this.props.setChosenRecipes(this.recipesObj.liked);
-    $.post('/foodBot/meals/' + this.props.id.id, this.recipesObj)
+    $.post('/foodBot/meals/' + this.props.id, this.recipesObj)
     .done((result) => {
       console.log('posted!')
       //redirect to main view
@@ -116,7 +116,7 @@ class Recipe extends React.Component {
 
   renderCard (element, index) {
 
-    // console.log('in rendercard', element, index)
+    console.log('in rendercard', element, index)
     return (
       <div key={index} className="card-container">
         <Card style={this.style}>
@@ -134,7 +134,7 @@ class Recipe extends React.Component {
   }
 
   render() {
-    const recipes = this.state.recipes;
+    const recipes = this.props.recipes;
     return (
       <div >
         <div>

@@ -32,7 +32,7 @@ class App extends React.Component {
       chosenType: "",
 
       setDiet: (diet) => {
-        this.setState({diet})
+        this.setState({diet: diet})
       },
 
       setPrep: (prep) => {
@@ -46,6 +46,7 @@ class App extends React.Component {
       profSubmit: (chosenType) => {
         this.setState({chosenType})                
         const id = this.props.location.state.id.id
+        console.log(this.state.diet)
         const prof = {
           diet: this.state.diet,
           cookingTime: this.state.prep +1,
@@ -113,10 +114,9 @@ class App extends React.Component {
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
       }      
-      }
     }
   }
-
+  
   render() {
     //PROFILE MAKE
     if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
@@ -144,6 +144,7 @@ class App extends React.Component {
               id={this.state.id} 
               setChosenRecipes={this.state.setChosenRecipes.bind(this)} 
               getRecipes={this.state.getRecipes.bind(this)}
+              recipes={this.state.recipes}
               userMatch={this.state.userMatch}/>
 
         </div>

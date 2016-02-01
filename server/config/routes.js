@@ -20,6 +20,7 @@ module.exports = function(app, express) {
 	app.get('/foodBot/recipes/:id',  recipeController.retrieveSuggestedRecipes); // Add AuthChecker
 
 	app.get('/foodBot/meals/:id', mealController.retrieveUserMeals); // Add AuthChecker
+	
 	app.post('/foodBot/meals/:id', mealController.addUserMeal); // Add AuthChecker
 
 	app.get('/foodBot/match/:id', matchController.retrieveMatch);
