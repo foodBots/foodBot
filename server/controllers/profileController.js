@@ -27,7 +27,6 @@ module.exports = {
     console.log('ADD USER PROFILE', userId, cookingTime, diet, foodie);
   	client.connect();
     var updateOrNewQuery = client.query("SELECT match FROM Profiles WHERE id='"+userId+"';", function(err, data) {
-      console.log(data);
       if (data.rowCount > 0) {
         var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
         });

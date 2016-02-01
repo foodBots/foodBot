@@ -25,7 +25,7 @@ class App extends React.Component {
       },
 
       prep: {
-        value: 0,
+        value: 1,
         text: ""
       },
 
@@ -38,7 +38,7 @@ class App extends React.Component {
 
       currentView: this.props.location.state.route,
       username: this.props.location.state.email,
-      userMatch: $.get('/foodBot/match/ + this.location.state.id.id'),
+      userMatch: "",
       chosenType: "",
 
       //Recipes from GET request go here
@@ -76,13 +76,11 @@ class App extends React.Component {
       },
 
       profSubmit: (chosenType) => {
-        this.setState({chosenType})
-        console.log(this.props.location.state)
+        this.setState({chosenType})                
         const id = this.props.location.state.id.id
-        console.log('ID POST PROPS:', id);
         const prof = {
           diet: this.state.diet,
-          cookingTime: this.state.prep.value,
+          cookingTime: this.state.prep.value +1,
           foodie: this.state.chosenType === "foodie"
         }
         $.post('/foodBot/profile/'+id, prof)

@@ -85,6 +85,8 @@ module.exports = {
           profileData: {},
           recipesData: []
         };
+
+
         var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
           if (data.rowCount == 0) {
             var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
@@ -96,7 +98,7 @@ module.exports = {
               allUserData.profileData.cookingtime = data.cookingtime;
               allUserData.profileData.foodie = data.foodie;
 
-              console.log("USER PROFILE ONLY:", allUserData.profileData);
+
               res.status(201).json(allUserData);
             });
           } else {
@@ -116,12 +118,11 @@ module.exports = {
               allUserData.profileData.foodie = data.foodie;
               allUserData.profileData.id = data.profileid;
 
-
-              console.log("USER WITH RECIPES:", allUserData);
               res.status(201).json(allUserData);
             });
           }
         });
+
         // , function(err,data){
         //   console.log('profile data', data);
         //   allUserData.profileData = data;

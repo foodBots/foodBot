@@ -95,7 +95,7 @@ class Recipe extends React.Component {
           // obj.rating = currElement.rating
           return obj;
         });
-        // console.log('recipes choose', r);
+        console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>', r);
         this.setState({recipes: r});
       });
     }
