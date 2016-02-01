@@ -95,15 +95,11 @@ class SignUp extends React.Component {
             // this.refs.signupForm.reset();
           }
         });
-      }
-    }
-    // this.signUp = this.signUp.bind(this);
-    // this.clearError = this.clearError.bind(this);
-  }
 
   // signUp(e) {
+  //   injectTapEventPlugin();
   //   e.preventDefault();
-  //   // const router = this.context.router;
+  //   const router = this.context.router;
   //   const user = {
   //     email: this.refs.email.getValue(),
   //     password: this.refs.password.getValue()
@@ -116,7 +112,14 @@ class SignUp extends React.Component {
   //     //redirect to landing page
   //     // console.log('props',this.props);
   //     // this.setState({user: user});
-  //     user.id = result;
+  //     user.id = result.id;
+  //     console.log(user.id, "USER ID HERE")            
+      
+  //     //Creates a match upon sign up
+  //     // $.post('/foodBot/match/:'+ user.id).done((result) => {
+  //     //     console.log("match created!", result)          
+  //     //   })
+      
   //     user.route= 'Profile Settings';
   //     this.props.history.pushState(user, '/');
   //   })
@@ -125,9 +128,11 @@ class SignUp extends React.Component {
   //       this.setState({error:error.responseText});
   //       // console.log(error.responseText);
   //       // this.refs.signupForm.reset();
-  //     }
-  //   });
-  // }
+      }
+    }
+    // this.signUp = this.signUp.bind(this);
+    // this.clearError = this.clearError.bind(this);
+  }
   clearError() {
     // this.setState({error: ''});
     // console.log(this.state);
