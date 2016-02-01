@@ -86,6 +86,12 @@ class App extends React.Component {
         $.post('/foodBot/profile/'+id, prof)
         this.state.redirect("Swipe Recipes")
       },
+
+      createMatch: () => {
+        $.post('/foodBot/match'+id).done((result) => {
+          console.log("match created!")
+        })
+      }
     }
     //getInitialState()
   }
