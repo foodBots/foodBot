@@ -89,6 +89,7 @@ class App extends React.Component {
         this.state.redirect("Swipe Recipes")
       },
     }
+    //getInitialState()
   }
 
   render() {

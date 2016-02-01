@@ -1,5 +1,5 @@
 import React from 'react';
-import {RaisedButton, DropDownMenu, MenuItem, Checkbox} from 'material-ui'
+import {RaisedButton, DropDownMenu, MenuItem, Checkbox, TextField} from 'material-ui'
 import Catalyst from 'react-catalyst';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
@@ -43,7 +43,7 @@ class ProfileMake extends React.Component {
   renderAllergies(element, index) {
     injectTapEventPlugin();
     return (
-      <td key={index}><Checkbox ref={element} label={element} style={styles.checkbox} onCheck={this.handleCheck} /></td>          
+      <td key={index}><Checkbox ref={element} label={element} style={styles.checkbox} onCheck={this.handleCheck} /></td>
     )
   }
 
@@ -62,32 +62,32 @@ class ProfileMake extends React.Component {
 
     return (
     <div>
-    <div className="profile-container">
+    <div /*className="profile-container"*/>
       <div className="profile-item">
-        <h3 className="roboto">Choose a Diet!</h3>
+        <h5 className="roboto">Choose a Diet!</h5>
         <DropDownMenu style={this.styles} value={this.props.diet.value}
             onChange={(event, index, value) => this.props.setDiet({value: index, text: event.target.textContent})}>
           {diets.map((dietItem, index) => this.renderDiet(dietItem, index))}
         </DropDownMenu>
       </div>
      <div className="profile-item">
-        <h3 className="roboto">Choose a Prep Time!</h3>
+        <h5 className="roboto">Choose a Prep Time!</h5>
         <DropDownMenu style={this.styles} value={this.props.prep.value} onChange={(event, index, value) => this.props.setPrep({value: index, text: event.target.textContent})}>
           {prep.map((prepItem, index) => this.renderPrep(prepItem, index))}
         </DropDownMenu>
       </div>
       <div className="profile-item">
-      <h3 className="roboto">Allergies?</h3>
+      <h5 className="roboto">Allergies?</h5>
         <table>
         <tbody>
         <tr>
-          {allergies.map((allergyItem, index) => this.renderAllergies(allergyItem, index))}          
+          {allergies.map((allergyItem, index) => this.renderAllergies(allergyItem, index))}
         </tr>
         </tbody>
         </table>
       </div>
       <div className="profile-item">
-        <h3 className="roboto">Choose a Profile</h3>
+        <h5 className="roboto">Choose a Profile</h5>
         {choiceButton.map((typeItem, index) => this.renderChoice(typeItem, index))}
       </div>
       </div>
