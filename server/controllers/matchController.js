@@ -61,6 +61,9 @@ module.exports = {
 
 		var alreadyMatched = false;
 		var checkIfMatch = client.query("SELECT match FROM Profiles WHERE id =" + uid + "", function (err, result){
+			if (err) {
+				console.log(err, "Nothing found", result)
+			}
 			if (result.rows[0].match !== null) {
 				alreadyMatched = true;
 				res.sendStatus(409);

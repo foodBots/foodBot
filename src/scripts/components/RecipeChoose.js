@@ -79,28 +79,9 @@ class Recipe extends React.Component {
   }
 
   componentWillMount() {
-    this.getRecipes = () => {
-      console.log("GETTING RECIPE IN CLIEN:", this.props);
-      $.get('/foodBot/recipes/' + this.props.id.id)
-      .done((result) => {
-        console.log('api results', result.recipes);
-        let r = [];
-        r = result.recipes.map((currElement)=>{
-          let obj = {};
-          obj.id = currElement.id;
-          obj.name = currElement.name;
-          obj.img = currElement.image.replace('s90', 's300-c');
-          obj.ingredients = currElement.ingredients;
-          obj.cookingtime = currElement.cookingtime;
-          // obj.rating = currElement.rating
-          return obj;
-        });
-        // console.log('recipes choose', r);
-        this.setState({recipes: r});
-      });
-    }
-    this.getRecipes();
+    this.props.getRecipes();
   }
+
   //takes in recipeId and like bool
   likeOrReject(recipeId, like) {
     // const id = this.props.id
@@ -108,6 +89,7 @@ class Recipe extends React.Component {
     like ? this.recipesObj.liked.push(recipeId) : this.recipesObj.rejected.push(recipeId);
     // console.log('save recipeObj', this.recipesObj);
   }
+  
   next(element) {
     this.likeOrReject(element.id, false);
     this.refs.ReactSwipe.swipe.next()
@@ -117,9 +99,10 @@ class Recipe extends React.Component {
     this.likeOrReject(element.id, true);
     this.refs.ReactSwipe.swipe.next()
   }
+
   saveMatch() {
     console.log('Your match is', this.props.userMatch)
-    this.openModal();
+    // this.openModal();
 
     console.log(this.recipesObj);
     this.props.setChosenRecipes(this.recipesObj.liked);
@@ -136,7 +119,6 @@ class Recipe extends React.Component {
     // console.log('in rendercard', element, index)
     return (
       <div key={index} className="card-container">
-        {this.renderModal()}
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
           <img src = {element.img}/>
@@ -144,7 +126,7 @@ class Recipe extends React.Component {
         <CardActions>
           <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
           <RaisedButton label="Yes" secondary={true} onClick={this.yes.bind(this, element)} /><br/><br/>
-          <RaisedButton  label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
+          <RaisedButton label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
         </CardActions>
         </Card>
       </div>

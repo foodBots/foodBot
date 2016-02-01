@@ -36,14 +36,15 @@ class ProfileMake extends React.Component {
     )
   }
 
-  handleCheck(element, index, value) {
+  //TODO: make sure we can get allergy values from the checkboxes
+  handleAllergies(element, index, value) {
     console.log(element, index, value, "testing")
   }
 
   renderAllergies(element, index) {
     injectTapEventPlugin();
     return (
-      <td key={index}><Checkbox ref={element} label={element} style={styles.checkbox} onCheck={this.handleCheck} /></td>
+      <td key={index}><Checkbox ref={element} label={element} style={styles.checkbox} onCheck={this.handleAllergies} /></td>          
     )
   }
 
