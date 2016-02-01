@@ -21,19 +21,14 @@ module.exports = {
     var diet = req.body.diet.text;
     var foodie = (req.body.foodie === 'true');
     var userId = req.params.id; 
-    console.log('ADD USER PROFILE FOODIE:', typeof foodie);
   	var client = new pg.Client(connectionString);
   	client.connect();
     var updateOrNewQuery = client.query("SELECT match FROM Profiles WHERE id='"+userId+"';", function(err, data) {
       if (data.rowCount > 0) {
-        console.log("UPDATING", req.body);
         var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
-          console.log("UPDATE PROFILES :", data);
         });
         res.status(201);
       } else {
-        console.log("creating");
-
   	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+diet+"')");
        res.status(200);
       }

@@ -77,15 +77,51 @@ module.exports = {
       } else {
         var id = data.rows[0].id
         var userData = {
-          id: data.rows[0].id,
           email: data.rows[0].email
         };
         var allUserData = {
+          id: id,
           userData: userData,
           profileData: {},
           recipesData: []
         };
-        var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';");
+        var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
+          if (data.rowCount == 0) {
+            var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
+            profileOnlyQuery.on('row', function(data) {
+              allUserData.profileData.name = data.name;
+              allUserData.profileData.budget =data.budget;
+              allUserData.profileData.diet = data.diet;
+              allUserData.profileData.match = data.match;
+              allUserData.profileData.cookingtime = data.cookingtime;
+              allUserData.profileData.foodie = data.foodie;
+
+              console.log("USER PROFILE ONLY:", allUserData.profileData);
+              res.status(201).json(allUserData);
+            });
+          } else {
+            userQuery.on('row', function(data) {
+              if (data.liked) {
+                allUserData.recipesData.push({
+                  'recipeid' :data.recipeid,
+                  'created' :data.created
+                });
+              }
+
+              allUserData.profileData.name = data.name;
+              allUserData.profileData.budget =data.budget;
+              allUserData.profileData.diet = data.diet;
+              allUserData.profileData.match = data.match;
+              allUserData.profileData.cookingtime = data.cookingtime;
+              allUserData.profileData.foodie = data.foodie;
+              allUserData.profileData.id = data.profileid;
+
+
+              console.log("USER WITH RECIPES:", allUserData);
+              res.status(201).json(allUserData);
+            });
+          }
+        });
         // , function(err,data){
         //   console.log('profile data', data);
         //   allUserData.profileData = data;
@@ -99,30 +135,8 @@ module.exports = {
             // res.redirect('/foodBot/profile')
             // res.status(201).json(profileData);
           // });
-          userQuery.on('row', function(data) {
-            // console.log(" USER RECIPES ON SIGNIN:", data);
-            // allUserData.recipeData = data;
-            if (data.liked) {
-              allUserData.recipesData.push({
-                'recipeid' :data.recipeid,
-                'created' :data.created
-              });
-            }
-
-            allUserData.name = data.name;
-            allUserData.budget =data.budget;
-            allUserData.diet = data.diet;
-            allUserData.match = data.match;
-            allUserData.cookingtime = data.cookingtime;
-            allUserData.foodie = data.foodie;
-            allUserData.id = data.profileid;
-
-
-            console.log('alluseradat', data);
-          });
           userQuery.on('end', function(data) {
-            console.log("USER ON END DATA:", allUserData);
-            res.status(201).json(allUserData);
+            client.end();
           });
         // });
       }
