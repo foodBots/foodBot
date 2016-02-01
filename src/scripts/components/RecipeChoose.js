@@ -80,6 +80,7 @@ class Recipe extends React.Component {
 
   componentWillMount() {
     this.getRecipes = () => {
+      console.log("GETTING RECIPE IN CLIEN:", this.props);
       $.get('/foodBot/recipes/' + this.props.id.id)
       .done((result) => {
         console.log('api results', result.recipes);

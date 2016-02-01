@@ -17,25 +17,23 @@ module.exports = {
   },
   addUserProfile: function(req, res, next) {
   	//on sign up
-    console.log('ADD USER PROFILE');
-  	var cookingTime = req.body.cookingTime;
-  	var diet = req.body.diet.text;
-  	var foodie = req.body.foodie;
-  	var userId = req.params.id;
+    var cookingTime = req.body.cookingTime;
+    var diet = req.body.diet.text;
+    var foodie = (req.body.foodie === 'true');
+    var userId = req.params.id; 
   	var client = new pg.Client(connectionString);
   	client.connect();
     var updateOrNewQuery = client.query("SELECT match FROM Profiles WHERE id='"+userId+"';", function(err, data) {
       if (data.rowCount > 0) {
-        console.log("UPDATING", req.body);
-        var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+!!foodie+",'"+diet+"') WHERE id = "+userId+";");
+        var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
+        });
+        res.status(201);
       } else {
-        console.log("creating");
-
   	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ('"+userId+"','"+cookingTime+"','"+!!foodie+"','"+diet+"')");
+       res.status(200);
       }
     });
   	updateOrNewQuery.on('end', function() {
-    res.status(200);
       client.end();
     }); 
   },
