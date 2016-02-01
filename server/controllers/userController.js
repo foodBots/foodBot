@@ -85,59 +85,82 @@ module.exports = {
           profileData: {},
           recipesData: []
         };
+        console.log('allUserData', allUserData);
+        res.status(200).json(allUserData);
+        // var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
+        //   if (data.rowCount == 0) {
+        //     var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
+        //     profileOnlyQuery.on('row', function(data) {
+        //       allUserData.profileData.name = data.name;
+        //       allUserData.profileData.budget =data.budget;
+        //       allUserData.profileData.diet = data.diet;
+        //       allUserData.profileData.match = data.match;
+        //       allUserData.profileData.cookingtime = data.cookingtime;
+        //       allUserData.profileData.foodie = data.foodie;
+        //       res.status(201).json(allUserData);
+        //     });
+        //   } else {
+        //     userQuery.on('row', function(data) {
+        //       if (data.liked) {
+        //         allUserData.recipesData.push({
+        //           'recipeid' :data.recipeid,
+        //           'created' :data.created
+        //         });
+        //       }
 
         var count = 0
-        var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
-          if (data.rowCount === 0) {
-            var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
-            profileOnlyQuery.on('row', function(data) {
-              allUserData.profileData.name = data.name;
-              allUserData.profileData.budget =data.budget;
-              allUserData.profileData.diet = data.diet;
-              allUserData.profileData.match = data.match;
-              allUserData.profileData.cookingtime = data.cookingtime;
-              allUserData.profileData.foodie = data.foodie;
-            });
-          } else {
-            userQuery.on('row', function(data) {
-                console.log("I LIKE YEWWW", data, count)
-              if (data.liked) { 
-                count++
-                allUserData.recipesData.push({
-                  'recipeid' :data.recipeid,
-                  'created' :data.created
-                });
-              }
-              allUserData.profileData.name = data.name;
-              allUserData.profileData.budget =data.budget;
-              allUserData.profileData.diet = data.diet;
-              allUserData.profileData.match = data.match;
-              allUserData.profileData.cookingtime = data.cookingtime;
-              allUserData.profileData.foodie = data.foodie;
-              allUserData.profileData.id = data.profileid;
-              res.status(201).json(allUserData)
-            });
-          }
-        });
-
-        // , function(err,data){
-        //   console.log('profile data', data);
-        //   allUserData.profileData = data;
+        // var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
+          // if (data.rowCount === 0) {
+          //   var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
+          //   profileOnlyQuery.on('row', function(data) {
+          //     allUserData.profileData.name = data.name;
+          //     allUserData.profileData.budget =data.budget;
+          //     allUserData.profileData.diet = data.diet;
+          //     allUserData.profileData.match = data.match;
+          //     allUserData.profileData.cookingtime = data.cookingtime;
+          //     allUserData.profileData.foodie = data.foodie;
+          //   });
+          // } else {
+          //   userQuery.on('row', function(data) {
+          //     console.log("I LIKE YEWWW", data, count)
+          //     if (data.liked) {
+          //       count++
+          //       allUserData.recipesData.push({
+          //         'recipeid' :data.recipeid,
+          //         'created' :data.created
+          //       });
+          //     }
+          //     allUserData.profileData.name = data.name;
+          //     allUserData.profileData.budget =data.budget;
+          //     allUserData.profileData.diet = data.diet;
+          //     allUserData.profileData.match = data.match;
+          //     allUserData.profileData.cookingtime = data.cookingtime;
+          //     allUserData.profileData.foodie = data.foodie;
+          //     allUserData.profileData.id = data.profileid;
+          //     res.status(201).json(allUserData)
+          //   });
+          // }
         // });
-        // var profileQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
-        // userQuery.on('row', function(data) {
 
-          // var userRecipesQuery = client.query("SELECT * FROM UserRecipes WHERE profileid='"+id+"';", function(err,data) {
-            // auth.createSession(req, res, req.body.email);
-            // console.log('req session sign in', req.session);
-            // res.redirect('/foodBot/profile')
-            // res.status(201).json(profileData);
+        //       allUserData.profileData.name = data.name;
+        //       allUserData.profileData.budget =data.budget;
+        //       allUserData.profileData.diet = data.diet;
+        //       allUserData.profileData.match = data.match;
+        //       allUserData.profileData.cookingtime = data.cookingtime;
+        //       allUserData.profileData.foodie = data.foodie;
+        //       allUserData.profileData.id = data.profileid;
+
+        //       res.status(201).json(allUserData);
+        //     });
+        //   }
+        // });
+
+          // userQuery.on('end', function(data) {
+          //   res.status(201).json(allUserData);
+          //   client.end();
           // });
-          userQuery.on('end', function(data) {
-            res.status(201).json(allUserData);
-            client.end();
-          });
         // });
+
       }
     });
   }
