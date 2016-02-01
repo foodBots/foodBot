@@ -8,9 +8,9 @@ var db = require('./server/config/dbOperations.js');
 var User = require('./server/controllers/userController.js');
 
 //Webpack
-var webpack = require('webpack');
-var config = require('./webpack.config.dev');
-var compiler = webpack(config);
+// var webpack = require('webpack');
+// var config = require('./webpack.config.dev');
+// var compiler = webpack(config);
 
 var app = express();
 
@@ -25,21 +25,22 @@ app.use(session({
 }))
 
 //Hot Reloading
-app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo: true,
-  publicPath: config.output.publicPath
-}));
+// app.use(require('webpack-dev-middleware')(compiler, {
+//   noInfo: true,
+//   publicPath: config.output.publicPath
+// }));
 
-app.use(require('webpack-hot-middleware')(compiler));
+// app.use(require('webpack-hot-middleware')(compiler));
 
-app.use(express.static(__dirname + '/../client'));
+app.use(express.static(__dirname + '/dist'));
 
 require('./server/config/routes.js')(app, express);
 
 var port = process.env.PORT || 3000;
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  // console.log(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
 app.listen(3000, function(err) {
@@ -53,7 +54,7 @@ app.listen(3000, function(err) {
 
 //postgres set up
 var pg = require('pg');
-var connectionString = process.env.DATABASE_URL || 'postgresql://localhost/foodbot';
+var connectionString = process.env.DATABASE_URL || 'postgresql://root:foodbot@localhost/foodbot';
 
 var client = new pg.Client(connectionString);
 client.connect();

@@ -17,14 +17,14 @@ module.exports = {
   },
   addUserProfile: function(req, res, next) {
   	//on sign up
-    var cookingTime = req.body.cookingTime;
+    var cookingTime = parseInt(req.body.cookingTime);
     var diet = req.body.diet.text;
     var foodie = req.body.foodie;
-    var userId = req.params.id;
+    var userId = parseInt(req.params.id);
     var client = new pg.Client(connectionString);
 
     console.log('ADD USER PROFILE', userId, cookingTime, diet, foodie);
-    
+
   	client.connect();
     var updateOrNewQuery = client.query("SELECT match FROM Profiles WHERE id='"+userId+"';", function(err, data) {
       if (data.rowCount > 0) {

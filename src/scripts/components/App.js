@@ -16,7 +16,7 @@ class App extends React.Component {
     this.state = {
       //USER INFO
       id: this.props.location.state.id,
-      username: this.props.location.state.email,      
+      username: this.props.location.state.email,
 
       //PROFILE MAKE
       choices: {
@@ -44,7 +44,7 @@ class App extends React.Component {
       },
 
       profSubmit: (chosenType) => {
-        this.setState({chosenType})                
+        this.setState({chosenType})
         const id = this.props.location.state.id.id
         console.log(this.state.diet)
         const prof = {
@@ -77,7 +77,7 @@ class App extends React.Component {
         this.setState({recipes: r});
       });
       },
-          
+
       //RECIPE VIEW
       userMatch: "",
       getUserMatch: () => {
@@ -87,10 +87,10 @@ class App extends React.Component {
       getChosenRecipes: () => {
         $.get('/foodBot/meals/:' + this.state.id)
           .done((result) => this.setState({chosenRecipes: result}))
-      },      
-      
+      },
+
       chosenRecipes: [],
-      
+
       getMatchRecipes: () => {
         $.get('foodBot/match/:' + this.state.id)
           .done((result) => this.setState({partnerRecipes: result}))
@@ -113,10 +113,10 @@ class App extends React.Component {
       redirect: (text) => {
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
-      }      
+      }
     }
   }
-  
+
   render() {
     //PROFILE MAKE
     if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
@@ -140,9 +140,9 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose 
-              id={this.state.id} 
-              setChosenRecipes={this.state.setChosenRecipes.bind(this)} 
+          <RecipeChoose
+              id={this.state.id}
+              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               getRecipes={this.state.getRecipes.bind(this)}
               recipes={this.state.recipes}
               userMatch={this.state.userMatch}/>
