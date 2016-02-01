@@ -54,6 +54,13 @@ module.exports = {
 	addUserMeal : function (req, res){
 		var rejected = req.body.rejected;
 		var liked = req.body.liked;
+
+		// In case reject passed as string: '[1,2]' instead of array
+		if (typeof rejected === "string") {
+			rejected = JSON.parse(rejected)
+			liked = JSON.parse(liked)
+		}
+
 		// console.log(typeof rejected)
 		// Get Client Data
 		var uid = req.params.id;

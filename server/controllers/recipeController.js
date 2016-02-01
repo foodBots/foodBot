@@ -85,7 +85,7 @@ module.exports = {
 		profileQuery.on("row", function (profileRow) {
 			userAllergies = profileRow.allergies;
 			var totalMatches = 0;
-			var foodQuery = client.query("SELECT * FROM Recipes WHERE cookingtime = " +  profileRow.cookingtime +" AND (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ")");
+			var foodQuery = client.query("SELECT * FROM Recipes WHERE cookingtime = " +  profileRow.cookingtime + " OR cookingtime = " + (profileRow.cookingtime - 1) + " AND (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ")");
 			// On row add if no user allergies in recipe ingredients add recipe to results
 			foodQuery.on("row", function (foodRow) {
 				var recipeIngredients = foodQuery.ingredients;
