@@ -18,7 +18,7 @@ class App extends React.Component {
       id: this.props.location.state.id,
       username: this.props.location.state.email,
 
-      //PROFILE MAKE      
+      //PROFILE MAKE
       prep: {
         value: 0,
         text: ""
@@ -29,7 +29,7 @@ class App extends React.Component {
       },
       chosenType: "",
       allergies: [],
-      
+
 
       setDiet: (diet) => {
         this.setState({diet: diet})
@@ -44,8 +44,10 @@ class App extends React.Component {
       },
 
       profSubmit: (chosenType) => {
-        this.setState({chosenType})                
+
+        this.setState({chosenType})
         const id = this.state.id
+
         console.log(this.state.diet)
         const prof = {
           diet: this.state.diet,
@@ -77,7 +79,7 @@ class App extends React.Component {
           this.setState({recipes: r});
           });
       },
-          
+
       //RECIPE VIEW
       userMatch: "",
       partnerRecipes: [],
@@ -89,12 +91,12 @@ class App extends React.Component {
       getChosenRecipes: () => {
         $.get('/foodBot/meals/:' + this.state.id)
           .done((result) => this.setState({chosenRecipes: result}))
-      },            
+      },
       getMatchRecipes: () => {
         $.get('foodBot/match/:' + this.state.id)
           .done((result) => this.setState({partnerRecipes: result}))
       },
-    
+
 
       //SOCIAL COMPONENT LOGIC
       messages: [],
@@ -113,19 +115,36 @@ class App extends React.Component {
       redirect: (text) => {
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
-      }      
+      }
     }
   }
-  
-  render() {    
+
+  render() {
+    //PROFILE MAKE
+    if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
+     return (
+       <div>
+        <Header redirect={this.state.redirect.bind(this)}/>
+        <ProfileMake
+          id = {this.state.id}
+          redirect={this.state.redirect}
+          choices={this.state.choices}
+          prep={this.state.prep}
+          diet={this.state.diet}
+          setDiet={this.state.setDiet.bind(this)}
+          setPrep={this.state.setPrep.bind(this)}
+          profSubmit={this.state.profSubmit.bind(this)}/>
+       </div>
+     )
+    }
     //SWIPE RECIPES
     if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose 
-              id={this.state.id} 
-              setChosenRecipes={this.state.setChosenRecipes.bind(this)} 
+          <RecipeChoose
+              id={this.state.id}
+              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               getRecipes={this.state.getRecipes.bind(this)}
               recipes={this.state.recipes}
               userMatch={this.state.userMatch}/>
@@ -137,7 +156,7 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeLanding           
+          <RecipeLanding
             username ={this.props.location.state.id}
             match={this.props.location.state.matchData.id}
             chosenRecipes={this.props.location.state.recipesData}

@@ -29,12 +29,12 @@ module.exports = {
         });
         createUserQuery.on('end', function(results) {
           auth.createSession(req, res, req.body.email)
-          // res.status(201).json('User session created');          
+          // res.status(201).json('User session created');
         });
       }
     });
     // checkUserQuery.on('end', function(results) {
-  //   
+  //
     // });
   },
   retrieveOneUser: function(req, res) {
@@ -46,7 +46,7 @@ module.exports = {
     });
     query.on('end', function() {
       //if no id  was found and res.status was not set, declare error to client
-      res.status(400).json("USER does not exist");      
+      res.status(400).json("USER does not exist");
     });
   },
   retrieveAllUsers: function(req, res) {
@@ -59,13 +59,13 @@ module.exports = {
       allUsers.push(data);
     });
     query.on('end', function() {
-      res.status(201).json(allUsers);      
+      res.status(201).json(allUsers);
     });
   },
   signin: function(req, res) {
    var client = new pg.Client(connectionString);
    client.connect();
-   
+
     client.query("SELECT * FROM Users where email ='"+req.body.email+"' AND password = crypt('"+req.body.password+"', password);", function(err, data) {
      if (err) {
        res.status(500).json("We're sorry, an error has occurred");
@@ -77,7 +77,7 @@ module.exports = {
        var id = data.rows[0].id
        var userData = {
          email: data.rows[0].email
-       };        
+       };
        var allUserData = {
          id: id,
          userData: userData,
@@ -93,7 +93,7 @@ module.exports = {
           allUserData.matchData.id = data.match
         })
 
-       var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")      
+       var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")
         userQuery.on('row', function(data) {
           allUserData.recipesData.push({
             'recipeid' :data.recipeid,
@@ -110,7 +110,7 @@ module.exports = {
             matchRec.push(data)
           })
 
-        matchQuery.on('end', function(data) {                      
+        matchQuery.on('end', function(data) {
           console.log('matchdata sent is', allUserData.matchData)
           res.send(allUserData)
          });

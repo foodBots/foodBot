@@ -1,12 +1,11 @@
-
 var path = require('path');
 var express = require('express');
 var session = require('express-session');
 
 //Extras
 var bodyParser = require('body-parser');
-var db = require('./config/dbOperations.js');
-var User = require('./controllers/userController.js');
+var db = require('./server/config/dbOperations.js');
+var User = require('./server/controllers/userController.js');
 
 //Webpack
 // var webpack = require('webpack');
@@ -33,14 +32,15 @@ app.use(session({
 
 // app.use(require('webpack-hot-middleware')(compiler));
 
-app.use(express.static(__dirname + '/../build'));
+app.use(express.static(__dirname + '/dist'));
 
-require('./config/routes.js')(app, express);
+require('./server/config/routes.js')(app, express);
 
 var port = process.env.PORT || 3000;
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  // console.log(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
 app.listen(3000, function(err) {
@@ -49,12 +49,12 @@ app.listen(3000, function(err) {
     return;
   }
 
-  console.log('Listening at http://localhost:3000');
+  console.log('Listening at http://postgres@localhost:3000');
 });
 
 //postgres set up
 var pg = require('pg');
-var connectionString = process.env.DATABASE_URL || 'postgresql://root:foodrobot@localhost/foodbot';
+var connectionString = process.env.DATABASE_URL || 'postgresql://root:foodbot@localhost/foodbot';
 
 var client = new pg.Client(connectionString);
 client.connect();
