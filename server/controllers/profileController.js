@@ -18,7 +18,7 @@ module.exports = {
   addUserProfile: function(req, res, next) {
   	//on sign up
     var cookingTime = req.body.cookingTime;
-    var diet = req.body.diet;
+    var diet = req.body.diet.text;
     var foodie = req.body.foodie;
     var userId = req.params.id;
     var client = new pg.Client(connectionString);
@@ -51,6 +51,6 @@ module.exports = {
     });
     query.on('end', function() {
       client.end();
-    });
+    })
   }
 };

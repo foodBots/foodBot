@@ -52,6 +52,7 @@ module.exports = {
 	},
 
 	addUserMeal : function (req, res){
+		console.log(req.body)
 		var rejected = req.body.rejected;
 		var liked = req.body.liked;
 
