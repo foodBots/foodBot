@@ -12,7 +12,7 @@ module.exports = {
 		var client = new pg.Client(connectionString);
 		client.connect();
 
-		// Create Query for all recipes user has created or eaten
+		// Create Query for all recipes user has created or seenRecipe
 		var userRecipesQuery = client.query("SELECT * FROM UserRecipes WHERE profileid = " + uid + "") ;
 
 		// Instantiate User Recipes
@@ -28,9 +28,9 @@ module.exports = {
 
 			// Instantiate Created and Eaten Array
 			var created = [];
-			var eaten = {liked:[] , rejected:[]};
+			var seenRecipe = {liked:[] , rejected:[]};
 
-			// Sort All Recipes By Eaten & Created
+			// Sort All Recipes By seenRecipe & Created
 			userRecipes.forEach(function (recipe){
 				console.log("recipe:",recipe)
 				if (recipe.created){
@@ -38,17 +38,16 @@ module.exports = {
 				}
 				else {
 					if (recipe.liked) {
-						eaten.liked.push(recipe)
+						seenRecipe.liked.push(recipe)
 					}
-					eaten.rejected.push(recipe)
+					seenRecipe.rejected.push(recipe)
 				}
 			})
 
 			// Send userRecipes to Client
-			var sendData = {created: created, eaten: eaten }
+			var sendData = {seenRecipe: seenRecipe.liked}
 			res.send(sendData);
 		});
-
 	},
 
 	addUserMeal : function (req, res){

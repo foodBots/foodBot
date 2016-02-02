@@ -4,7 +4,6 @@ var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
 
-
 var cooking = {
 	1: 600, // half hour in secs
 	2: 1800, // hour in secs
@@ -30,9 +29,6 @@ var cooking = {
 					"&flavor.meaty.min=" + Math.random().toFixed(1) +
 					"&flavor.sour.min=" + Math.random().toFixed(1) +
 					"&flavor.bitter.min=" + Math.random().toFixed(1), function (error, response, body) {
-						console.log("did yummly", response.statusCode)
-						console.log("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id +
-					"&_app_key=" + apiKeys.yummly_key + "")
 						if (!error && response.statusCode == 200) {
 							yummlyRecipes = body
 							console.log("result:", yummlyRecipes)
@@ -77,7 +73,7 @@ module.exports = {
 		client.connect();
 		// Get User ID & amt of recipes
 		var uid = parseInt(req.params.id);		
-		var amtOfRecipes = req.body.amount || 10;
+		var amtOfRecipes = req.body.amount || 20;
 
 		// Query allergies for User and Recipes
 		var profileQuery = client.query("SELECT * FROM Profiles WHERE id = " + uid + "", function (err, result){
