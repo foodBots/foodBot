@@ -26,12 +26,17 @@ class SignUp extends React.Component {
         allergies: ["Dairy", "Egg", "Gluten", "Peanut", "Seafood"]
       },
 
-      prep: {
+     prep: {
         value: 0,
         text: ""
       },
+      diet: {
+        value: 0,
+        text: ""
+      },
+      chosenType: "",
+      allergies: [],
 
-      diet: "",
       redirect: (text) => {
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
@@ -42,7 +47,7 @@ class SignUp extends React.Component {
       },
 
       setPrep: (prep) => {
-        this.setState({prep})
+        this.setState({prep: prep})
       },
 
       setChosenRecipes: (chosenRecipes) => {
@@ -50,19 +55,23 @@ class SignUp extends React.Component {
       },
 
       profSubmit: (chosenType) => {
-        console.log('chosenType', chosenType)
+        console.log('diet', this.state.diet)
         this.setState({chosenType})
         // const id = this.props.location.state.id.id
         // console.log('ID POST PROPS:', id);
         const prof = {
-          diet: this.state.diet.text,
+          diet: this.state.diet,
           cookingTime: this.state.prep.value +1,
           foodie: this.state.chosenType === "foodie"
         }
+
+        console.log(prof.cookingTime, "cookingTime")
         const user = {
           email: this.refs.email.getValue(),
           password: this.refs.password.getValue()
         }
+        //if there is a user defined, we put
+
         $.post('/foodBot/auth/signup', user)
         .done((result) => {
           console.log('result', result, 'user', user);
@@ -77,7 +86,7 @@ class SignUp extends React.Component {
             user.diet = this.state.diet;
             user.cookingTime = this.state.prep.value;
             user.foodie = this.state.chosenType === "foodie";
-            console.log('result after prorifle post', result, 'user', user);
+            console.log('result after profile post', result, 'user', user);
             this.props.history.pushState(user, '/');
           })
           .fail((error) =>{

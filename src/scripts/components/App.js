@@ -16,20 +16,20 @@ class App extends React.Component {
     this.state = {
       //USER INFO
       id: this.props.location.state.id,
-      username: this.props.location.state.email,      
+      username: this.props.location.state.email,
 
-      //PROFILE MAKE
-      choices: {
-        prep: ["Instant","Some prep","Lotta prep"],
-        diet: ["None", "Lacto vegetarian", "Ovo vegetarian", "Pescetarian", "Vegan", "Vegetarian"],
-        type: ["Foodie", "Diet"],
-        allergies: ["Dairy", "Egg", "Gluten", "Peanut", "Seafood"]
+      //PROFILE MAKE      
+      prep: {
+        value: 0,
+        text: ""
       },
-
-      prep: 0,
-      diet: "",
-      allergies: [],
+      diet: {
+        value: 0,
+        text: ""
+      },
       chosenType: "",
+      allergies: [],
+      
 
       setDiet: (diet) => {
         this.setState({diet: diet})
@@ -45,7 +45,7 @@ class App extends React.Component {
 
       profSubmit: (chosenType) => {
         this.setState({chosenType})                
-        const id = this.props.location.state.id.id
+        const id = this.state.id
         console.log(this.state.diet)
         const prof = {
           diet: this.state.diet,
@@ -59,9 +59,9 @@ class App extends React.Component {
       //RECIPE CHOOSE
       recipes: [],
       getRecipes: () => {
+        console.log(this.state.id, "asdkfhjlsakjdf")
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
-           console.log('api results', result.recipes);
             let r = [];
             r = result.recipes.map((currElement)=>{
             let obj = {};
@@ -73,9 +73,9 @@ class App extends React.Component {
           // obj.rating = currElement.rating
             return obj;
         });
-        console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>', r);
-        this.setState({recipes: r});
-      });
+          console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>');
+          this.setState({recipes: r});
+          });
       },
           
       //RECIPE VIEW
@@ -106,6 +106,7 @@ class App extends React.Component {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
         "View Recipes": "RecipeView",
+        "Sign Up": "SignUp",
         "Sign out": "SignIn",
         "PairChatRoom": "PairChatRoom"
       },
@@ -118,25 +119,43 @@ class App extends React.Component {
   }
   
   render() {
-    //PROFILE MAKE
-    if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
-     return (
-       <div>
-        <Header redirect={this.state.redirect.bind(this)}/>
-        <ProfileMake
-          id = {this.state.id}
-          redirect={this.state.redirect}
-          choices={this.state.choices}
-          prep={this.state.prep}
-          diet={this.state.diet}
-          setDiet={this.state.setDiet.bind(this)}
-          setPrep={this.state.setPrep.bind(this)}
-          profSubmit={this.state.profSubmit.bind(this)}/>
-       </div>
-     )
-    }
+    //SIGN UP FIRST TIME PROFILE MAKE
+    // if (this.state.componentRoute[this.state.currentView] === "SignUp") {
+    //  return (
+    //    <div>
+    //     <Header redirect={this.state.redirect.bind(this)}/>
+    //     <ProfileMake
+    //       id = {this.state.id}
+    //       redirect={this.state.redirect}
+    //       choices={this.state.choices}
+    //       prep={this.state.prep}
+    //       diet={this.state.diet}
+    //       setDiet={this.state.setDiet.bind(this)}
+    //       setPrep={this.state.setPrep.bind(this)}
+    //       profSubmit={this.state.profSubmit.bind(this)}/>
+    //    </div>
+    //  )
+    // }
+    
+    //UPDATE PROFILE
+    // else if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
+    //  return (
+    //    <div>
+    //     <Header redirect={this.state.redirect.bind(this)}/>
+    //     <ProfileMake
+    //       id = {this.state.id}
+    //       redirect={this.state.redirect}
+    //       choices={this.state.choices}
+    //       prep={this.state.prep}
+    //       diet={this.state.diet}
+    //       setDiet={this.state.setDiet.bind(this)}
+    //       setPrep={this.state.setPrep.bind(this)}
+    //       profSubmit={this.state.profSubmit.bind(this)}/>
+    //    </div>
+    //  )
+    // }
     //SWIPE RECIPES
-    else if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
+    if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
