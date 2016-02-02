@@ -88,15 +88,26 @@ module.exports = {
 
         var count = 0
         var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';", function(err, data) {
+          if (err) {
+            console.log("your mother", err)
+          }
           if (data.rowCount === 0) {
-            var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';");
+            var profileOnlyQuery = client.query("SELECT * FROM PROFILES where id='"+id+"';", function(err, data) {
+              if (err) { 
+                console.log("help I'm stuck")
+              }
+            });
             profileOnlyQuery.on('row', function(data) {
+              console.log("I am exploring the profile>>>>>>>>>>>>>>>>>>>", allUserData)
+
               allUserData.profileData.name = data.name;
               allUserData.profileData.budget =data.budget;
               allUserData.profileData.diet = data.diet;
               allUserData.profileData.match = data.match;
               allUserData.profileData.cookingtime = data.cookingtime;
               allUserData.profileData.foodie = data.foodie;
+              console.log("this is data. hear me roar,", allUserData)
+              res.status(201).json(allUserData)
             });
           } else {
             userQuery.on('row', function(data) {
@@ -134,8 +145,10 @@ module.exports = {
             // res.status(201).json(profileData);
           // });
           userQuery.on('end', function(data) {
-            res.status(201).json(allUserData);
-            client.end();
+            // res.status(201).json(allUserData);
+            res.send(JSON.stringify(allUserData))
+            // client.end();
+            console.log("I made it to the finish line")
           });
         // });
       }

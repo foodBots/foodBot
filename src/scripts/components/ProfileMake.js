@@ -67,7 +67,11 @@ class ProfileMake extends React.Component {
       <div className="profile-item">
         <h5 className="roboto">Choose a Diet!</h5>
         <DropDownMenu style={this.styles} value={this.props.diet.value}
-            onChange={(event, index, value) => this.props.setDiet({value: index, text: event.target.textContent})}>
+            onChange={(event, index, value) => {
+              var diet = event.target.textContent
+              this.props.setDiet(diet)
+              }
+            }>
           {diets.map((dietItem, index) => this.renderDiet(dietItem, index))}
         </DropDownMenu>
       </div>
