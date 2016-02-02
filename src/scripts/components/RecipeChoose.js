@@ -115,8 +115,6 @@ class Recipe extends React.Component {
   }
 
   renderCard (element, index) {
-
-    console.log('in rendercard', element, index)
     return (
       <div key={index} className="card-container">
         <Card style={this.style}>

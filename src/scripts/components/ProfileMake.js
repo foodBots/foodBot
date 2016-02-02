@@ -22,12 +22,29 @@ class ProfileMake extends React.Component {
       'textAlign': 'center',
       'margin': '5px'
     };
+    this.state = {
+      prep: {
+        value: 0,
+        text: ""
+      },
+      diet: {
+        value: 0,
+        text: ""
+      }
+    }
+
   }
 
   renderChoice(element, index){
     return (
       <RaisedButton style={this.styles} label={element} key={element} primary={true} onClick={(event) => this.props.profSubmit(element)} />
       )
+  }
+
+  renderPrep(element, index) {
+    return (
+      <MenuItem value={index} key={index} primaryText={this.props.choices.prep[element]} />
+    )
   }
 
   renderDiet(element, index) {
@@ -48,12 +65,6 @@ class ProfileMake extends React.Component {
     )
   }
 
-  renderPrep(element, index) {
-    return (
-      <MenuItem value={index} key={index} primaryText={this.props.choices.prep[element]} />
-    )
-  }
-
   render() {
     injectTapEventPlugin();
     const choiceButton = this.props.choices.type
@@ -66,10 +77,9 @@ class ProfileMake extends React.Component {
     <div /*className="profile-container"*/>
       <div className="profile-item">
         <h5 className="roboto">Choose a Diet!</h5>
-        <DropDownMenu style={this.styles} value={this.props.diet.value}
+        <DropDownMenu style={this.styles} value={this.state.diet.value}
             onChange={(event, index, value) => {
-              var diet = event.target.textContent
-              this.props.setDiet(diet)
+              this.props.setDiet({text: event.target.textContent, value: index})
               }
             }>
           {diets.map((dietItem, index) => this.renderDiet(dietItem, index))}
@@ -77,7 +87,7 @@ class ProfileMake extends React.Component {
       </div>
      <div className="profile-item">
         <h5 className="roboto">Choose a Prep Time!</h5>
-        <DropDownMenu style={this.styles} value={this.props.prep.value} onChange={(event, index, value) => this.props.setPrep({value: index, text: event.target.textContent})}>
+        <DropDownMenu style={this.styles} value={this.state.prep.value} onChange={(event, index, value) => this.props.setPrep({value: index, text: event.target.textContent})}>
           {prep.map((prepItem, index) => this.renderPrep(prepItem, index))}
         </DropDownMenu>
       </div>

@@ -26,12 +26,9 @@ import PairChatRoom from './scripts/components/PairChatRoom'
 const routes = (
   <Router history={createHistory()}>
     <Route path="/" component={App}/>
-    <Route path="/makeprofile" component={ProfileMake}/>
-    <Route path="/recipechoose" component={RecipeChoose}/>
-    <Route path="/recipeview" component={PairChatRoom}/>
+    <Route path="/signup" component={SignUp}/>
     <Route path="/signin" component={SignIn}/>
     <Route path="/signout" component={SignIn}/>
-    <Route path="/signup" component={SignUp}/>
     <Route path="*" component={NotFound}/>
   </Router>
 )
