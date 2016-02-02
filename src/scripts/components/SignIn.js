@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 
 
@@ -54,7 +54,7 @@ class SignIn extends React.Component {
   }
 
   render() {
-    injectTapEventPlugin();
+    // injectTapEventPlugin();
     return (
 
       <div>

@@ -54,7 +54,7 @@ app.listen(3000, function(err) {
 
 //postgres set up
 var pg = require('pg');
-var connectionString = process.env.DATABASE_URL || 'postgresql://root:foodbot@localhost/foodbot';
+var connectionString = process.env.DATABASE_URL || 'postgresql://localhost/foodbot';
 
 var client = new pg.Client(connectionString);
 client.connect();
