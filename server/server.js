@@ -33,7 +33,7 @@ app.use(session({
 
 // app.use(require('webpack-hot-middleware')(compiler));
 
-app.use(express.static(__dirname + '/../client'));
+app.use(express.static(__dirname + '/../build'));
 
 require('./config/routes.js')(app, express);
 
