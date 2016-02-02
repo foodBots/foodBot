@@ -65,8 +65,7 @@ module.exports = {
   signin: function(req, res) {
    var client = new pg.Client(connectionString);
    client.connect();
-
-
+   
     client.query("SELECT * FROM Users where email ='"+req.body.email+"' AND password = crypt('"+req.body.password+"', password);", function(err, data) {
      if (err) {
        res.status(500).json("We're sorry, an error has occurred");
@@ -78,20 +77,20 @@ module.exports = {
        var id = data.rows[0].id
        var userData = {
          email: data.rows[0].email
-       };
-
+       };        
        var allUserData = {
          id: id,
          userData: userData,
          profileData: {},
          recipesData: [],
-         matchData: {}
+         matchData: {id: "", recipes: []}
        };
 
        var profileQuery = client.query("SELECT * FROM PROFILES AS P where P.id='"+id+"';")
         profileQuery.on('row', function(data) {
           console.log("data from profile query", data);
           allUserData.profileData = data;
+          allUserData.matchData.id = data.match
         })
 
        var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")      
@@ -100,13 +99,19 @@ module.exports = {
             'recipeid' :data.recipeid,
              'created' :data.created
          });
-          console.log(data)
+          // console.log(data)
         })
 
-        var matchQuery = client.query("SELECT")
+        var matchQuery = client.query("SELECT * FROM USERRECIPES WHERE profileid IN (SELECT match from profiles where id='"+id+"');")
+          var matchRec = allUserData.matchData.recipes
+          matchQuery.on('row', function(data) {
+            console.log(data, "MATCHED FOOLS")
+            if(!data.created && data.liked)
+            matchRec.push(data)
+          })
 
-        userQuery.on('end', function(data) {                      
-          console.log('alluserdata sent is', allUserData)
+        matchQuery.on('end', function(data) {                      
+          console.log('matchdata sent is', allUserData.matchData)
           res.send(allUserData)
          });
 

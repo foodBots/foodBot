@@ -5,6 +5,7 @@ module.exports = {
 
 	createMatch : function (req, res){
 		// TODO: Remove (Temporary for testing)
+		console.log("WE GOT NEXT", req.params, req.body)
 		var uid = req.params.id;
 
 		// Create Postgress Connection

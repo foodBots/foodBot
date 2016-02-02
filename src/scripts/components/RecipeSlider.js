@@ -20,7 +20,7 @@ export default class RecipeSlider extends React.Component {
     return (
       <div key={index} >
       <Card key={index}>
-        <CardMedia style={this.style} overlay={<CardTitle title={item}/>}>
+        <CardMedia style={this.style} overlay={<CardTitle title={item.recipeId}/>}>
           <img src="http://danielfooddiary.com/wp-content/uploads/2014/03/boinnovation2.jpg"/>
         </CardMedia>
         <CardText>
