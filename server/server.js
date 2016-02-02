@@ -9,9 +9,9 @@ var db = require('./config/dbOperations.js');
 var User = require('./controllers/userController.js');
 
 //Webpack
-var webpack = require('webpack');
-var config = require('./webpack.config.dev');
-var compiler = webpack(config);
+// var webpack = require('webpack');
+// var config = require('./webpack.config.dev');
+// var compiler = webpack(config);
 
 var app = express();
 
@@ -26,12 +26,12 @@ app.use(session({
 }))
 
 //Hot Reloading
-app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo: true,
-  publicPath: config.output.publicPath
-}));
+// app.use(require('webpack-dev-middleware')(compiler, {
+//   noInfo: true,
+//   publicPath: config.output.publicPath
+// }));
 
-app.use(require('webpack-hot-middleware')(compiler));
+// app.use(require('webpack-hot-middleware')(compiler));
 
 app.use(express.static(__dirname + '/../client'));
 
