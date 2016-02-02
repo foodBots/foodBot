@@ -17,8 +17,7 @@ import NotFound from './scripts/components/NotFound';
 import Header from './scripts/components/Header.js'
 import ProfileMake from './scripts/components/ProfileMake'
 import RecipeChoose from './scripts/components/RecipeChoose'
-import RecipeView from './scripts/components/RecipeView'
-import PairChatRoom from './scripts/components/PairChatRoom'
+import RecipeLanding from './scripts/components/RecipeLanding'
 
 //incl API key
 

@@ -5,7 +5,7 @@ import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
 import RecipeView from './RecipeView'
 import SignIn from './SignIn'
-import PairChatRoom from './PairChatRoom'
+import RecipeLanding from './RecipeLanding'
 import $ from 'jquery';
 
 class App extends React.Component {
@@ -80,6 +80,8 @@ class App extends React.Component {
           
       //RECIPE VIEW
       userMatch: "",
+      partnerRecipes: [],
+      chosenRecipes: [],
       getUserMatch: () => {
         $.get('/foodBot/match/:' + this.state.id)
           .done((result) => this.setState({userMatch: result}))
@@ -87,15 +89,12 @@ class App extends React.Component {
       getChosenRecipes: () => {
         $.get('/foodBot/meals/:' + this.state.id)
           .done((result) => this.setState({chosenRecipes: result}))
-      },      
-      
-      chosenRecipes: [],
-      
+      },            
       getMatchRecipes: () => {
         $.get('foodBot/match/:' + this.state.id)
           .done((result) => this.setState({partnerRecipes: result}))
       },
-      partnerRecipes: ["d", "e", "f", "g", "h"],
+    
 
       //SOCIAL COMPONENT LOGIC
       messages: [],
@@ -118,26 +117,46 @@ class App extends React.Component {
     }
   }
   
-  render() {
-    //SIGN UP FIRST TIME PROFILE MAKE
-    // if (this.state.componentRoute[this.state.currentView] === "SignUp") {
-    //  return (
-    //    <div>
-    //     <Header redirect={this.state.redirect.bind(this)}/>
-    //     <ProfileMake
-    //       id = {this.state.id}
-    //       redirect={this.state.redirect}
-    //       choices={this.state.choices}
-    //       prep={this.state.prep}
-    //       diet={this.state.diet}
-    //       setDiet={this.state.setDiet.bind(this)}
-    //       setPrep={this.state.setPrep.bind(this)}
-    //       profSubmit={this.state.profSubmit.bind(this)}/>
-    //    </div>
-    //  )
-    // }
-    
-    //UPDATE PROFILE
+  render() {    
+    //SWIPE RECIPES
+    if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
+      return (
+        <div>
+          <Header redirect={this.state.redirect.bind(this)} />
+          <RecipeChoose 
+              id={this.state.id} 
+              setChosenRecipes={this.state.setChosenRecipes.bind(this)} 
+              getRecipes={this.state.getRecipes.bind(this)}
+              recipes={this.state.recipes}
+              userMatch={this.state.userMatch}/>
+        </div>
+      )
+    }
+    //VIEW PAIR AND RECIPES
+    else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
+      return (
+        <div>
+          <Header redirect={this.state.redirect.bind(this)} />
+          <RecipeLanding           
+            username ={this.props.location.state.id}
+            match={this.props.location.state.matchData.id}
+            chosenRecipes={this.props.location.state.recipesData}
+            matchRecipes={this.props.location.state.matchData.recipes}
+
+            messages={this.state.messages}
+            submitChat={this.state.submitChat}/>
+        </div>
+      )
+    }
+    else {
+      <NotFound />
+    }
+  }
+
+};
+export default App;
+
+//UPDATE PROFILE
     // else if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
     //  return (
     //    <div>
@@ -154,43 +173,3 @@ class App extends React.Component {
     //    </div>
     //  )
     // }
-    //SWIPE RECIPES
-    if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
-      return (
-        <div>
-          <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose 
-              id={this.state.id} 
-              setChosenRecipes={this.state.setChosenRecipes.bind(this)} 
-              getRecipes={this.state.getRecipes.bind(this)}
-              recipes={this.state.recipes}
-              userMatch={this.state.userMatch}/>
-
-        </div>
-      )
-    }
-    //VIEW PAIR AND RECIPES
-    else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
-      return (
-        <div>
-          <Header redirect={this.state.redirect.bind(this)} />
-          <PairChatRoom
-            getUserMatch= {this.state.getUserMatch.bind(this)}
-            getChosenRecipes= {this.state.getChosenRecipes.bind(this)}
-            getMatchRecipes= {this.state.getMatchRecipes.bind(this)}
-            username ={this.state.username}
-            match={this.state.userMatch}
-            chosenRecipes={this.state.chosenRecipes}
-            matchRecipes={this.state.matchRecipes}
-            messages={this.state.messages}
-            submitChat={this.state.submitChat}/>
-        </div>
-      )
-    }
-    else {
-      <NotFound />
-    }
-  }
-
-};
-export default App;

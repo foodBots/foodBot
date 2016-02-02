@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import {FlexColumn, FlexRow} from 'react-flexbox';
 import View from 'react-flexbox';
 
-class PairChatRoom extends React.Component {
+class RecipeLanding extends React.Component {
   
   constructor() {
   super();
@@ -39,5 +39,5 @@ class PairChatRoom extends React.Component {
   }
 }
 
-export default PairChatRoom
+export default RecipeLanding
 

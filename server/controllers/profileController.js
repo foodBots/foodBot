@@ -23,8 +23,6 @@ module.exports = {
     var foodie = (req.body.foodie === "true");
     var userId = parseInt(req.params.id);
     var client = new pg.Client(connectionString);
-
-    console.log(typeof cookingTime, typeof diet, typeof foodie, typeof userId, "IS IT OR IZNT IT", req.body)
     
   	client.connect();
     var updateOrNewQuery = client.query("SELECT * FROM Profiles WHERE id='"+userId+"';", function(err, data) {      
@@ -36,14 +34,12 @@ module.exports = {
       } else {
   	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ("+userId+","+cookingTime+","+foodie+",'"+diet+"')", function(err, data) {
         console.log("MAKEA DUH NEW QUERYRRYRYRY", data)
-       });
-       res.status(200);
+       });       
       }
     });
   	updateOrNewQuery.on('end', function() {
       console.log('ended?');
-      res.status(200).json(userId);
-      client.end();
+      next();
     });
   },
   retrieveAllUsers: function(req, res, next) {
