@@ -52,7 +52,7 @@ module.exports = {
 	},
 
 	addUserMeal : function (req, res){
-		console.log(req.body)
+		console.log("adding users likes/dislikes",req.body)
 		var rejected = req.body.rejected;
 		var liked = req.body.liked;
 
@@ -72,18 +72,22 @@ module.exports = {
 		client.connect();
 
 		// Create Insert Meal Query
+		if (rejected) {
+			rejected.forEach(function (recipeID) {
+			// console.log("trying...", recipe)
+				// var recipeID = recipe.mealID;
+				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)") ;
 
-		rejected.forEach(function (recipeID) {
-		// console.log("trying...", recipe)
-			// var recipeID = recipe.mealID;
-			var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)") ;
+			});		
+		}
 
-		});
+		if (liked) {
+			liked.forEach(function (recipeID) {
+				// var recipeID = recipe.mealID;
+				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;
+			});
+		}
 
-		liked.forEach(function (recipeID) {
-			// var recipeID = recipe.mealID;
-			var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;
-		});
 		// var liked = req.body.liked;
 		res.sendStatus(200);
 		//TODO: MAKE RESTRAINT TO NOT ALLOW DUPLICATES

@@ -14,12 +14,15 @@ var cooking = {
 		var client = new pg.Client(connectionString);
 		client.connect();
 		var yummlyRecipes;
+		console.log("in yummly",uid)
 
 		var foodQ = function (){
+			console.log("running foodQ")
 			return new Promise (function (resolve, reject) {
+				console.log("returning foodq promise")
 				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
-					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id +
-					"&_app_key=" + apiKeys.yummly_key +
+					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
+					"&_app_key=" + apiKeys.yummly.key +
 					"&requirePictures=true" +
 					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
 					"&flavor.sweet.min=" + Math.random().toFixed(1) +
@@ -27,8 +30,12 @@ var cooking = {
 					"&flavor.meaty.min=" + Math.random().toFixed(1) +
 					"&flavor.sour.min=" + Math.random().toFixed(1) +
 					"&flavor.bitter.min=" + Math.random().toFixed(1), function (error, response, body) {
+						console.log("did yummly", response.statusCode)
+						console.log("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly_id +
+					"&_app_key=" + apiKeys.yummly_key + "")
 						if (!error && response.statusCode == 200) {
 							yummlyRecipes = body
+							console.log("result:", yummlyRecipes)
 							resolve(yummlyRecipes);
 						}
 					})
@@ -38,6 +45,7 @@ var cooking = {
 		}
 
 		foodQ().then(function (yummlyRecipes) {
+			console.log("about to insert into db")
 			var insertRecipesIntoDB = function () {
 				yummlyRecipes = JSON.parse(yummlyRecipes);
 				yummlyRecipes.matches.forEach(function (recipe, index) {
@@ -47,11 +55,13 @@ var cooking = {
 						recipe.cookingTime = 2;
 					} else {
 						recipe.cookingTime = 1;
-					}				
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, yummly_id, rating) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipe.smallImageUrls[0] + "0-c', 'http://www.yummly.com/recipe/external/" + recipe.id + "', " + recipe.cookingTime + ", '" + recipe.id + "', " + recipe.rating + ") " , function (err) {
+					}
+					var recipeImg = recipe.smallImageUrls ? recipe.smallImageUrls[0] + "0-c": recipe.imageUrlsBySize[Object.keys(recipe.imageUrlsBySize)[0]].replace("90","900")
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, yummly_id, rating) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipeImg + "0-c', 'http://www.yummly.com/recipe/external/" + recipe.id + "', " + recipe.cookingTime + ", '" + recipe.id + "', " + recipe.rating + ") " , function (err) {
 						if (err){
 							console.log("yummly recipe already saved in db")
 						}
+						console.log("added recipe to database")
 					})
 				})
 
@@ -61,7 +71,8 @@ var cooking = {
 	}
 
 module.exports = {
-	retrieveSuggestedRecipes: function (req, res) {		
+	retrieveSuggestedRecipes: function (req, res) {	
+	console.log("retrieveSuggestedRecipes")	
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
@@ -84,7 +95,9 @@ module.exports = {
 		profileQuery.on("row", function (profileRow) {
 			userAllergies = profileRow.allergies;
 			var totalMatches = 0;
-			var foodQuery = client.query("SELECT * FROM Recipes WHERE cookingtime = " +  profileRow.cookingtime + " OR cookingtime = " + (profileRow.cookingtime - 1) + " AND (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ")");
+			// SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = 1 ) AND (cookingtime = profileRow.cookingtime OR cookingtime = (profileRow.cookingtime - 1)
+
+			var foodQuery = client.query("SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ") AND (cookingtime = " +  profileRow.cookingtime + " OR cookingtime = " + (profileRow.cookingtime - 1) + ")" );
 			// On row add if no user allergies in recipe ingredients add recipe to results
 
 			foodQuery.on("row", function (foodRow) {
@@ -107,8 +120,10 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
+				console.log("sending this thingy:",sendData)	
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 50;
+				console.log("getting from yummly")
 				if (totalMatches < lowOnViableRecipes) {
 					client.end();
 					getRecipesFromYummly(uid);
