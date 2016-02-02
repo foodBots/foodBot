@@ -22,7 +22,7 @@ class SignIn extends React.Component {
   }
 
   signIn(e) {
-    injectTapEventPlugin();
+    // injectTapEventPlugin();
     e.preventDefault();
     let user = {
       email: this.refs.email.getValue(),
