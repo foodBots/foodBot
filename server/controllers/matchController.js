@@ -14,7 +14,7 @@ module.exports = {
 
 		// Create Query for all recipes user has created or eaten
 		var newMatch = function (){
-			var matchesQuery = client.query("SELECT * FROM MatchesQueue LIMIT 1", function (err, result){
+			var matchesQuery = client.query("SELECT * FROM matchesQueue WHERE (userone) in (Select id from profiles WHERE foodie = (SELECT foodie FROM profiles WHERE id = " + uid + "))  LIMIT 1", function (err, result){
 				var addToMatchesQueue = function () {
 					var addToMatchQueueQuery = client.query("INSERT INTO MatchesQueue (userone) VALUES ( " + uid + ")");
 					addToMatchQueueQuery.on("end", function (){
