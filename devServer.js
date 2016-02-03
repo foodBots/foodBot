@@ -32,14 +32,14 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + '/../client'));
 
 require('./server/config/routes.js')(app, express);
 
 var port = process.env.PORT || 3000;
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '/dist/index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(3000, function(err) {

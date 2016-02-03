@@ -48,7 +48,7 @@ class App extends React.Component {
         this.setState({chosenType})
         const id = this.state.id
 
-        console.log(this.state.diet)
+        console.log('chosenType', chosenType)
         const prof = {
           diet: this.state.diet,
           cookingTime: this.state.prep +1,

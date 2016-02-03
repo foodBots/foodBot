@@ -55,14 +55,16 @@ class SignUp extends React.Component {
       },
 
       profSubmit: (chosenType) => {
-        console.log('diet', this.state.diet)
-        this.setState({chosenType})
+        const isFoodie = chosenType === "Foodie";
+        // console.log('diet', this.state.diet)
+        this.setState({chosenType: isFoodie})
+        // console.log('state chosentype', this.state.chosenType, 'isFoodie', isFoodie);
         // const id = this.props.location.state.id.id
         // console.log('ID POST PROPS:', id);
         const prof = {
           diet: this.state.diet,
           cookingTime: this.state.prep.value +1,
-          foodie: this.state.chosenType === "foodie"
+          foodie: isFoodie
         }
 
         console.log(prof.cookingTime, "cookingTime")
