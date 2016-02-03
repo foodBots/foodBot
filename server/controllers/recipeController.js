@@ -9,6 +9,14 @@ var cooking = {
 	2: 1800, // hour in secs
 	3: 3600 // two hour in secs
 }
+
+	// getRecipesFromEdaman = function (){
+	// 	request("https://api.edamam.com/search?&&app_id=" + apiKeys.edamam.id + "&app_key=" + apiKeys.edamam.key + "", function (err, data){
+	// 		console.log(JSON.parse(data.body).hits)
+	// 	})
+	// }
+
+
 	getRecipesFromYummly = function (uid) {
 		var client = new pg.Client(connectionString);
 		client.connect();
@@ -24,11 +32,10 @@ var cooking = {
 					"&_app_key=" + apiKeys.yummly.key +
 					"&requirePictures=true" +
 					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
-					"&flavor.sweet.min=" + Math.random().toFixed(1) +
-					"&flavor.piquant.min=" + Math.random().toFixed(1) +
-					"&flavor.meaty.min=" + Math.random().toFixed(1) +
-					"&flavor.sour.min=" + Math.random().toFixed(1) +
-					"&flavor.bitter.min=" + Math.random().toFixed(1), function (error, response, body) {
+					"&excludedCourse[]=course^course-Breads" +
+					"&excludedCourse[]=course^course-Beverages" +
+					"&excludedCourse[]=course^course-Condiments and Sauces" +
+					"&excludedCourse[]=course^course-Cocktails", function (error, response, body) {
 						if (!error && response.statusCode == 200) {
 							yummlyRecipes = body
 							console.log("result:", yummlyRecipes)
@@ -93,7 +100,7 @@ module.exports = {
 			var totalMatches = 0;
 			// SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = 1 ) AND (cookingtime = profileRow.cookingtime OR cookingtime = (profileRow.cookingtime - 1)
 
-			var foodQuery = client.query("SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ") AND (cookingtime = " +  profileRow.cookingtime + " OR cookingtime = " + (profileRow.cookingtime - 1) + ")" );
+			var foodQuery = client.query("SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ") AND (cookingtime = " +  profileRow.cookingtime + " OR cookingtime = " + (profileRow.cookingtime - 1) + " OR cookingtime IS NULL)" );
 			// On row add if no user allergies in recipe ingredients add recipe to results
 
 			foodQuery.on("row", function (foodRow) {
@@ -116,13 +123,14 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
-				console.log("sending this thingy:",sendData)	
+				// console.log("sending this thingy:",sendData)	
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 50;
 				console.log("getting from yummly")
 				if (totalMatches < lowOnViableRecipes) {
 					client.end();
 					getRecipesFromYummly(uid);
+					// getRecipesFromEdaman();
 				}
 			})
 		})
