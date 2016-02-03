@@ -23,9 +23,10 @@ module.exports = {
     var foodie = (req.body.foodie === "true");
     var userId = parseInt(req.params.id);
     var client = new pg.Client(connectionString);
-    
+
+
   	client.connect();
-    var updateOrNewQuery = client.query("SELECT * FROM Profiles WHERE id='"+userId+"';", function(err, data) {      
+    var updateOrNewQuery = client.query("SELECT * FROM Profiles WHERE id='"+userId+"';", function(err, data) {
       if (data.rowCount > 0) {
         var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
           console.log("update querrrry", data)
@@ -34,7 +35,7 @@ module.exports = {
       } else {
   	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, foodie, diet) VALUES ("+userId+","+cookingTime+","+foodie+",'"+diet+"')", function(err, data) {
         console.log("MAKEA DUH NEW QUERYRRYRYRY", data)
-       });       
+       });
       }
     });
   	updateOrNewQuery.on('end', function() {

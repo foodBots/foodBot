@@ -2,7 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 import ProfileMake from './ProfileMake'
 
@@ -55,14 +55,16 @@ class SignUp extends React.Component {
       },
 
       profSubmit: (chosenType) => {
-        console.log('diet', this.state.diet)
-        this.setState({chosenType})
+        const isFoodie = chosenType === "Foodie";
+        // console.log('diet', this.state.diet)
+        this.setState({chosenType: isFoodie})
+        // console.log('state chosentype', this.state.chosenType, 'isFoodie', isFoodie);
         // const id = this.props.location.state.id.id
         // console.log('ID POST PROPS:', id);
         const prof = {
           diet: this.state.diet,
           cookingTime: this.state.prep.value +1,
-          foodie: this.state.chosenType === "foodie"
+          foodie: isFoodie
         }
 
         console.log(prof.cookingTime, "cookingTime")
@@ -118,13 +120,13 @@ class SignUp extends React.Component {
   //     // console.log('props',this.props);
   //     // this.setState({user: user});
   //     user.id = result.id;
-  //     console.log(user.id, "USER ID HERE")            
-      
+  //     console.log(user.id, "USER ID HERE")
+
   //     //Creates a match upon sign up
   //     // $.post('/foodBot/match/:'+ user.id).done((result) => {
-  //     //     console.log("match created!", result)          
+  //     //     console.log("match created!", result)
   //     //   })
-      
+
   //     user.route= 'Profile Settings';
   //     this.props.history.pushState(user, '/');
   //   })
@@ -148,7 +150,7 @@ class SignUp extends React.Component {
   //<form className="sign-up" ref="signupForm" onSubmit={this.signUp}>
   // <RaisedButton style={this.buttonStyles} type="submit" label="Sign Up!" />
   render() {
-    injectTapEventPlugin();
+    // injectTapEventPlugin();
     return (
       <div>
         <Header />

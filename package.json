@@ -4,7 +4,7 @@
   "description": "Food Robot",
   "scripts": {
     "clean": "rimraf dist",
-    "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
+    "build:webpack": "cross-env NODE_ENV=production webpack --config webpack.config.dev.js",
     "build": "npm run clean && npm run build:webpack",
     "start": "node devServer.js",
     "lint": "eslint src",
@@ -46,6 +46,7 @@
     "babelify": "^7.2.0",
     "browser-sync": "2.9.11",
     "browserify": "^12.0.1",
+    "chai": "^3.5.0",
     "classnames": "^2.2.3",
     "connect-history-api-fallback": "1.1.0",
     "cross-env": "^1.0.6",
