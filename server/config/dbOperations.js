@@ -18,6 +18,18 @@ module.exports = {
       'name varchar(50)' +
     ')',
 
+  createRecipeSourcesTable: 'CREATE TABLE IF NOT EXISTS RecipeSources' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY,' + 
+      'name varchar(50)' +
+    ')',
+
+  createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY, ' +
+      'name varchar(255)' +
+    ')',
+
   createRecipesTable: 'CREATE TABLE IF NOT EXISTS Recipes' +
     '(' +
     'id serial NOT NULL PRIMARY KEY, ' +
@@ -31,8 +43,8 @@ module.exports = {
     'cost int ,' +
     "image varchar(255) DEFAULT 'http://lh4.ggpht.com/iEyogFzb2gMbVBLSjgPL0qSETW76pRG1hQYRjLOnmU4JDgMdc65v53OZ3WWSvuRO_kY'," +
     'complexity int,' +
-    'recipe_source_id varchar(255) UNIQUE,' +
-    'source_id int references RecipeSources(id) NOT NULL,' +
+    'recipesourceid varchar(255) UNIQUE,' +
+    'sourceid int references RecipeSources(id) NOT NULL,' +
     'rating int' +
     ')',
 

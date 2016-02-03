@@ -25,23 +25,33 @@ var cooking = {
 
 		var foodQ = function (){
 			return new Promise (function (resolve, reject) {
-				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
-					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
-					"&_app_key=" + apiKeys.yummly.key +
-					"&allowedCourse[]=course^course-Main%20Dishes&requirePictures=true" +
-					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
-					"&excludedCourse[]=course^course-Breads" +
-					"&excludedCourse[]=course^course-Beverages" +
-					"&excludedCourse[]=course^course-Condiments and Sauces" +
-					"&excludedCourse[]=course^course-Cocktails" + 
-					"&maxResult=10"
-					, function (error, response, body) {
-						if (!error && response.statusCode == 200) {
-							yummlyRecipes = body
-							resolve(yummlyRecipes);
-						}
-					})
-				});
+				var start;
+				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=1", function (err, result){
+					start = parseInt(result.rows[0].count) + 2;
+
+				})
+				startQuery.on("end", function (){
+					var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
+						request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
+						"&_app_key=" + apiKeys.yummly.key +
+						"&requirePictures=true" +
+						"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
+						"&excludedCourse[]=course^course-Breads" +
+						"&excludedCourse[]=course^course-Beverages" +
+						"&excludedCourse[]=course^course-Condiments and Sauces" +
+						"&excludedCourse[]=course^course-Cocktails" + 
+						"&maxResult=10" +
+						"&start=" + start
+						, function (error, response, body) {
+							if (!error && response.statusCode == 200) {
+								yummlyRecipes = body
+								console.log("result:", yummlyRecipes)
+								resolve(yummlyRecipes);
+							}
+						})
+
+					});
+				})
 			})
 		}
 
@@ -59,7 +69,7 @@ var cooking = {
 						recipe.cookingTime = 1;
 					}
 					var recipeImg = recipe.smallImageUrls ? recipe.smallImageUrls[0] + "0-c": recipe.imageUrlsBySize[Object.keys(recipe.imageUrlsBySize)[0]].replace("90","900")
-					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, recipe_source_id, rating, source_id) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipeImg + "0-c', 'http://www.yummly.com/recipe/external/" + recipe.id + "', " + recipe.cookingTime + ", '" + recipe.id + "', " + recipe.rating + ", 1) " , function (err) {
+					client.query("INSERT INTO Recipes (name, exactcookingtime, image, directionsUrl, cookingtime, recipesourceid, rating, sourceid) VALUES ('" + recipe.recipeName + "', " + recipe.totalTimeInSeconds + ", '" + recipeImg + "0-c', 'http://www.yummly.com/recipe/external/" + recipe.id + "', " + recipe.cookingTime + ", '" + recipe.id + "', " + recipe.rating + ", 1) " , function (err) {
 						if (err){
 							console.log("yummly recipe already saved in db")
 						}
