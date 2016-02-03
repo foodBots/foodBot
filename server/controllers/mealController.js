@@ -5,6 +5,7 @@ var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/
 module.exports = {
 
 	retrieveUserMeals : function (req, res){
+		console.log(req.params, req.body)
 		// Get User ID
 		var uid = req.params.id;
 
@@ -13,7 +14,9 @@ module.exports = {
 		client.connect();
 
 		// Create Query for all recipes user has created or seenRecipe
-		var userRecipesQuery = client.query("SELECT * FROM UserRecipes WHERE profileid = " + uid + "") ;
+		var userRecipesQuery = client.query("SELECT name, ingredients, image, rating, directionsurl, liked FROM Recipes INNER JOIN UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid="+uid+" AND liked=true;");
+		//TestQ: SELECT * from Recipes WHERE id in (SELECT recipeid FROM UserRecipes WHERE profileid= 17);
+				//TestQ2: Select name, ingredients, image, rating, directionsurl, liked from Recipes Inner Join UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid=17 AND liked=true;
 
 		// Instantiate User Recipes
 		var userRecipes = [];
@@ -26,26 +29,28 @@ module.exports = {
 		// After recieved all User Recipes
 		userRecipesQuery.on("end", function () {
 
-			// Instantiate Created and Eaten Array
-			var created = [];
-			var seenRecipe = {liked:[] , rejected:[]};
 
-			// Sort All Recipes By seenRecipe & Created
-			userRecipes.forEach(function (recipe){
-				console.log("recipe:",recipe)
-				if (recipe.created){
-					created.push(recipe)
-				}
-				else {
-					if (recipe.liked) {
-						seenRecipe.liked.push(recipe)
-					}
-					seenRecipe.rejected.push(recipe)
-				}
-			})
+		//Filtering logic in DB call. Not necessary to separate
+			// // Instantiate Created and Eaten Array
+			// var created = [];
+			// var seenRecipe = {liked:[] , rejected:[]};
+
+			// // Sort All Recipes By seenRecipe & Created
+			// userRecipes.forEach(function (recipe){
+			// 	console.log("recipe:",recipe)
+			// 	if (recipe.created){
+			// 		created.push(recipe)
+			// 	}
+			// 	else {
+			// 		if (recipe.liked) {
+			// 			seenRecipe.liked.push(recipe)
+			// 		}
+			// 		seenRecipe.rejected.push(recipe)
+			// 	}
+			// })
 
 			// Send userRecipes to Client
-			var sendData = {seenRecipe: seenRecipe.liked}
+			var sendData = {recipeView: userRecipes}
 			res.send(sendData);
 		});
 	},

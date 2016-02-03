@@ -7,6 +7,8 @@ import RecipeSlider from './RecipeSlider'
 import ReactDOM from 'react-dom';
 import {FlexColumn, FlexRow} from 'react-flexbox';
 import View from 'react-flexbox';
+import $ from 'jquery';
+
 
 class RecipeLanding extends React.Component {
   
@@ -19,7 +21,13 @@ class RecipeLanding extends React.Component {
     }
   }
 
-  render() {
+  componentWillMount(){
+    ///foodBot/meals/:17 
+    $.get('/foodBot/meals/' + this.props.username).
+    done((data) => {this.props.setChosenRecipes(data)})
+  }
+
+  render() {    
     return (
     <div>
     <h3>{this.props.username}</h3>
@@ -27,14 +35,14 @@ class RecipeLanding extends React.Component {
               username={this.props.username}
               recipes={this.props.chosenRecipes} 
               submitChat={this.props.submitChat}
-              messages ={this.props.messages} />
-    <h3>{this.props.match}</h3>
-      <RecipeSlider
-              username={this.props.match}
-              recipes={this.props.matchRecipes}
-              submitChat={this.props.submitChat}
-              messages ={this.props.messages}  />          
+              messages ={this.props.messages} />    
     </div>
+    //   <RecipeSlider
+    //           username={this.props.match}
+    //           recipes={this.props.matchRecipes}
+    //           submitChat={this.props.submitChat}
+    //           messages ={this.props.messages}  />          
+    
     )
   }
 }

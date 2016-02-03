@@ -40,7 +40,7 @@ class App extends React.Component {
       },
 
       setChosenRecipes: (chosenRecipes) => {
-        this.setState({chosenRecipes})
+        this.setState({chosenRecipes: chosenRecipes})
       },
 
       profSubmit: (chosenType) => {
@@ -81,7 +81,8 @@ class App extends React.Component {
         });
           console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>');
           this.setState({recipes: r});
-          });
+        });
+        
       },
       saveMatch: () => {
         // console.log('Your match is', this.props.userMatch)
@@ -97,20 +98,7 @@ class App extends React.Component {
       //RECIPE VIEW
       userMatch: "",
       partnerRecipes: [],
-      chosenRecipes: [],
-      getUserMatch: () => {
-        $.get('/foodBot/match/:' + this.state.id)
-          .done((result) => this.setState({userMatch: result}))
-      },
-      getChosenRecipes: () => {
-        $.get('/foodBot/meals/:' + this.state.id)
-          .done((result) => this.setState({chosenRecipes: result}))
-      },
-      getMatchRecipes: () => {
-        $.get('foodBot/match/:' + this.state.id)
-          .done((result) => this.setState({partnerRecipes: result}))
-      },
-
+      chosenRecipes: [],      
 
       //SOCIAL COMPONENT LOGIC
       messages: [],
@@ -179,9 +167,10 @@ class App extends React.Component {
           <RecipeLanding
             username ={this.props.location.state.id}
             match={this.props.location.state.matchData.id}
-            chosenRecipes={this.props.location.state.recipesData}
-            matchRecipes={this.props.location.state.matchData.recipes}
-
+            setChosenRecipes={this.state.setChosenRecipes.bind(this)}            
+            chosenRecipes={this.state.chosenRecipes}
+            matchRecipes={this.state.matchRecipes}
+            //social
             messages={this.state.messages}
             submitChat={this.state.submitChat}/>
         </div>

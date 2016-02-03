@@ -17,11 +17,12 @@ export default class RecipeSlider extends React.Component {
 
   }
   renderRecipeCard (item, index) {
+    console.log(item)
     return (
       <div key={index} >
       <Card key={index}>
-        <CardMedia style={this.style} overlay={<CardTitle title={item.recipeId}/>}>
-          <img src="http://danielfooddiary.cogit /wp-content/uploads/2014/03/boinnovation2.jpg"/>
+        <CardMedia style={this.style} overlay={<CardTitle title={item.title}/>}>
+          <img src={item.image}/>
         </CardMedia>
         <CardText>
         {index}: Link to Recipe Instructions? Or Ingredient List<br/>
@@ -42,7 +43,7 @@ export default class RecipeSlider extends React.Component {
 
   render(){
     let recipes = this.props.recipes
-    console.log(this.props.username)
+    console.log(recipes)
     const settings = {
       dots: false,
       infinite: true,
