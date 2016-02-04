@@ -69,13 +69,13 @@ class Recipe extends React.Component {
       textAlign: 'center',
       width: '450px'
     }
-    this.state = {
-      recipes: []
-    }
-    this.recipesObj = {
-      liked: [],
-      rejected: []
-    }
+    // this.state = {
+    //   recipes: []
+    // }
+    // this.recipesObj = {
+    //   liked: [],
+    //   rejected: []
+    // }
   }
 
   componentWillMount() {
@@ -85,11 +85,11 @@ class Recipe extends React.Component {
   //takes in recipeId and like bool
   likeOrReject(recipeId, like) {
     // const id = this.props.id
-    console.log(recipeId, like);
-    like ? this.recipesObj.liked.push(recipeId) : this.recipesObj.rejected.push(recipeId);
-    // console.log('save recipeObj', this.recipesObj);
+    // console.log(recipeId, like);
+    like ? this.props.recipesObj.liked.push(recipeId) : this.props.recipesObj.rejected.push(recipeId);
+    console.log('saved recipeObj', this.props.recipesObj);
   }
-  
+
   next(element) {
     this.likeOrReject(element.id, false);
     this.refs.ReactSwipe.swipe.next()
@@ -100,19 +100,9 @@ class Recipe extends React.Component {
     this.refs.ReactSwipe.swipe.next()
   }
 
-  saveMatch() {
-    console.log('Your match is', this.props.userMatch)
-    // this.openModal();
 
-    console.log(this.recipesObj);
-    this.props.setChosenRecipes(this.recipesObj.liked);
-    $.post('/foodBot/meals/' + this.props.id, this.recipesObj)
-    .done((result) => {
-      console.log('posted!')
-      //redirect to main view
+  // <RaisedButton label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
 
-    })
-  }
 
   renderCard (element, index) {
     return (
@@ -124,7 +114,6 @@ class Recipe extends React.Component {
         <CardActions>
           <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
           <RaisedButton label="Yes" secondary={true} onClick={this.yes.bind(this, element)} /><br/><br/>
-          <RaisedButton label="Pair and Cook!" primary={true} onClick={this.saveMatch.bind(this)} />
         </CardActions>
         </Card>
       </div>
