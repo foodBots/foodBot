@@ -30,7 +30,7 @@ var cooking = {
 				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
 					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
 					"&_app_key=" + apiKeys.yummly.key +
-					"&requirePictures=true" +
+					"&allowedCourse[]=course^course-Main%20Dishes&requirePictures=true" +
 					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
 					"&excludedCourse[]=course^course-Breads" +
 					"&excludedCourse[]=course^course-Beverages" +
@@ -74,12 +74,12 @@ var cooking = {
 	}
 
 module.exports = {
-	retrieveSuggestedRecipes: function (req, res) {	
-	console.log("retrieveSuggestedRecipes")	
+	retrieveSuggestedRecipes: function (req, res) {
+	console.log("retrieveSuggestedRecipes")
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
-		var uid = parseInt(req.params.id);		
+		var uid = parseInt(req.params.id);
 		var amtOfRecipes = req.body.amount || 20;
 
 		// Query allergies for User and Recipes
@@ -123,7 +123,11 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
+<<<<<<< 8e23fc011a7faaec269bb46258b433e3ec3b4714
 				// console.log("sending this thingy:",sendData)	
+=======
+				console.log("sending this thingy:",sendData)
+>>>>>>> moved recipeChoose save to db to App.js
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 50;
 				console.log("getting from yummly")

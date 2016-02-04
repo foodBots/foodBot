@@ -28,7 +28,9 @@ const routes = (
     <Route path="/signup" component={SignUp}/>
     <Route path="/signin" component={SignIn}/>
     <Route path="/signout" component={SignIn}/>
+    <Route path="/header" component={Header}/>
     <Route path="*" component={NotFound}/>
+
   </Router>
 )
 

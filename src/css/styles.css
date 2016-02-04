@@ -164,12 +164,21 @@
       width: 100vw !important; /* be as wide as the viewport */
 }
 
+.footer-styles {
+  bottom: 0px;
+  left: 0px;
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  background-color: #00bcd4;
+}
+
 /*.bubble {
   text-align: left;
   background-color: aquamarine;
 
 }
-.comment-area 
+.comment-area
 .message
 
 
@@ -178,15 +187,15 @@ li {
 }
 */
 ul {
-  height: 100px; 
+  height: 100px;
   border: solid;
-  border-color: gray; 
+  border-color: gray;
   max-height: 100px;
   overflow-y:scroll;
   -moz-transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
-  
+
 }
 
 ul > li {

@@ -20,7 +20,7 @@ module.exports = function(app, express) {
 	app.get('/foodBot/recipes/:id',  recipeController.retrieveSuggestedRecipes); // Add AuthChecker
 
 	app.get('/foodBot/meals/:id', mealController.retrieveUserMeals); // Add AuthChecker
-	
+
 	app.post('/foodBot/meals/:id', mealController.addUserMeal); // Add AuthChecker
 
 	app.get('/foodBot/match/:id', matchController.retrieveMatch);
@@ -44,5 +44,4 @@ module.exports = function(app, express) {
 	// app.get('/foodBot/user/home/:id', auth.checkUser, dashboardController.getUserMeals) // Add AuthChecker
 	// app.post('/foodBot/user/home/:id', auth.checkUser, dashboardController.addMeal); // Add AuthChecker
 	// app.get('/foodBot/users/home/:username', auth.checkUser, dashboardController.getUserProfile) // Add AuthChecker
-
 };

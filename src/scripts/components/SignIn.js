@@ -2,13 +2,15 @@ import React from 'react';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import $ from 'jquery';
-// import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 import { Link } from 'react-router'
 
 
 class SignIn extends React.Component {
   constructor(props) {
+    injectTapEventPlugin();
+
     super(props);
     this.buttonStyles = {
       'display': 'block',
@@ -31,7 +33,7 @@ class SignIn extends React.Component {
     this.refs.signinForm.reset();
     // post email and password
     console.log(user);
-    $.post('/foodBot/auth/signin', user).done((result) => {      
+    $.post('/foodBot/auth/signin', user).done((result) => {
       user = result;
       user.route = 'Swipe Recipes';
       this.props.history.pushState(user, '/')
@@ -56,7 +58,6 @@ class SignIn extends React.Component {
   }
 
   render() {
-    // injectTapEventPlugin();
     return (
 
       <div>
@@ -67,10 +68,10 @@ class SignIn extends React.Component {
             <TextField type="password" ref="password" hintText="password" floatingLabelText="Enter password"  /><br/>
             <RaisedButton style={this.buttonStyles} type="submit" label="Sign In" /><br/>
             <Link to='/signup/'>
-            <RaisedButton 
-                style={this.buttonStyles} 
-                type="submit" label="Register" 
-                secondary={true} linkButton={true} 
+            <RaisedButton
+                style={this.buttonStyles}
+                type="submit" label="Register"
+                secondary={true} linkButton={true}
                 onClick={(event) => console.log(event.target.textContent)}
                 />
               </Link>
