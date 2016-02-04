@@ -7,7 +7,6 @@ export default class PairMessagesList extends React.Component {
 
   constructor(props){
     super(props)
-
     this.state = {
       messages: [],
       submitChat: (message) => {
@@ -16,9 +15,8 @@ export default class PairMessagesList extends React.Component {
       }
     }
   }
-
+  
   renderInput(){
-    console.log("input box rendered")
     return(
       <form onSubmit={(event) => {
             event.preventDefault();
@@ -31,7 +29,6 @@ export default class PairMessagesList extends React.Component {
   }
 
   renderChats() {
-    console.log("render chats done")
     return(    
           <ul className="comment-area">
             {this.state.messages.map((message, index) => this.renderMessage(message, index))}

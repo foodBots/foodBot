@@ -93,7 +93,7 @@ module.exports = {
 		}
 
 		// var liked = req.body.liked;
-		res.sendStatus(200);
+		res.sendStatus(200)
 		//TODO: MAKE RESTRAINT TO NOT ALLOW DUPLICATES
 
 		// After Added Send Client 200 Status Code

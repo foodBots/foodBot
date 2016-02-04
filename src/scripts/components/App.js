@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './Header.js'
-import ProfileMake from './ProfileMake'
-import RecipeChoose from './RecipeChoose'
-import RecipeView from './RecipeView'
-import SignIn from './SignIn'
-import RecipeLanding from './RecipeLanding'
 import $ from 'jquery';
 
-class App extends React.Component {
+import Header from './Header.js'
+import SignIn from './SignIn'
+import ProfileMake from './ProfileMake'
+import RecipeChoose from './RecipeChoose'
+import RecipeLanding from './RecipeLanding'
 
+export default class App extends React.Component {
+  
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = {            
       //USER INFO
       id: this.props.location.state.id,
       username: this.props.location.state.email,
@@ -30,17 +30,12 @@ class App extends React.Component {
       chosenType: "",
       allergies: [],
 
-
       setDiet: (diet) => {
         this.setState({diet: diet})
       },
 
       setPrep: (prep) => {
         this.setState({prep})
-      },
-
-      setChosenRecipes: (chosenRecipes) => {
-        this.setState({chosenRecipes: chosenRecipes})
       },
 
       profSubmit: (chosenType) => {
@@ -59,6 +54,9 @@ class App extends React.Component {
       },
 
       //RECIPE CHOOSE
+      setChosenRecipes: (chosenRecipes) => {
+        this.setState({chosenRecipes})
+      },
       recipes: [],
       recipesObj: {
         liked: [],
@@ -97,8 +95,23 @@ class App extends React.Component {
 
       //RECIPE VIEW
       userMatch: "",
-      partnerRecipes: [],
+      matchRecipes: [],
       chosenRecipes: [],      
+      getChosenRecipes: (id) => {
+        $.get('/foodBot/meals/' + id).
+          done((data) => {
+          console.log("data you got back is..", data)
+          this.setState({chosenRecipes: data.recipeView})
+        })
+      }, 
+      getMatchRecipes: (id) => {
+        $.get('/foodBot/meals/' + id).
+          done((data) => {
+          console.log("data you got back from match is..", data)
+          this.setState({matchRecipes: data.recipeView})
+        })
+      },
+
 
       //SOCIAL COMPONENT LOGIC
       messages: [],
@@ -121,7 +134,7 @@ class App extends React.Component {
         }
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
-      }
+      },
     }
   }
 
@@ -148,15 +161,21 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose
+          <RecipeChoose          
               id={this.state.id}
-              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               getRecipes={this.state.getRecipes.bind(this)}
+              redirect={this.state.redirect}
+              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               recipes={this.state.recipes}
+<<<<<<< e2b61cb918949c731b94cdd86e8e007897c51e97
               recipesObj={this.state.recipesObj}
               saveMatch={this.state.saveMatch.bind(this)}
               userMatch={this.state.userMatch}/>
         </div>
+=======
+              userMatch={this.state.userMatch}/>           
+       </div>
+>>>>>>> some changes
       )
     }
     //VIEW PAIR AND RECIPES
@@ -167,7 +186,8 @@ class App extends React.Component {
           <RecipeLanding
             username ={this.props.location.state.id}
             match={this.props.location.state.matchData.id}
-            setChosenRecipes={this.state.setChosenRecipes.bind(this)}            
+            getChosenRecipes={this.state.getChosenRecipes.bind(this)}
+            getMatchRecipes={this.state.getMatchRecipes.bind(this)}
             chosenRecipes={this.state.chosenRecipes}
             matchRecipes={this.state.matchRecipes}
             //social
@@ -180,10 +200,7 @@ class App extends React.Component {
       <NotFound />
     }
   }
-
 };
-export default App;
-
 //UPDATE PROFILE
     // else if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
     //  return (
