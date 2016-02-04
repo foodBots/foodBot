@@ -167,15 +167,10 @@ export default class App extends React.Component {
               redirect={this.state.redirect}
               setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               recipes={this.state.recipes}
-<<<<<<< e2b61cb918949c731b94cdd86e8e007897c51e97
               recipesObj={this.state.recipesObj}
               saveMatch={this.state.saveMatch.bind(this)}
               userMatch={this.state.userMatch}/>
-        </div>
-=======
-              userMatch={this.state.userMatch}/>           
        </div>
->>>>>>> some changes
       )
     }
     //VIEW PAIR AND RECIPES

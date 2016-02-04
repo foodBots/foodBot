@@ -189,13 +189,8 @@ li {
 ul {
   height: 100px;
   border: solid;
-<<<<<<< e2b61cb918949c731b94cdd86e8e007897c51e97
   border-color: gray;
-  max-height: 100px;
-=======
-  border-color: gray; 
   max-height: 150px;
->>>>>>> some changes
   overflow-y:scroll;
   -moz-transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
