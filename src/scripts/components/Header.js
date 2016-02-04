@@ -4,8 +4,8 @@
 */
 
 import React from 'react';
-// import injectTapEventPlugin from 'react-tap-event-plugin';
-// injectTapEventPlugin();
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 
 //This should be destructured

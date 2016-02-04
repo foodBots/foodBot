@@ -1,19 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Header from './Header.js'
-import ProfileMake from './ProfileMake'
-import RecipeChoose from './RecipeChoose'
-import RecipeView from './RecipeView'
-import SignIn from './SignIn'
-import RecipeLanding from './RecipeLanding'
 import $ from 'jquery';
 
-class App extends React.Component {
+import Header from './Header.js'
+import SignIn from './SignIn'
+import ProfileMake from './ProfileMake'
+import RecipeChoose from './RecipeChoose'
+import { Modal, Button } from 'react-bootstrap';
+import RaisedButton from 'material-ui/lib/raised-button';
 
+
+//This needs to be refactored to the Explore and Socialize Page
+import RecipeLanding from './RecipeLanding'
+
+export default class App extends React.Component {
+  
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = {            
+      //MODAL
+      isModalOpen: false,
+      close: () => {
+        this.setState({ isModalOpen: false });        
+      },
+      showModal: () => {
+        this.setState({ isModalOpen: true });
+      },
+
       //USER INFO
       id: this.props.location.state.id,
       username: this.props.location.state.email,
@@ -30,17 +44,12 @@ class App extends React.Component {
       chosenType: "",
       allergies: [],
 
-
       setDiet: (diet) => {
         this.setState({diet: diet})
       },
 
       setPrep: (prep) => {
         this.setState({prep})
-      },
-
-      setChosenRecipes: (chosenRecipes) => {
-        this.setState({chosenRecipes})
       },
 
       profSubmit: (chosenType) => {
@@ -59,13 +68,15 @@ class App extends React.Component {
       },
 
       //RECIPE CHOOSE
+      setChosenRecipes: (chosenRecipes) => {
+        this.setState({chosenRecipes})
+      },
       recipes: [],
       recipesObj: {
         liked: [],
         rejected: []
       },
       getRecipes: () => {
-        console.log(this.state.id, "asdkfhjlsakjdf")
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
             let r = [];
@@ -76,41 +87,43 @@ class App extends React.Component {
             obj.img = currElement.image.replace('s90', 's300-c');
             obj.ingredients = currElement.ingredients;
             obj.cookingtime = currElement.cookingtime;
-          // obj.rating = currElement.rating
             return obj;
-        });
-          console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>');
+        });          
           this.setState({recipes: r});
-          });
+        });        
       },
       saveMatch: () => {
-        // console.log('Your match is', this.props.userMatch)
-        // this.openModal();
-        console.log('saveMatch recipesObj', this.state.recipesObj);
         this.state.setChosenRecipes(this.state.recipesObj.liked);
         $.post('/foodBot/meals/' + this.state.id, this.state.recipesObj)
         .done((result) => {
-          console.log('posted recipes', this.state.recipesObj)
+          console.log(result, "REDIS RESULT")
         })
+        this.state.close();
+      },
+
+      goCheckout:() => { 
+        event.preventDefault();
+        console.log("Go to checkout")
       },
 
       //RECIPE VIEW
       userMatch: "",
-      partnerRecipes: [],
-      chosenRecipes: [],
-      getUserMatch: () => {
-        $.get('/foodBot/match/:' + this.state.id)
-          .done((result) => this.setState({userMatch: result}))
+      matchRecipes: [],
+      chosenRecipes: [],      
+      getChosenRecipes: (id) => {
+        $.get('/foodBot/meals/' + id).
+          done((data) => {
+          console.log("data you got back is..", data)
+          this.setState({chosenRecipes: data.recipeView})
+        })
+      }, 
+      getMatchRecipes: (id) => {
+        $.get('/foodBot/meals/' + id).
+          done((data) => {
+          console.log("data you got back from match is..", data)
+          this.setState({matchRecipes: data.recipeView})
+        })
       },
-      getChosenRecipes: () => {
-        $.get('/foodBot/meals/:' + this.state.id)
-          .done((result) => this.setState({chosenRecipes: result}))
-      },
-      getMatchRecipes: () => {
-        $.get('foodBot/match/:' + this.state.id)
-          .done((result) => this.setState({partnerRecipes: result}))
-      },
-
 
       //SOCIAL COMPONENT LOGIC
       messages: [],
@@ -127,13 +140,12 @@ class App extends React.Component {
       },
 
       redirect: (text) => {
-        //if currentView was RecipesChoose, save liked recipes before changing views
         if (this.state.currentView==="Swipe Recipes") {
           this.state.saveMatch();
         }
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
-      }
+      },
     }
   }
 
@@ -160,15 +172,47 @@ class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose
+          <RecipeChoose          
               id={this.state.id}
-              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               getRecipes={this.state.getRecipes.bind(this)}
+              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               recipes={this.state.recipes}
               recipesObj={this.state.recipesObj}
               saveMatch={this.state.saveMatch.bind(this)}
-              userMatch={this.state.userMatch}/>
-        </div>
+              userMatch={this.state.userMatch}
+              showModal={this.state.showModal.bind(this)}/>
+          
+          <Modal 
+            show={this.state.isModalOpen} 
+            onHide={this.state.close}
+            container={this}
+            bsSize="small"
+            enforceFocus={true}>
+          <Modal.Header closeButton><h3>Cart Subtotal(1 item)</h3> </Modal.Header>
+          <Modal.Body>
+          <table>
+            <tr>
+              <th>Small Picture</th>
+              <th>Meal Name</th> 
+            </tr>
+            <tr>
+              <td>Ingredient1</td>
+              <td>$5.00</td> 
+            </tr>
+            
+            <tr>
+              <th>Total Cost</th>
+              <th>$25.95</th>
+            </tr>
+          </table>
+          <button>Portions?</button> <button>Delete</button> <button>Save for later</button>
+          </Modal.Body>
+          <Modal.Footer>
+          <RaisedButton label="Keep Swiping!" secondary={true} onClick={this.state.saveMatch}/>          
+          <RaisedButton label="Checkout" primary={true} onClick={this.state.goCheckout} />
+          </Modal.Footer>
+          </Modal> 
+       </div>
       )
     }
     //VIEW PAIR AND RECIPES
@@ -179,9 +223,11 @@ class App extends React.Component {
           <RecipeLanding
             username ={this.props.location.state.id}
             match={this.props.location.state.matchData.id}
-            chosenRecipes={this.props.location.state.recipesData}
-            matchRecipes={this.props.location.state.matchData.recipes}
-
+            getChosenRecipes={this.state.getChosenRecipes.bind(this)}
+            getMatchRecipes={this.state.getMatchRecipes.bind(this)}
+            chosenRecipes={this.state.chosenRecipes}
+            matchRecipes={this.state.matchRecipes}
+            //social
             messages={this.state.messages}
             submitChat={this.state.submitChat}/>
         </div>
@@ -191,10 +237,7 @@ class App extends React.Component {
       <NotFound />
     }
   }
-
 };
-export default App;
-
 //UPDATE PROFILE
     // else if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
     //  return (

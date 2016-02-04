@@ -21,6 +21,9 @@ module.exports = function(app, express) {
 
 	app.get('/foodBot/meals/:id', mealController.retrieveUserMeals); // Add AuthChecker
 
+	
+	//After posting to the database, send back all of the liked meals for viewing
+
 	app.post('/foodBot/meals/:id', mealController.addUserMeal); // Add AuthChecker
 
 	app.get('/foodBot/match/:id', matchController.retrieveMatch);

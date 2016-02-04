@@ -1,7 +1,5 @@
 import './css/styles.css'
 import './css/bootstrap.min.css'
-
-
 import React from 'react';
 import { render }  from 'react-dom';
 import { Router, Route } from 'react-router';
@@ -20,8 +18,6 @@ import RecipeChoose from './scripts/components/RecipeChoose'
 import RecipeLanding from './scripts/components/RecipeLanding'
 
 //incl API key
-
-
 const routes = (
   <Router history={createHistory()}>
     <Route path="/" component={App}/>

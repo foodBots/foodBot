@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import PairMessagesList from './PairMessagesList'
 import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib/card';
 import RaisedButton from 'material-ui/lib/raised-button';
+import $ from 'jquery';
 
 export default class RecipeSlider extends React.Component {
 
@@ -12,29 +13,37 @@ export default class RecipeSlider extends React.Component {
     super(props)
       this.style = {
       textAlign: "center",
-      margin: "10px, 0, 10px, 0"
-    }
+      margin: "10px, 0, 10px, 0",
+      height: "20%"
 
+    }
   }
+
+  handleClick() {
+    event.preventDefault()
+    console.log("handle click")
+  }
+
   renderRecipeCard (item, index) {
     return (
-      <div key={index} >
-      <Card key={index}>
-        <CardMedia style={this.style} overlay={<CardTitle title={item.recipeId}/>}>
-          <img src="http://danielfooddiary.cogit /wp-content/uploads/2014/03/boinnovation2.jpg"/>
+      <div key={index} style={{height:"80vh"}}>      
+      <Card key={index}>      
+        <CardMedia style={this.style} overlay={<CardTitle title={item.name}/>}>
+          <img style={{height: "30%"}}src={item.image} />
         </CardMedia>
         <CardText>
-        {index}: Link to Recipe Instructions? Or Ingredient List<br/>
-        </CardText>
-        <CardText>
-          <PairMessagesList
-              username={this.props.username}/>     
-        </CardText>        
+          <h4>Ingredients:</h4>
+          <ul>
+          <li>"1 thing"</li>
+          <li>"1 thing"</li>
+          <li>"1 thing"</li>
+          <li>"1 thing"</li> 
+          </ul>
+          Total Cost: <strong>"1 million dollars"</strong>         
+        </CardText>      
         <CardActions style={this.style}>
-          <button>Upvote</button>
-          <button>Mark Complete</button>
-          <button>Save</button>
-        </CardActions>
+          <RaisedButton label="Add to Cart" primary={true} onClick={this.handleClick} />
+      </CardActions>        
       </Card>
       </div>
     )
@@ -42,7 +51,6 @@ export default class RecipeSlider extends React.Component {
 
   render(){
     let recipes = this.props.recipes
-    console.log(this.props.username)
     const settings = {
       dots: false,
       infinite: true,

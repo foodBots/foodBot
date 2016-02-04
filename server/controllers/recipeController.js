@@ -15,8 +15,7 @@ var cooking = {
 	// 		console.log(JSON.parse(data.body).hits)
 	// 	})
 	// }
-
-
+	
 	getRecipesFromYummly = function (uid) {
 		var client = new pg.Client(connectionString);
 		client.connect();
@@ -24,9 +23,7 @@ var cooking = {
 		console.log("in yummly",uid)
 
 		var foodQ = function (){
-			console.log("running foodQ")
 			return new Promise (function (resolve, reject) {
-				console.log("returning foodq promise")
 				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
 					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
 					"&_app_key=" + apiKeys.yummly.key +
@@ -38,11 +35,9 @@ var cooking = {
 					"&excludedCourse[]=course^course-Cocktails", function (error, response, body) {
 						if (!error && response.statusCode == 200) {
 							yummlyRecipes = body
-							console.log("result:", yummlyRecipes)
 							resolve(yummlyRecipes);
 						}
 					})
-
 				});
 			})
 		}
@@ -72,6 +67,7 @@ var cooking = {
 			insertRecipesIntoDB();
 		});
 	}
+
 
 module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {
@@ -123,11 +119,6 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
-<<<<<<< 8e23fc011a7faaec269bb46258b433e3ec3b4714
-				// console.log("sending this thingy:",sendData)	
-=======
-				console.log("sending this thingy:",sendData)
->>>>>>> moved recipeChoose save to db to App.js
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 50;
 				console.log("getting from yummly")
