@@ -22,7 +22,7 @@ var cooking = {
 				var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data){
 					request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
 					"&_app_key=" + apiKeys.yummly.key +
-					"&allowedCourse[]=course^course-Main%20Dishes&requirePictures=true" +
+					"&requirePictures=true" +
 					"&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
 					"&flavor.sweet.min=" + Math.random().toFixed(1) +
 					"&flavor.piquant.min=" + Math.random().toFixed(1) +
