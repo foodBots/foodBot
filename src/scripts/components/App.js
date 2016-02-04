@@ -6,6 +6,11 @@ import Header from './Header.js'
 import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
+import { Modal, Button } from 'react-bootstrap';
+import RaisedButton from 'material-ui/lib/raised-button';
+
+
+//This needs to be refactored to the Explore and Socialize Page
 import RecipeLanding from './RecipeLanding'
 
 export default class App extends React.Component {
@@ -14,6 +19,15 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {            
+      //MODAL
+      isModalOpen: false,
+      close: () => {
+        this.setState({ isModalOpen: false });        
+      },
+      showModal: () => {
+        this.setState({ isModalOpen: true });
+      },
+
       //USER INFO
       id: this.props.location.state.id,
       username: this.props.location.state.email,
@@ -63,7 +77,6 @@ export default class App extends React.Component {
         rejected: []
       },
       getRecipes: () => {
-        console.log(this.state.id, "asdkfhjlsakjdf")
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
             let r = [];
@@ -74,23 +87,23 @@ export default class App extends React.Component {
             obj.img = currElement.image.replace('s90', 's300-c');
             obj.ingredients = currElement.ingredients;
             obj.cookingtime = currElement.cookingtime;
-          // obj.rating = currElement.rating
             return obj;
-        });
-          console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>');
+        });          
           this.setState({recipes: r});
-        });
-        
+        });        
       },
       saveMatch: () => {
-        // console.log('Your match is', this.props.userMatch)
-        // this.openModal();
-        console.log('saveMatch recipesObj', this.state.recipesObj);
         this.state.setChosenRecipes(this.state.recipesObj.liked);
         $.post('/foodBot/meals/' + this.state.id, this.state.recipesObj)
         .done((result) => {
-          console.log('posted recipes', this.state.recipesObj)
+          console.log(result, "REDIS RESULT")
         })
+        this.state.close();
+      },
+
+      goCheckout:() => { 
+        event.preventDefault();
+        console.log("Go to checkout")
       },
 
       //RECIPE VIEW
@@ -112,7 +125,6 @@ export default class App extends React.Component {
         })
       },
 
-
       //SOCIAL COMPONENT LOGIC
       messages: [],
 
@@ -128,7 +140,6 @@ export default class App extends React.Component {
       },
 
       redirect: (text) => {
-        //if currentView was RecipesChoose, save liked recipes before changing views
         if (this.state.currentView==="Swipe Recipes") {
           this.state.saveMatch();
         }
@@ -164,12 +175,43 @@ export default class App extends React.Component {
           <RecipeChoose          
               id={this.state.id}
               getRecipes={this.state.getRecipes.bind(this)}
-              redirect={this.state.redirect}
               setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               recipes={this.state.recipes}
               recipesObj={this.state.recipesObj}
               saveMatch={this.state.saveMatch.bind(this)}
-              userMatch={this.state.userMatch}/>
+              userMatch={this.state.userMatch}
+              showModal={this.state.showModal.bind(this)}/>
+          
+          <Modal 
+            show={this.state.isModalOpen} 
+            onHide={this.state.close}
+            container={this}
+            bsSize="small"
+            enforceFocus={true}>
+          <Modal.Header closeButton><h3>Cart Subtotal(1 item)</h3> </Modal.Header>
+          <Modal.Body>
+          <table>
+            <tr>
+              <th>Small Picture</th>
+              <th>Meal Name</th> 
+            </tr>
+            <tr>
+              <td>Ingredient1</td>
+              <td>$5.00</td> 
+            </tr>
+            
+            <tr>
+              <th>Total Cost</th>
+              <th>$25.95</th>
+            </tr>
+          </table>
+          <button>Portions?</button> <button>Delete</button> <button>Save for later</button>
+          </Modal.Body>
+          <Modal.Footer>
+          <RaisedButton label="Keep Swiping!" secondary={true} onClick={this.state.saveMatch}/>          
+          <RaisedButton label="Checkout" primary={true} onClick={this.state.goCheckout} />
+          </Modal.Footer>
+          </Modal> 
        </div>
       )
     }

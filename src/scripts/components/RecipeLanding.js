@@ -18,7 +18,7 @@ export default class RecipeLanding extends React.Component {
         margin: "5 0 5 0"
     }
   }
-
+  
   componentWillMount(){  
     this.props.getChosenRecipes(this.props.username)        
     this.props.getMatchRecipes(this.props.match)

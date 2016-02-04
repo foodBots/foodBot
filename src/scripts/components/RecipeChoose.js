@@ -4,7 +4,6 @@ import Header from './Header.js'
 import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib/card';
 import $ from 'jquery';
 import RaisedButton from 'material-ui/lib/raised-button';
-import { Modal, Button } from 'react-bootstrap';
 
 export default class Recipe extends React.Component {
 
@@ -12,23 +11,12 @@ export default class Recipe extends React.Component {
     super(props);
     this.style = {
       textAlign: 'center',
-      width: '380px',
-      height: '560px'
+      height: '100vh'
     }
     this.buttonStyles = {
       display: 'block',
       textAlign: 'center',
       width: '450px'
-    }
-    this.state = {
-      isModalOpen: false,
-      close: () => {
-        this.setState({ isModalOpen: false });
-        this.props.redirect("View Recipes")
-      },
-      showModal: () => {
-        this.setState({ isModalOpen: true });
-      }
     }
   }
 
@@ -36,12 +24,8 @@ export default class Recipe extends React.Component {
     this.props.getRecipes();
   }
 
-  //takes in recipeId and like bool
   likeOrReject(recipeId, like) {
-    // const id = this.props.id
-    // console.log(recipeId, like);
     like ? this.props.recipesObj.liked.push(recipeId) : this.props.recipesObj.rejected.push(recipeId);
-    console.log('saved recipeObj', this.props.recipesObj);
   }
 
   next(element) {
@@ -54,14 +38,10 @@ export default class Recipe extends React.Component {
     this.refs.ReactSwipe.swipe.next()
   }
 
-  saveMatch() {        
-    this.state.showModal();
-    this.props.setChosenRecipes(this.recipesObj.liked);
-    $.post('/foodBot/meals/' + this.props.id, this.recipesObj)
-      //modify routing for pos
-      .done((result) => {      
-        console.log("posted!", result)
-    })
+  addToCart (element) {
+    this.likeOrReject(element.id, true);
+    this.props.showModal()
+    this.refs.ReactSwipe.swipe.next()
   }
 
   renderCard (element, index) {
@@ -71,10 +51,21 @@ export default class Recipe extends React.Component {
         <CardMedia overlay={<CardTitle title={element.name}/>}>
           <img src = {element.img}/>
         </CardMedia>
-        <CardActions>
+        <CardText>
+        <h4>Estimated Cost</h4>
+          <strong>It is going to cost this much to buy</strong>
+        </CardText>
+               <CardActions>
           <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
-          <RaisedButton label="Yes" secondary={true} onClick={this.yes.bind(this, element)} /><br/><br/>
+          <RaisedButton label="Save for Later" primary={true} onClick={this.yes.bind(this, element)} />
+          <RaisedButton label="Add to Cart" secondary={true} onClick={this.addToCart.bind(this, element)} />
         </CardActions>
+        <h3>Ingredients</h3>
+        <ul>
+          <li>Cost number one</li>
+          <li>Cost number one</li>
+          <li>Cost number one</li>
+        </ul>
         </Card>        
       </div>
     )
@@ -84,30 +75,9 @@ export default class Recipe extends React.Component {
     const recipes = this.props.recipes;
     return (
       <div>
-        <div>
-        <ReactSwipe
-          key={recipes.length}
-          ref="ReactSwipe"
-          continuous={true}
-          speed={800}
-        >
+        <ReactSwipe key={recipes.length} ref="ReactSwipe" continuous={true} speed={800}>
           {recipes.map((elem, index) => this.renderCard(elem, index))}
-        </ReactSwipe>
-        <Modal 
-            show={this.state.isModalOpen} 
-            onHide={this.state.close}
-            container={this}
-            bsSize="large">
-          <Modal.Header closeButton>Test
-          </Modal.Header>
-          <Modal.Body>
-            <Subtotal />
-
-          </Modal.Body>
-          <Modal.Footer>
-          </Modal.Footer>
-          </Modal>                                   
-        </div>
+        </ReactSwipe>                                  
       </div>
     )
   }

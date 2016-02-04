@@ -192,23 +192,17 @@ ul {
   border-color: gray;
   max-height: 150px;
   overflow-y:scroll;
-  -moz-transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-
 }
 
 ul > li {
+  text-align: left;
   list-style-type: none;
   flex: 0 0 auto;
-  -moz-transform: rotate(-180deg);
-  -webkit-transform: rotate(-180deg);
-  transform: rotate(-180deg);
 }
 
 .modal-lg {
-  padding-top: 40%;
-  width: 20%;
+  padding-top: 30%;
+  width: 40%;
 }
 
 .slick-track {

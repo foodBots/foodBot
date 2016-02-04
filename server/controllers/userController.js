@@ -49,6 +49,7 @@ module.exports = {
       res.status(400).json("USER does not exist");
     });
   },
+
   retrieveAllUsers: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
@@ -62,6 +63,7 @@ module.exports = {
       res.status(201).json(allUsers);
     });
   },
+  
   signin: function(req, res) {
    var client = new pg.Client(connectionString);
    client.connect();
