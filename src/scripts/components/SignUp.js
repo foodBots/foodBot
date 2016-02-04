@@ -19,14 +19,7 @@ class SignUp extends React.Component {
     }
     this.state = {
       error: '',
-      choices: {
-        prep: ["Instant","Some prep","Lotta prep"],
-        diet: ["None", "Lacto vegetarian", "Ovo vegetarian", "Pescetarian", "Vegan", "Vegetarian"],
-        type: ["Foodie", "Diet"],
-        allergies: ["Dairy", "Egg", "Gluten", "Peanut", "Seafood"]
-      },
-
-     prep: {
+      prep: {
         value: 0,
         text: ""
       },
@@ -48,6 +41,10 @@ class SignUp extends React.Component {
 
       setPrep: (prep) => {
         this.setState({prep: prep})
+      },
+
+      setAllergies: (allergies) => {
+        this.setState({allergies})
       },
 
       setChosenRecipes: (chosenRecipes) => {
@@ -149,8 +146,10 @@ class SignUp extends React.Component {
   }
   //<form className="sign-up" ref="signupForm" onSubmit={this.signUp}>
   // <RaisedButton style={this.buttonStyles} type="submit" label="Sign Up!" />
+              // choices={this.state.choices}
   render() {
     // injectTapEventPlugin();
+              // setAllergies={this.state.setAllergies.bind(this)}
     return (
       <div>
         <Header />
@@ -160,7 +159,6 @@ class SignUp extends React.Component {
             <TextField className="profile-item" style={this.inputStyles} type="password" ref="password" hintText="password" floatingLabelText="Enter password" /><br/>
             <ProfileMake
               redirect={this.state.redirect}
-              choices={this.state.choices}
               prep={this.state.prep}
               diet={this.state.diet}
               setDiet={this.state.setDiet.bind(this)}
