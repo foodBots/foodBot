@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+
 import Header from './Header.js'
 import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
+import RecipesBuy from './RecipesBuy'
+
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
-import RecipeView from './RecipeView'
-import SignIn from './SignIn'
-import RecipeLanding from './RecipeLanding'
-import RecipesBuy from './RecipesBuy'
 
 //This needs to be refactored to the Explore and Socialize Page
 import RecipeLanding from './RecipeLanding'
