@@ -60,6 +60,10 @@ class App extends React.Component {
 
       //RECIPE CHOOSE
       recipes: [],
+      recipesObj: {
+        liked: [],
+        rejected: []
+      },
       getRecipes: () => {
         console.log(this.state.id, "asdkfhjlsakjdf")
         $.get('/foodBot/recipes/' + this.state.id)
@@ -78,6 +82,16 @@ class App extends React.Component {
           console.log('recipes choose HERE ARE THE RECIPES>>>>>>>>>');
           this.setState({recipes: r});
           });
+      },
+      saveMatch: () => {
+        // console.log('Your match is', this.props.userMatch)
+        // this.openModal();
+        console.log('saveMatch recipesObj', this.state.recipesObj);
+        this.state.setChosenRecipes(this.state.recipesObj.liked);
+        $.post('/foodBot/meals/' + this.state.id, this.state.recipesObj)
+        .done((result) => {
+          console.log('posted recipes', this.state.recipesObj)
+        })
       },
 
       //RECIPE VIEW
@@ -113,6 +127,10 @@ class App extends React.Component {
       },
 
       redirect: (text) => {
+        //if currentView was RecipesChoose, save liked recipes before changing views
+        if (this.state.currentView==="Swipe Recipes") {
+          this.state.saveMatch();
+        }
         console.log("route is", this.state.componentRoute[text])
         this.setState({currentView: text});
       }
@@ -147,6 +165,8 @@ class App extends React.Component {
               setChosenRecipes={this.state.setChosenRecipes.bind(this)}
               getRecipes={this.state.getRecipes.bind(this)}
               recipes={this.state.recipes}
+              recipesObj={this.state.recipesObj}
+              saveMatch={this.state.saveMatch.bind(this)}
               userMatch={this.state.userMatch}/>
         </div>
       )

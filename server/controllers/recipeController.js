@@ -67,12 +67,12 @@ var cooking = {
 	}
 
 module.exports = {
-	retrieveSuggestedRecipes: function (req, res) {	
-	console.log("retrieveSuggestedRecipes")	
+	retrieveSuggestedRecipes: function (req, res) {
+	console.log("retrieveSuggestedRecipes")
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
-		var uid = parseInt(req.params.id);		
+		var uid = parseInt(req.params.id);
 		var amtOfRecipes = req.body.amount || 20;
 
 		// Query allergies for User and Recipes
@@ -116,7 +116,7 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
-				console.log("sending this thingy:",sendData)	
+				console.log("sending this thingy:",sendData)
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 50;
 				console.log("getting from yummly")
