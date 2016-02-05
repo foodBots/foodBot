@@ -6,23 +6,24 @@ import Header from './Header.js'
 import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
+import RecipesBuy from './RecipesBuy'
+
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
-
 
 //This needs to be refactored to the Explore and Socialize Page
 import RecipeLanding from './RecipeLanding'
 
 export default class App extends React.Component {
-  
+
   constructor(props) {
     super(props);
 
-    this.state = {            
+    this.state = {
       //MODAL
       isModalOpen: false,
       close: () => {
-        this.setState({ isModalOpen: false });        
+        this.setState({ isModalOpen: false });
       },
       showModal: () => {
         this.setState({ isModalOpen: true });
@@ -88,9 +89,9 @@ export default class App extends React.Component {
             obj.ingredients = currElement.ingredients;
             obj.cookingtime = currElement.cookingtime;
             return obj;
-        });          
+        });
           this.setState({recipes: r});
-        });        
+        });
       },
       saveMatch: () => {
         this.state.setChosenRecipes(this.state.recipesObj.liked);
@@ -101,7 +102,7 @@ export default class App extends React.Component {
         this.state.close();
       },
 
-      goCheckout:() => { 
+      goCheckout:() => {
         event.preventDefault();
         console.log("Go to checkout")
       },
@@ -109,14 +110,14 @@ export default class App extends React.Component {
       //RECIPE VIEW
       userMatch: "",
       matchRecipes: [],
-      chosenRecipes: [],      
+      chosenRecipes: [],
       getChosenRecipes: (id) => {
         $.get('/foodBot/meals/' + id).
           done((data) => {
           console.log("data you got back is..", data)
           this.setState({chosenRecipes: data.recipeView})
         })
-      }, 
+      },
       getMatchRecipes: (id) => {
         $.get('/foodBot/meals/' + id).
           done((data) => {
@@ -136,7 +137,8 @@ export default class App extends React.Component {
         "View Recipes": "RecipeView",
         "Sign Up": "SignUp",
         "Sign out": "SignIn",
-        "PairChatRoom": "PairChatRoom"
+        "PairChatRoom": "PairChatRoom",
+        "Buy Recipes": "RecipesBuy"
       },
 
       redirect: (text) => {
@@ -172,7 +174,7 @@ export default class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose          
+          <RecipeChoose
               id={this.state.id}
               getRecipes={this.state.getRecipes.bind(this)}
               setChosenRecipes={this.state.setChosenRecipes.bind(this)}
@@ -181,9 +183,9 @@ export default class App extends React.Component {
               saveMatch={this.state.saveMatch.bind(this)}
               userMatch={this.state.userMatch}
               showModal={this.state.showModal.bind(this)}/>
-          
-          <Modal 
-            show={this.state.isModalOpen} 
+
+          <Modal
+            show={this.state.isModalOpen}
             onHide={this.state.close}
             container={this}
             bsSize="small"
@@ -193,13 +195,13 @@ export default class App extends React.Component {
           <table>
             <tr>
               <th>Small Picture</th>
-              <th>Meal Name</th> 
+              <th>Meal Name</th>
             </tr>
             <tr>
               <td>Ingredient1</td>
-              <td>$5.00</td> 
+              <td>$5.00</td>
             </tr>
-            
+
             <tr>
               <th>Total Cost</th>
               <th>$25.95</th>
@@ -208,10 +210,10 @@ export default class App extends React.Component {
           <button>Portions?</button> <button>Delete</button> <button>Save for later</button>
           </Modal.Body>
           <Modal.Footer>
-          <RaisedButton label="Keep Swiping!" secondary={true} onClick={this.state.saveMatch}/>          
+          <RaisedButton label="Keep Swiping!" secondary={true} onClick={this.state.saveMatch}/>
           <RaisedButton label="Checkout" primary={true} onClick={this.state.goCheckout} />
           </Modal.Footer>
-          </Modal> 
+          </Modal>
        </div>
       )
     }
@@ -230,6 +232,14 @@ export default class App extends React.Component {
             //social
             messages={this.state.messages}
             submitChat={this.state.submitChat}/>
+        </div>
+      )
+    }
+    else if(this.state.componentRoute[this.state.currentView] ==="RecipesBuy"){
+      return (
+        <div>
+          <Header redirect={this.state.redirect.bind(this)} />
+          <RecipesBuy recipes={this.state.recipesObj.liked}/>
         </div>
       )
     }

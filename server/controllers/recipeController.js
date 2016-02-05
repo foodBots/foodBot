@@ -15,7 +15,7 @@ var cooking = {
 	// 		console.log(JSON.parse(data.body).hits)
 	// 	})
 	// }
-	
+
 	getRecipesFromYummly = function (uid) {
 		var client = new pg.Client(connectionString);
 		client.connect();
@@ -119,6 +119,7 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
+				// console.log("sending this thingy:",sendData)
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 50;
 				console.log("getting from yummly")

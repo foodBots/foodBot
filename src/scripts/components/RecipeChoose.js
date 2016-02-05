@@ -25,7 +25,19 @@ export default class Recipe extends React.Component {
   }
 
   likeOrReject(recipeId, like) {
-    like ? this.props.recipesObj.liked.push(recipeId) : this.props.recipesObj.rejected.push(recipeId);
+
+    // const id = this.props.id
+    // only add once to rejected or liked arrays
+    if (like) {
+      if (this.props.recipesObj.liked.indexOf(recipeId) < 0) {
+        this.props.recipesObj.liked.push(recipeId);
+      }
+    } else {
+      if (this.props.recipesObj.rejected.indexOf(recipeId) < 0) {
+        this.props.recipesObj.rejected.push(recipeId);
+      }
+    }
+    console.log('saved recipeObj', this.props.recipesObj);
   }
 
   next(element) {
@@ -66,7 +78,7 @@ export default class Recipe extends React.Component {
           <li>Cost number one</li>
           <li>Cost number one</li>
         </ul>
-        </Card>        
+        </Card>
       </div>
     )
   }
@@ -77,7 +89,7 @@ export default class Recipe extends React.Component {
       <div>
         <ReactSwipe key={recipes.length} ref="ReactSwipe" continuous={true} speed={800}>
           {recipes.map((elem, index) => this.renderCard(elem, index))}
-        </ReactSwipe>                                  
+        </ReactSwipe>
       </div>
     )
   }

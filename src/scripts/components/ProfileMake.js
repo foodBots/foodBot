@@ -9,8 +9,8 @@ const styles = {
     maxWidth: 250,
   },
   checkbox: {
-    marginBottom: 16
-  },
+    marginBottom: '16px'
+  }
 };
 
 class ProfileMake extends React.Component {
@@ -22,6 +22,13 @@ class ProfileMake extends React.Component {
       'textAlign': 'center',
       'margin': '5px'
     };
+    this.choices = {
+      prep: ["Instant","Some prep","Lotta prep"],
+      diet: ["None", "Lacto vegetarian", "Ovo vegetarian", "Pescetarian", "Vegan", "Vegetarian"],
+      type: ["Foodie", "Diet"],
+      allergies: ["Dairy", "Egg", "Gluten", "Peanut", "Seafood"]
+    };
+    this.allergies = [];
     // this.state = {
     //   prep: {
     //     value: 0,
@@ -43,34 +50,45 @@ class ProfileMake extends React.Component {
 
   renderPrep(element, index) {
     return (
-      <MenuItem value={index} key={index} primaryText={this.props.choices.prep[element]} />
+      <MenuItem value={index} key={index} primaryText={this.choices.prep[element]} />
     )
   }
 
   renderDiet(element, index) {
     return (
-      <MenuItem value={index} key={index} primaryText={this.props.choices.diet[element]} />
+      <MenuItem value={index} key={index} primaryText={this.choices.diet[element]} />
     )
   }
 
   //TODO: make sure we can get allergy values from the checkboxes
   handleAllergies(element, index, value) {
-    console.log(element, index, value, "testing")
+    // console.log(element, index, value, "testing")
+    if (value) {
+      if(this.allergies.indexOf(element) < 0) {
+        this.allergies.push(element);
+      }
+      console.log(this.allergies);
+    } else {
+      this.allergies.splice(this.allergies.indexOf(element),1);
+      console.log(this.allergies);
+
+    }
+    // this.props.setAllergies(this.allergies);
   }
 
   renderAllergies(element, index) {
     injectTapEventPlugin();
     return (
-      <td key={index}><Checkbox ref={element} label={element} style={styles.checkbox} onCheck={this.handleAllergies} /></td>          
+      <td key={index}><Checkbox ref={element} iconStyle = {{left: "5"}} label={element} style={styles.checkbox} onCheck={this.handleAllergies.bind(this, element)} /></td>
     )
   }
 
   render() {
     injectTapEventPlugin();
-    const choiceButton = this.props.choices.type
-    const diets = Object.keys(this.props.choices.diet)
-    const prep = Object.keys(this.props.choices.prep)
-    const allergies = this.props.choices.allergies
+    const choiceButton = this.choices.type
+    const diets = Object.keys(this.choices.diet)
+    const prep = Object.keys(this.choices.prep)
+    const allergies = this.choices.allergies
 
     return (
     <div>
