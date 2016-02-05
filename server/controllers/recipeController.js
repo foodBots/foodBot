@@ -3,6 +3,7 @@ var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/
 var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
+var helper = require('../config/helpers.js');
 
 var cooking = {
 	1: 600, // half hour in secs
@@ -46,6 +47,7 @@ var cooking = {
 			console.log("about to insert into db")
 			var insertRecipesIntoDB = function () {
 				yummlyRecipes = JSON.parse(yummlyRecipes);
+					var ingredients = helper.scrapeIngredients("http://www.yummly.com/recipe/external/Black-Bean-_-Corn-Salsa-673549");
 				yummlyRecipes.matches.forEach(function (recipe, index) {
 					if (recipe.totalTimeInSeconds >= cooking[2]) {
 						recipe.cookingTime = 3;

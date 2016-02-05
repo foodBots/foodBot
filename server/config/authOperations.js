@@ -4,12 +4,12 @@ var isLoggedIn = function(req) {
 
 exports.checkUser = function(req, res, next){
   // console.log('in check user',  req.session);
-  if (!isLoggedIn(req)) {
-    console.log('checkUser fail', req.session);
-    // res.redirect('foodBot/auth/signin');
+  if (!req.isAuthenticated()) {
+    res.redirect('/signin');
   } else {
     // console.log('checkUser success', req.session);
-    next();
+    return next();
+    // next();
   }
 };
 

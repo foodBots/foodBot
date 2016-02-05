@@ -8,43 +8,68 @@ var mealController = require('../controllers/mealController.js');
 
 var helpers = require('./helpers.js');
 var auth = require('./authOperations.js');
-
+var GoogleStrategy = require('passport-google-oauth2').Strategy;
+var keys = require('./apiKeys.js');
+var passport = require('passport');
 
 module.exports = function(app, express) {
-    // app.get('/foodBot/profile', userController.retrieveAllUsers); // Add AuthChecker
-	app.post('/foodBot/auth/signup', userController.signup);
-	app.post('/foodBot/auth/signin', userController.signin); // Add AuthChecker
-	// app.get('/foodBot/auth/signedin', userController.signedin);
 
-	// app.post('/foodBot/recipes/', recipeController.addMeal); // Add AuthChecker
-	app.get('/foodBot/recipes/:id',  recipeController.retrieveSuggestedRecipes); // Add AuthChecker
 
-	app.get('/foodBot/meals/:id', mealController.retrieveUserMeals); // Add AuthChecker
+  app.post('/foodBot/auth/signin', userController.signin); 
+  app.get('/foodBot/auth/logout', userController.logout);
 
-	
-	//After posting to the database, send back all of the liked meals for viewing
 
-	app.post('/foodBot/meals/:id', mealController.addUserMeal); // Add AuthChecker
+  app.get('/foodBot/recipes/:id', auth.checkUser, recipeController.retrieveSuggestedRecipes); 
 
-	app.get('/foodBot/match/:id', matchController.retrieveMatch);
-	app.post('/foodBot/match/:id', matchController.createMatch);
-	app.delete('/foodBot/match/:id', matchController.deleteMatch);
-	// app.get('/foodBot/users/home/:username', dashboardController.getUserProfile) // Add AuthChecker
+  app.get('/foodBot/meals/:id', auth.checkUser, mealController.retrieveUserMeals); 
+  app.post('/foodBot/meals/:id', auth.checkUser, mealController.addUserMeal); 
 
-	app.get('/foodBot/profile/:id', profileController.retrieveOneUser); // Add 4th argument to direct to matchController, Add AuthChecker
-  app.post('/foodBot/profile/:id', profileController.addUserProfile, matchController.createMatch); // Add 4th argument to direct to matchController, Add AuthChecker
-  // app.put('/foodBot/profile/:id', profileController.updateUserProfile); // Add 4th argument to direct to matchController, Add AuthChecker
-  app.get('/foodBot/profile', profileController.retrieveAllUsers); //Add AuthChecker
-	// app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); // Add 4th argument to direct to matchController
-  // app.get('/foodBot/profile', auth.checkUser, profileController.retrieveAllUsers);
-	app.post('/foodBot/auth/signup', userController.signup);
-	app.post('/foodBot/auth/signin', userController.signin);
-	// app.get('/foodBot/auth/signedin', userController.signedin);
+  app.get('/foodBot/match/:id', auth.checkUser, matchController.retrieveMatch);
+  app.post('/foodBot/match/:id', auth.checkUser, matchController.createMatch);
+  app.delete('/foodBot/match/:id', auth.checkUser, matchController.deleteMatch);
 
-	// app.post('/foodBot/recipes/', auth.checkUser, recipeController.addMeal); // Add AuthChecker
-	// app.get('/foodBot/recipes/:id',  auth.checkUser, recipeController.retrieveSuggestedRecipes) // Add AuthChecker
+  app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); 
+  app.post('/foodBot/profile/:id', auth.checkUser, profileController.addUserProfile, matchController.createMatch); 
+    app.get('/foodBot/profile', auth.checkUser, profileController.retrieveAllUsers); 
+  
+  passport.serializeUser(function(user, done) {
+    done(null, user.email);
+  });
 
-	// app.get('/foodBot/user/home/:id', auth.checkUser, dashboardController.getUserMeals) // Add AuthChecker
-	// app.post('/foodBot/user/home/:id', auth.checkUser, dashboardController.addMeal); // Add AuthChecker
-	// app.get('/foodBot/users/home/:username', auth.checkUser, dashboardController.getUserProfile) // Add AuthChecker
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
+
+  passport.use(new GoogleStrategy({
+    clientID: keys.google.clientID,
+    clientSecret: keys.google.clientSecret,
+    callbackURL: keys.google.callbackURL
+  },
+  function(accessToken, refreshToken, profile, done) {
+    process.nextTick(function() {
+      return done(null, profile);
+    });
+  }
+  ));
+  //send to google to do the authentication
+  app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email'] }));
+  //the callback after google has authenticated the user
+  app.get('/auth/google/callback',
+    passport.authenticate('google', {failureRedirect: '/foodBot/auth/google' }),
+    function(req, res) {
+      var userObj = {};
+      userController.storeUser(req.user, function(err, userData) {
+        if (err) {
+          res.json(err);
+        } else {
+          userObj = {
+            name: req.user.displayName,
+            id: userData.id,
+            photos: req.user.photos[0].value
+          }
+        req.DBid = userObj.id;
+        res.json(userObj);    
+        }
+      });
+    });
 };

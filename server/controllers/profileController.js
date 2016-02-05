@@ -21,6 +21,7 @@ module.exports = {
     var cookingTime = parseInt(req.body.cookingTime);
     var diet = req.body.diet.text;
     var foodie = (req.body.foodie === "true");
+    console.log('FOODIE BEFORE:', req.body.foodie, 'FOODIE AFTER:', foodie);
     var userId = parseInt(req.params.id);
     var client = new pg.Client(connectionString);
 
