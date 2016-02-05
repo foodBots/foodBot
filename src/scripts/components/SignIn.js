@@ -76,9 +76,7 @@ class SignIn extends React.Component {
                 />
               </Link>
               <br />
-              <Link to="/auth/google">
-              <RaisedButton style={this.buttonStyles} label="Sign In with Google" />
-              </Link>
+              <RaisedButton style={this.buttonStyles} linkButton="true" href="http://localhost:3000/auth/google" label="Sign In with Google" />
           </form>
         </div>
       </div>

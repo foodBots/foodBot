@@ -97,6 +97,7 @@ export default class App extends React.Component {
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
+            console.log('recipe results', result);
             let r = [];
             r = result.recipes.map((currElement)=>{
             let obj = {};
@@ -166,6 +167,23 @@ export default class App extends React.Component {
         this.setState({currentView: text});
       },
     }
+  }
+
+  //load initial state from db
+  componentDidMount() {
+
+    // $.post('/foodBot/auth/signin', user).done((result) => {
+    //   user = result;
+    //   user.route = 'Swipe Recipes';
+    // })
+    // .fail((error) => {
+    //   if(error.status === 400) {
+    //     alert("NOOOO")
+    //     this.setState({error:error.responseText});
+    //     // console.log(error.responseText);
+    //     // this.refs.signupForm.reset();
+    //   }
+    // });
   }
 
   render() {

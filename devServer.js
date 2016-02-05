@@ -20,10 +20,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(session({
   secret: 'FOOD1234567890BOT'
-  // ,
-  // resave: false,
-  // saveUninitialized: false,
-  // cookie: {}
 }));
 // use passport
 app.use( passport.initialize());
@@ -57,7 +53,7 @@ app.listen(3000, function(err) {
     return;
   }
 
-  console.log('Listening at http://postgres@localhost:3000');
+  console.log('Listening at http://localhost:3000');
 });
 
 //postgres set up

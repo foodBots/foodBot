@@ -59,6 +59,7 @@ class SignUp extends React.Component {
         this.setState({chosenType: isFoodie})
 
         const user = {
+          name: this.refs.name.getValue(),
           email: this.refs.email.getValue(),
           password: this.refs.password.getValue()
         }
@@ -112,7 +113,8 @@ class SignUp extends React.Component {
         <Header />
         <div className="signin-container">
           <form className="sign-up" ref="signupForm" >
-            <TextField className="profile-item" style={this.inputStyles} type="text" ref="email" hintText="email" floatingLabelText="Enter email" errorText={this.state.error} onChange={this.clearError.bind(this)}/><br/>
+            <TextField className="profile-item" style={this.inputStyles} type="text" ref="name" hintText="name" floatingLabelText="Enter name" onChange={this.clearError.bind(this)}/><br/>
+            <TextField className="profile-item" style={this.inputStyles} type="email" ref="email" hintText="email" floatingLabelText="Enter email" errorText={this.state.error} onChange={this.clearError.bind(this)}/><br/>
             <TextField className="profile-item" style={this.inputStyles} type="password" ref="password" hintText="password" floatingLabelText="Enter password" /><br/>
             <ProfileMake
               redirect={this.state.redirect}
