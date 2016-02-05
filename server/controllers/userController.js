@@ -14,7 +14,11 @@ module.exports = {
       } else if (data.rows.length > 0) {
         res.status(400).json('User with that email already exists');
       } else {
-        var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
+        var createUserQuery = client.query("INSERT INTO Users (password, email, name) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"','"+req.body.name+"') RETURNING id;", function(err, data) {
+          if(err) {
+            console.log('error creating user', err);
+            res.status(500).json("We're sorry, an error has occurred");
+          }
           var userData = {
             id: data.rows[0].id,
             email: data.rows[0].email
@@ -22,7 +26,7 @@ module.exports = {
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {
-          auth.createSession(req, res, req.body.email)         
+          auth.createSession(req, res, req.body.email)
         });
       }
     });
@@ -71,13 +75,13 @@ module.exports = {
       allUsers.push(data);
     });
     query.on('end', function() {
-      res.status(201).json(allUsers);      
+      res.status(201).json(allUsers);
     });
   },
   signin: function(req, res) {
    var client = new pg.Client(connectionString);
    client.connect();
-   
+
     client.query("SELECT * FROM Users where email ='"+req.body.email+"' AND password = crypt('"+req.body.password+"', password);", function(err, data) {
      if (err) {
        res.status(500).json("We're sorry, an error has occurred");
@@ -87,7 +91,7 @@ module.exports = {
        var id = data.rows[0].id
        var userData = {
          email: data.rows[0].email
-       };        
+       };
        var allUserData = {
          id: id,
          userData: userData,
@@ -103,7 +107,7 @@ module.exports = {
           allUserData.matchData.id = data.match
         });
 
-       var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")      
+       var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")
         userQuery.on('row', function(data) {
           allUserData.recipesData.push({
             'recipeid' :data.recipeid,
@@ -118,7 +122,7 @@ module.exports = {
             matchRec.push(data)
           });
 
-        matchQuery.on('end', function(data) {                      
+        matchQuery.on('end', function(data) {
           res.send(allUserData)
          });
 

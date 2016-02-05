@@ -75,6 +75,8 @@ class SignIn extends React.Component {
                 onClick={(event) => console.log(event.target.textContent)}
                 />
               </Link>
+              <br />
+              <RaisedButton style={this.buttonStyles} linkButton="true" href="http://localhost:3000/auth/google" label="Sign In with Google" />
           </form>
         </div>
       </div>

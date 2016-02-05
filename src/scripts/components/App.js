@@ -53,7 +53,14 @@ export default class App extends React.Component {
         this.setState({prep})
       },
 
+      setAllergies: (allergies) => {
+        this.setState({
+          allergies: this.state.allergies.concat(allergies)
+        });
+      },
+
       profSubmit: (chosenType) => {
+        const isFoodie = chosenType === "Foodie";
 
         this.setState({chosenType})
         const id = this.state.id
@@ -61,11 +68,21 @@ export default class App extends React.Component {
         console.log('chosenType', chosenType)
         const prof = {
           diet: this.state.diet,
-          cookingTime: this.state.prep +1,
-          foodie: this.state.chosenType === "foodie"
+          cookingTime: this.state.prep.value +1,
+          foodie: isFoodie,
+          allergies: this.state.allergies
         }
-        $.post('/foodBot/profile/'+id, prof)
-        this.state.redirect("Swipe Recipes")
+
+        $.ajax({
+          url: '/foodBot/profile/'+id,
+          type: 'PUT',
+          data: prof
+        }).done((result)=> {
+          this.state.redirect("Swipe Recipes")
+        })
+        .fail((error) => {
+          console.log('error updating profile');
+        });
       },
 
       //RECIPE CHOOSE
@@ -80,6 +97,7 @@ export default class App extends React.Component {
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
+            console.log('recipe results', result);
             let r = [];
             r = result.recipes.map((currElement)=>{
             let obj = {};
@@ -151,21 +169,40 @@ export default class App extends React.Component {
     }
   }
 
+  //load initial state from db
+  componentDidMount() {
+
+    // $.post('/foodBot/auth/signin', user).done((result) => {
+    //   user = result;
+    //   user.route = 'Swipe Recipes';
+    // })
+    // .fail((error) => {
+    //   if(error.status === 400) {
+    //     alert("NOOOO")
+    //     this.setState({error:error.responseText});
+    //     // console.log(error.responseText);
+    //     // this.refs.signupForm.reset();
+    //   }
+    // });
+  }
+
   render() {
-    //PROFILE MAKE
+    //PROFILE MAKE WHEN UPDATING
     if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
      return (
-       <div>
+       <div >
         <Header redirect={this.state.redirect.bind(this)}/>
+        <div className="profile-container">
         <ProfileMake
           id = {this.state.id}
           redirect={this.state.redirect}
-          choices={this.state.choices}
           prep={this.state.prep}
           diet={this.state.diet}
           setDiet={this.state.setDiet.bind(this)}
           setPrep={this.state.setPrep.bind(this)}
+          setAllergies={this.state.setAllergies.bind(this)}
           profSubmit={this.state.profSubmit.bind(this)}/>
+        </div>
        </div>
      )
     }

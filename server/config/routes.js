@@ -13,23 +13,26 @@ var keys = require('./apiKeys.js');
 var passport = require('passport');
 
 module.exports = function(app, express) {
+  app.get('/', auth.checkUser);
+  app.post('/foodBot/auth/signup', userController.signup);
+  app.post('/foodBot/auth/signin', userController.signin);
 
-  app.post('/foodBot/auth/signin', userController.signin); 
   app.get('/foodBot/auth/logout', userController.logout);
 
-  app.get('/foodBot/recipes/:id', auth.checkUser, recipeController.retrieveSuggestedRecipes); 
+  app.get('/foodBot/recipes/:id', /*auth.checkUser,*/ recipeController.retrieveSuggestedRecipes);
 
-  app.get('/foodBot/meals/:id', auth.checkUser, mealController.retrieveUserMeals); 
-  app.post('/foodBot/meals/:id', auth.checkUser, mealController.addUserMeal); 
+  app.get('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.retrieveUserMeals);
+  app.post('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.addUserMeal);
 
-  app.get('/foodBot/match/:id', auth.checkUser, matchController.retrieveMatch);
-  app.post('/foodBot/match/:id', auth.checkUser, matchController.createMatch);
-  app.delete('/foodBot/match/:id', auth.checkUser, matchController.deleteMatch);
+  app.get('/foodBot/match/:id', /*auth.checkUser,*/ matchController.retrieveMatch);
+  app.post('/foodBot/match/:id', /*auth.checkUser,*/ matchController.createMatch);
+  app.delete('/foodBot/match/:id', /*auth.checkUser,*/ matchController.deleteMatch);
 
-  app.get('/foodBot/profile/:id', auth.checkUser, profileController.retrieveOneUser); 
-  app.post('/foodBot/profile/:id', auth.checkUser, profileController.addUserProfile, matchController.createMatch); 
-    app.get('/foodBot/profile', auth.checkUser, profileController.retrieveAllUsers); 
-  
+  app.get('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.retrieveOneUser);
+  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile, matchController.createMatch);
+  app.put('/foodBot/profile/:id', profileController.updateUserProfile);
+  app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
+
   passport.serializeUser(function(user, done) {
     done(null, user.email);
   });
@@ -66,7 +69,8 @@ module.exports = function(app, express) {
             photos: req.user.photos[0].value
           }
         req.DBid = userObj.id;
-        res.json(userObj);    
+        res.redirect('/');
+        // res.json(userObj);
         }
       });
     });

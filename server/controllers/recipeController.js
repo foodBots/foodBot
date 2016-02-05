@@ -47,7 +47,7 @@ var cooking = {
 			console.log("about to insert into db")
 			var insertRecipesIntoDB = function () {
 				yummlyRecipes = JSON.parse(yummlyRecipes);
-					var ingredients = helper.scrapeIngredients("http://www.yummly.com/recipe/external/Black-Bean-_-Corn-Salsa-673549");
+					// var ingredients = helper.scrapeIngredients("http://www.yummly.com/recipe/external/Black-Bean-_-Corn-Salsa-673549");
 				yummlyRecipes.matches.forEach(function (recipe, index) {
 					if (recipe.totalTimeInSeconds >= cooking[2]) {
 						recipe.cookingTime = 3;

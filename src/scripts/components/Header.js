@@ -5,7 +5,7 @@
 
 import React from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+// injectTapEventPlugin();
 
 
 //This should be destructured
@@ -25,7 +25,6 @@ const iconStyles = {
   marginRight: 30,
 }
 
-
 export default class Header extends React.Component {
   render() {
     return (
@@ -44,6 +43,8 @@ export default class Header extends React.Component {
         <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="View Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Buy Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
+        <MenuItem primaryText="Profile Settings" onClick={(event) => this.props.redirect(event.target.textContent)}/>
+
         <MenuItem primaryText="Sign out" href="/signin" />
       </IconMenu>}/>
     </div>
