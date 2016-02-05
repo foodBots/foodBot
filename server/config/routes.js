@@ -8,6 +8,8 @@ var photoController = require('../controllers/photoController.js');
 var ordersController = require('../controllers/ordersController.js');
 
 
+var purchaseController = require('../controllers/purchaseController.js');
+
 var helpers = require('./helpers.js');
 var auth = require('./authOperations.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
@@ -15,7 +17,7 @@ var keys = require('./apiKeys.js');
 var passport = require('passport');
 
 module.exports = function(app, express) {
-  // app.get('/', auth.checkUser);
+  // app.get('/', auth.checkUser);30
   app.post('/foodBot/auth/signup', userController.signup);
   app.post('/foodBot/auth/signin', userController.signin);
 
@@ -87,3 +89,4 @@ module.exports = function(app, express) {
       });
     });
 };
+

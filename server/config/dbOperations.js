@@ -1,3 +1,5 @@
+// var insertIntoMeasuresTable = require('./models/measurementsModel')
+
 module.exports = {
 
   //sql command for user table
@@ -99,6 +101,21 @@ module.exports = {
     'orderid int references Orders(id) NOT NULL,' +
     'recipeid int references Recipes(id) NOT NULL,' +
     'total int' +
-  
-};
+    ')',
 
+  createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY, ' +
+      'name varchar(255),' +
+      'quantity real,' +
+      'measure varchar(50),' +
+      'recipeid int references Recipes(id)' +
+    ')'
+};
+// ,
+
+//   createMeasuresTable: 'CREATE TABLE IF NOT EXISTS Measurements' +
+//     '(' +
+//       'id SERIAL NOT NULL PRIMARY KEY, ' +
+//       'name varchar(255),' +
+//     ')' +

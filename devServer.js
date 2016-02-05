@@ -74,7 +74,6 @@ var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
 var createUserPhotosTable = client.query(db.createUserPhotosTable);
 var createOrdersTable = client.query(db.createOrdersTable);
 var createRecipeCostTable = client.query(db.createRecipeCostTable);
-
-
+var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
 
 module.exports = app;
