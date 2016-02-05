@@ -14,10 +14,8 @@ var passport = require('passport');
 
 module.exports = function(app, express) {
 
-
   app.post('/foodBot/auth/signin', userController.signin); 
   app.get('/foodBot/auth/logout', userController.logout);
-
 
   app.get('/foodBot/recipes/:id', auth.checkUser, recipeController.retrieveSuggestedRecipes); 
 
