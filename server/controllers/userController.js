@@ -13,12 +13,6 @@ module.exports = {
         res.status(500).json("We're sorry, an error has occurred");
       } else if (data.rows.length > 0) {
         res.status(400).json('User with that email already exists');
-        // res.redirect('/foodBot/auth/signup');
-        // res.send({
-        //   // status: 400,
-        //   // json: 'User with that email already exists',
-        //   redirect: '/signup'
-        // });
       } else {
         var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, data) {
           var userData = {
@@ -28,28 +22,45 @@ module.exports = {
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {
-          auth.createSession(req, res, req.body.email)
-          // res.status(201).json('User session created');
+          auth.createSession(req, res, req.body.email)         
         });
       }
     });
-    // checkUserQuery.on('end', function(results) {
-  //
-    // });
   },
-  retrieveOneUser: function(req, res) {
+  storeUser: function(profile, next) {
+       var userObj = {
+      name: profile.displayName,
+      email: profile.email,
+      photo: profile.photos[0].value,
+      googleID: profile.id,
+    };
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("SELECT * FROM Users WHERE id = "+req.params.id+";");
-    query.on('row', function(data) {
-      res.status(200).json(data);
-    });
-    query.on('end', function() {
-      //if no id  was found and res.status was not set, declare error to client
-      res.status(400).json("USER does not exist");
+    var checkUserQuery = client.query("SELECT * FROM Users where email ='"+userObj.email+"';", function(err, checkUserData) {
+      if (err) {
+         next("We're sorry, an error has occurred", null);
+      } else if (checkUserData.rows.length > 0) {
+          userObj.id = checkUserData.rows[0].id;
+        next(null, userObj);
+      } else {
+        var createUserQuery = client.query("INSERT INTO Users (name, email, photo, googleID) VALUES ('"+userObj.name+"','"+userObj.email+"','"+userObj.photo+"','"+userObj.googleID+"') RETURNING id;", function(err, createUserData) {
+          if (err) {console.log ("ERROR IN CREATE USER", err)}
+         userObj.id = createUserData.rows[0].id;
+         next(null, userObj);
+      });
+      }
     });
   },
-
+  retrieveOneUser: function(email, next) {
+    var id = {};
+    var client = new pg.Client(connectionString);
+    client.connect();
+    var query = client.query("SELECT id FROM Users WHERE email = '"+email+"';");
+    query.on('row', function(data) {
+      id.id = data;
+      next(null, id);
+    });
+  },
   retrieveAllUsers: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
@@ -60,26 +71,23 @@ module.exports = {
       allUsers.push(data);
     });
     query.on('end', function() {
-      res.status(201).json(allUsers);
+      res.status(201).json(allUsers);      
     });
   },
-  
   signin: function(req, res) {
    var client = new pg.Client(connectionString);
    client.connect();
-
+   
     client.query("SELECT * FROM Users where email ='"+req.body.email+"' AND password = crypt('"+req.body.password+"', password);", function(err, data) {
      if (err) {
        res.status(500).json("We're sorry, an error has occurred");
-       console.log('500');
-     } else if (data.rows.length < 1) {
+       } else if (data.rows.length < 1) {
        res.status(400).json("Username or password is incorrect");
-       console.log('400');
-     } else {
+       } else {
        var id = data.rows[0].id
        var userData = {
          email: data.rows[0].email
-       };
+       };        
        var allUserData = {
          id: id,
          userData: userData,
@@ -93,34 +101,33 @@ module.exports = {
           console.log("data from profile query", data);
           allUserData.profileData = data;
           allUserData.matchData.id = data.match
-        })
+        });
 
-       var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")
+       var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")      
         userQuery.on('row', function(data) {
           allUserData.recipesData.push({
             'recipeid' :data.recipeid,
              'created' :data.created
          });
-          // console.log(data)
-        })
+        });
 
         var matchQuery = client.query("SELECT * FROM USERRECIPES WHERE profileid IN (SELECT match from profiles where id='"+id+"');")
           var matchRec = allUserData.matchData.recipes
           matchQuery.on('row', function(data) {
-            console.log(data, "MATCHED FOOLS")
             if(!data.created && data.liked)
             matchRec.push(data)
-          })
+          });
 
-        matchQuery.on('end', function(data) {
-          console.log('matchdata sent is', allUserData.matchData)
+        matchQuery.on('end', function(data) {                      
           res.send(allUserData)
          });
 
         }
-      })
+      });
+  },
+  logout: function(req, res) {
+    req.session.destroy(function() {
+      res.redirect('/signin');
+    });
   }
 }
-
-
-//)

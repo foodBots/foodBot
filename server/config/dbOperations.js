@@ -4,8 +4,10 @@ module.exports = {
   createUsersTable: 'CREATE TABLE IF NOT EXISTS Users' +
     '(' +
     'id SERIAL NOT NULL PRIMARY KEY,' +
-    'password VARCHAR(255) NOT NULL,' +
-    'email VARCHAR(25) NOT NULL' +
+    'name VARCHAR(255) NOT NULL,' +
+    'email VARCHAR(255) NOT NULL,' +
+    "photo varchar(255) DEFAULT 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiLi7Ln69zKAhUNxWMKHZo6CKMQjRwIBw&url=http%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fcooks-people&bvm=bv.113370389,d.cGc&psig=AFQjCNFk8JDd74HqUtWZAypvRUyzolx3UA&ust=1454631766701909'," +
+    'googleID varchar(255) UNIQUE' +
     ')',
 
   //sql command for user profile

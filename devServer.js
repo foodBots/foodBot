@@ -6,6 +6,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var db = require('./server/config/dbOperations.js');
 var User = require('./server/controllers/userController.js');
+var passport = require('passport');
 
 //Webpack
 var webpack = require('webpack');
@@ -18,11 +19,18 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(session({
-  secret: 'FOOD1234567890BOT',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
+  secret: 'FOOD1234567890BOT'
+  // ,
+  // resave: false,
+  // saveUninitialized: false,
+  // cookie: {}
+}));
+// use passport
+app.use( passport.initialize());
+// store passport authentication in the session
+app.use( passport.session());
+
+
 
 //Hot Reloading
 app.use(require('webpack-dev-middleware')(compiler, {
@@ -35,6 +43,7 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.use(express.static(__dirname + '/../client'));
 
 require('./server/config/routes.js')(app, express);
+//(app, passport);
 
 var port = process.env.PORT || 3000;
 
