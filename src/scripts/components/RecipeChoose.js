@@ -51,8 +51,8 @@ export default class Recipe extends React.Component {
   }
 
   addToCart (element) {
-    this.likeOrReject(element.id, true);
-    this.props.showModal()
+    this.likeOrReject(element.id, true);    
+    this.props.showModal(element)
     this.refs.ReactSwipe.swipe.next()
   }
 
@@ -65,9 +65,9 @@ export default class Recipe extends React.Component {
         </CardMedia>
         <CardText>
         <h4>Estimated Cost</h4>
-          <strong>It is going to cost this much to buy</strong>
+          <strong>{element.price}</strong>
         </CardText>
-               <CardActions>
+        <CardActions>
           <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
           <RaisedButton label="Save for Later" primary={true} onClick={this.yes.bind(this, element)} />
           <RaisedButton label="Add to Cart" secondary={true} onClick={this.addToCart.bind(this, element)} />

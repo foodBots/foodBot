@@ -210,6 +210,10 @@ li {
   list-style-type: none;
 }
 */
+table {
+  width: 100%;
+}
+
 ul {
   height: 100px;
   border: solid;
@@ -227,6 +231,7 @@ ul > li {
 .modal-lg {
   padding-top: 30%;
   width: 40%;
+  height: 75%;
 }
 
 .slick-track {

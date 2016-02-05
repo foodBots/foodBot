@@ -52,8 +52,8 @@ app.listen(3000, function(err) {
     console.log(err);
     return;
   }
-
-  console.log('Listening at http://localhost:3000');
+  
+  console.log('Listening at http://postgres@localhost:3000');
 });
 
 //postgres set up

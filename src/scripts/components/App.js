@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-
 import Header from './Header.js'
 import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
 import RecipesBuy from './RecipesBuy'
+import Subtotal from './Subtotal'
+
 
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -25,10 +26,25 @@ export default class App extends React.Component {
       close: () => {
         this.setState({ isModalOpen: false });
       },
-      showModal: () => {
-        this.setState({ isModalOpen: true });
+      cart: [],
+      recentItem: "",      
+      
+      showModal: (element) => {        
+        let recent = {
+          name: element.name,
+          img: element.img,
+          price: 10
+        }
+                
+        let subtotal = this.state.subtotal
+        subtotal += recent.price
+
+        this.setState({recentItem: recent, subtotal: subtotal, cart: this.state.cart.concat(recent)})        
+        this.setState({ isModalOpen: true })                
       },
 
+      subtotal: 0,
+  
       //USER INFO
       id: this.props.location.state.id,
       username: this.props.location.state.email,
@@ -115,12 +131,11 @@ export default class App extends React.Component {
         this.state.setChosenRecipes(this.state.recipesObj.liked);
         $.post('/foodBot/meals/' + this.state.id, this.state.recipesObj)
         .done((result) => {
-          console.log(result, "REDIS RESULT")
         })
         this.state.close();
       },
 
-      goCheckout:() => {
+      goCheckout:() => { 
         event.preventDefault();
         console.log("Go to checkout")
       },
@@ -203,7 +218,6 @@ export default class App extends React.Component {
           setAllergies={this.state.setAllergies.bind(this)}
           profSubmit={this.state.profSubmit.bind(this)}/>
         </div>
-       </div>
      )
     }
     //SWIPE RECIPES
@@ -211,46 +225,28 @@ export default class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeChoose
-              id={this.state.id}
-              getRecipes={this.state.getRecipes.bind(this)}
-              setChosenRecipes={this.state.setChosenRecipes.bind(this)}
-              recipes={this.state.recipes}
-              recipesObj={this.state.recipesObj}
-              saveMatch={this.state.saveMatch.bind(this)}
-              userMatch={this.state.userMatch}
-              showModal={this.state.showModal.bind(this)}/>
+        <RecipeChoose          
+            id={this.state.id}
+            getRecipes={this.state.getRecipes.bind(this)}
+            setChosenRecipes={this.state.setChosenRecipes.bind(this)}
+            recipes={this.state.recipes}
+            recipesObj={this.state.recipesObj}
+            saveMatch = {this.state.saveMatch.bind(this)}
+            userMatch={this.state.userMatch}
+            showModal={this.state.showModal.bind(this)}
+            recentItem = {this.state.recentItem}/>            
+        <Subtotal 
+          //Actions
+          showModal = {this.state.showModal.bind(this)}
+          isModalOpen={this.state.isModalOpen}
+          saveMatch = {this.state.saveMatch.bind(this)}
+          close ={this.state.close.bind(this)}          
+          goCheckout = {this.state.goCheckout.bind(this)}          
 
-          <Modal
-            show={this.state.isModalOpen}
-            onHide={this.state.close}
-            container={this}
-            bsSize="small"
-            enforceFocus={true}>
-          <Modal.Header closeButton><h3>Cart Subtotal(1 item)</h3> </Modal.Header>
-          <Modal.Body>
-          <table>
-            <tr>
-              <th>Small Picture</th>
-              <th>Meal Name</th>
-            </tr>
-            <tr>
-              <td>Ingredient1</td>
-              <td>$5.00</td>
-            </tr>
-
-            <tr>
-              <th>Total Cost</th>
-              <th>$25.95</th>
-            </tr>
-          </table>
-          <button>Portions?</button> <button>Delete</button> <button>Save for later</button>
-          </Modal.Body>
-          <Modal.Footer>
-          <RaisedButton label="Keep Swiping!" secondary={true} onClick={this.state.saveMatch}/>
-          <RaisedButton label="Checkout" primary={true} onClick={this.state.goCheckout} />
-          </Modal.Footer>
-          </Modal>
+          //Props
+          recentItem = {this.state.recentItem}
+          cart = {this.state.cart}
+          subtotal={this.state.subtotal}/>            
        </div>
       )
     }
