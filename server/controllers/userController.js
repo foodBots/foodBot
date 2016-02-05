@@ -114,13 +114,11 @@ module.exports = {
         var matchQuery = client.query("SELECT * FROM USERRECIPES WHERE profileid IN (SELECT match from profiles where id='"+id+"');")
           var matchRec = allUserData.matchData.recipes
           matchQuery.on('row', function(data) {
-            // console.log(data, "MATCHED FOOLS");
             if(!data.created && data.liked)
             matchRec.push(data)
           });
 
         matchQuery.on('end', function(data) {                      
-          // console.log('matchdata sent is', allUserData.matchData)
           res.send(allUserData)
          });
 
