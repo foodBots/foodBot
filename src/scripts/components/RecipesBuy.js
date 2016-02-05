@@ -6,19 +6,18 @@ import $ from 'jquery';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Avatar from 'material-ui/lib/avatar';
 
-
 class RecipesBuy extends React.Component {
   constructor(props) {
     super(props);
     this.cardStyles = {
       display: 'block',
-      textAlign: 'center',
-      width: '450px'
+      textAlign: 'left',
+      width: '70%'
     }
     this.buttonStyles = {
       display: 'block',
       textAlign: 'center',
-      width: '450px'
+      width: '300px'
     }
   }
   renderCard(element, index) {
@@ -26,27 +25,25 @@ class RecipesBuy extends React.Component {
       <div key={index} style={this.cardStyles}>
         <Card >
         <CardHeader
-          title={element}
-          avatar="https://lh3.googleusercontent.com/5UWFVuKC1bw63TzPDoaRT1VngwcoiJdOP8xPJs6BsFF8fYCYk6wVTDUwP3SEaXzufEpnfvQWwRpDhofQ1IqStw=s90"
-          subtitle="Subtotal $25.00"
+          title={element.name}
+          avatar={element.img}
+          subtitle={element.price}
           actAsExpander={true}
-          showExpandableButton={true}
-        />
+          showExpandableButton={true}/>
         <CardText expandable={true}>
-          Veggie $5.75 <br/>
-          Meat $5.75 <br/>
-          Sauce $5.75 <br/>
-          Bread $ 5.75 <br/>
           <CardActions>
-            <RaisedButton label="Delete from order" primary={true}  />
+            <RaisedButton label="Remove" primary={true} onClick={this.props.removeOrder.bind(this, element)}/>
           </CardActions>
         </CardText>
         </Card>
       </div>
     )
   }
+
+  //TODO: When posting the order to PG, these foods have to be marked as "created/bought"
+  //
   render() {
-    const recipes = ['Recipe 1','Recipe 2','Recipe 3','Recipe 4'];
+    const recipes = this.props.cart
     return(
       <div className="buyrecipe-container">
         <h1>Your Recipes Order</h1>
@@ -54,11 +51,10 @@ class RecipesBuy extends React.Component {
         {recipes.map((element, index) => this.renderCard(element, index))}
         <Card style={this.cardStyles}>
           <CardHeader
-            title="Total: $100.00"
-          />
+            title={"Total Order: $"+this.props.total}/>
         </Card>
         <br />
-        <RaisedButton style={this.buttonStyles} secondary={true} label="Check Out with Fast Bucket" />
+        <RaisedButton style={this.buttonStyles} secondary={true} label="Check Out with Amazon Fresh"/>
       </div>
     )
   }

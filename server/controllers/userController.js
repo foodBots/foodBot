@@ -20,9 +20,10 @@ module.exports = {
             res.status(500).json("We're sorry, an error has occurred");
           }
           var userData = {
-            id: data.rows[0].id,
-            email: data.rows[0].email
+            id: newData.rows[0].id,
+            email: newData.rows[0].email
           }
+          console.log(newData)
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {

@@ -10,12 +10,6 @@ export default class Subtotal extends React.Component {
       super(props);
     }
 
-    componentWillReceiveProps() {
-      this.setState({
-        cart: this.props.cart
-      })
-    }
-
     render() {    
       return (
        <Modal 

@@ -11,7 +11,6 @@ export default class SubtotalTable extends React.Component {
 
 
   renderRow (element) {
-    this.forceUpdate();
     return (
     <div>
     {element.name} {element.price}

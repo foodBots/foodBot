@@ -5,6 +5,11 @@ import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib
 import $ from 'jquery';
 import RaisedButton from 'material-ui/lib/raised-button';
 
+
+import firebase from 'firebase'
+let newFire = new firebase('https://dazzling-inferno-511.firebaseio.com/')
+let order =  newFire.child('shoppingCart')
+
 export default class Recipe extends React.Component {
 
   constructor(props) {
@@ -52,6 +57,10 @@ export default class Recipe extends React.Component {
 
   addToCart (element) {
     this.likeOrReject(element.id, true);    
+    order.push({
+      name: element.name,
+      price: 10.98
+    })
     this.props.showModal(element)
     this.refs.ReactSwipe.swipe.next()
   }
