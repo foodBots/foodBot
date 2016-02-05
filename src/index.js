@@ -16,6 +16,8 @@ import Header from './scripts/components/Header.js'
 import ProfileMake from './scripts/components/ProfileMake'
 import RecipeChoose from './scripts/components/RecipeChoose'
 import RecipeLanding from './scripts/components/RecipeLanding'
+import PhotoUpload from './scripts/components/PhotoUpload'
+
 
 //incl API key
 const routes = (
@@ -25,6 +27,7 @@ const routes = (
     <Route path="/signin" component={SignIn}/>
     <Route path="/signout" component={SignIn}/>
     <Route path="/header" component={Header}/>
+    <Route path="/photos" component={PhotoUpload}/>
     <Route path="*" component={NotFound}/>
 
   </Router>

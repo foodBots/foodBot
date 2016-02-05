@@ -44,7 +44,10 @@ class SignUp extends React.Component {
       },
 
       setAllergies: (allergies) => {
-        this.setState({allergies})
+        this.setState({
+          allergies: this.state.allergies.concat(allergies)
+        });
+        // console.log('seting allergies to', this.state.allergies);
       },
 
       setChosenRecipes: (chosenRecipes) => {
@@ -53,93 +56,48 @@ class SignUp extends React.Component {
 
       profSubmit: (chosenType) => {
         const isFoodie = chosenType === "Foodie";
-        // console.log('diet', this.state.diet)
         this.setState({chosenType: isFoodie})
-        // console.log('state chosentype', this.state.chosenType, 'isFoodie', isFoodie);
-        // const id = this.props.location.state.id.id
-        // console.log('ID POST PROPS:', id);
-        const prof = {
-          diet: this.state.diet,
-          cookingTime: this.state.prep.value +1,
-          foodie: isFoodie
-        }
 
-        console.log(prof.cookingTime, "cookingTime")
         const user = {
           email: this.refs.email.getValue(),
           password: this.refs.password.getValue()
         }
-        //if there is a user defined, we put
 
         $.post('/foodBot/auth/signup', user)
         .done((result) => {
           console.log('result', result, 'user', user);
-          //redirect to landing page
-          // console.log('props',this.props);
-          // this.setState({user: user});
           user.id = result.id;
+          const prof = {
+            diet: this.state.diet,
+            cookingTime: this.state.prep.value +1,
+            foodie: isFoodie,
+            allergies: this.state.allergies
+          }
+          console.log('profObj', prof, 'state allergies', this.state.allergies)
           $.post('/foodBot/profile/'+ user.id, prof)
           .done((result) => {
-            // this.state.redirect("Swipe Recipes")
             user.route = 'Swipe Recipes';
             user.diet = this.state.diet;
             user.cookingTime = this.state.prep.value;
             user.foodie = this.state.chosenType === "foodie";
+            user.allergies = this.state.allergies
             console.log('result after profile post', result, 'user', user);
             this.props.history.pushState(user, '/');
           })
           .fail((error) =>{
-            console.log('error updating profile');
+            console.log('error creating profile');
           })
         })
         .fail((error) => {
           if(error.status === 400) {
             this.setState({error:error.responseText});
-            // console.log(error.responseText);
-            // this.refs.signupForm.reset();
           }
         });
-
-  // signUp(e) {
-  //   injectTapEventPlugin();
-  //   e.preventDefault();
-  //   const router = this.context.router;
-  //   const user = {
-  //     email: this.refs.email.getValue(),
-  //     password: this.refs.password.getValue()
-  //   }
-  //   this.refs.signupForm.reset();
-  //   //post email and password
-  //   $.post('/foodBot/auth/signup', user)
-  //   .done((result) => {
-  //     console.log('result', result, 'user', user);
-  //     //redirect to landing page
-  //     // console.log('props',this.props);
-  //     // this.setState({user: user});
-  //     user.id = result.id;
-  //     console.log(user.id, "USER ID HERE")
-
-  //     //Creates a match upon sign up
-  //     // $.post('/foodBot/match/:'+ user.id).done((result) => {
-  //     //     console.log("match created!", result)
-  //     //   })
-
-  //     user.route= 'Profile Settings';
-  //     this.props.history.pushState(user, '/');
-  //   })
-  //   .fail((error) => {
-  //     if(error.status === 400) {
-  //       this.setState({error:error.responseText});
-  //       // console.log(error.responseText);
-  //       // this.refs.signupForm.reset();
       }
     }
-    // this.signUp = this.signUp.bind(this);
-    // this.clearError = this.clearError.bind(this);
   }
   clearError() {
-    // this.setState({error: ''});
-    // console.log(this.state);
+
     if (this.state.error.length > 0) {
       this.setState({error:''});
     }
@@ -149,7 +107,6 @@ class SignUp extends React.Component {
               // choices={this.state.choices}
   render() {
     // injectTapEventPlugin();
-              // setAllergies={this.state.setAllergies.bind(this)}
     return (
       <div>
         <Header />
@@ -163,6 +120,7 @@ class SignUp extends React.Component {
               diet={this.state.diet}
               setDiet={this.state.setDiet.bind(this)}
               setPrep={this.state.setPrep.bind(this)}
+              setAllergies={this.state.setAllergies.bind(this)}
               profSubmit={this.state.profSubmit.bind(this)}/>
               <br />
           </form>

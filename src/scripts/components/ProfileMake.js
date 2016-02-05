@@ -44,7 +44,10 @@ class ProfileMake extends React.Component {
 
   renderChoice(element, index){
     return (
-      <RaisedButton style={this.styles} label={element} key={element} primary={true} onClick={(event) => this.props.profSubmit(element)} />
+      <RaisedButton style={this.styles} label={element} key={element} primary={true} onClick={(event) => {
+        this.props.setAllergies(this.allergies);
+        this.props.profSubmit(element);
+      }} />
       )
   }
 
@@ -73,11 +76,10 @@ class ProfileMake extends React.Component {
       console.log(this.allergies);
 
     }
-    // this.props.setAllergies(this.allergies);
   }
 
   renderAllergies(element, index) {
-    injectTapEventPlugin();
+    // injectTapEventPlugin();
     return (
       <td key={index}><Checkbox ref={element} iconStyle = {{left: "5"}} label={element} style={styles.checkbox} onCheck={this.handleAllergies.bind(this, element)} /></td>
     )

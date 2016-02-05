@@ -104,6 +104,7 @@
     "passport": "^0.3.2",
     "passport-google-oauth2": "^0.1.6",
     "pg": "^4.4.3",
+    "react-dropzone": "^3.3.2",
     "react-flexbox": "^3.0.0",
     "react-flexbox-grid": "^0.9.4",
     "request": "^2.69.0",
