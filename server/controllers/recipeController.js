@@ -87,7 +87,7 @@ var pickNumber = 1;
 		foodQ().then(function (yummlyRecipes) {
 			console.log("about to insert into db")
 			var addIngriedientToDB = function (item) {
-				console.log("AddIngredientoDB:", item);
+				// console.log("AddIngredientoDB:", item);
 				request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
 					parseString(xml, function (err, result) {
 						if (err) {
@@ -98,14 +98,17 @@ var pickNumber = 1;
 							var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
 							var index = productList.length >= 5 ? 5 : productList.length-1;
 							var choice = productList[index];
-							console.log("productList:", productList, "index:", index, "choice", choice);
-							client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname + "','" + choice.ItemDescription + "'," + choice.Pricing[0] + ");", function(err, productData) {
-								if (err) {
-									console.log("Error in inserting to GroceryPrices:", err);
-								} else {
-									console.log("GroceryPrices result:", productData);
-								}
-							})
+							if (choice.Itemname[0] !== 'NOITEM') {
+								var description = choice.ItemDescription[0].length > 1000 ? choice.ItemDescription[0].substr(0,1000) : choice.ItemDescription[0];
+							// console.log("productList:", productList, "index:", index, "choice", choice);
+								client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ");", function(err, productData) {
+									if (err) {
+										console.log("Error in inserting to GroceryPrices:", err);
+									} else {
+										// console.log("GroceryPrices result:", productData);
+									}
+								})
+							}
 						}
 					    // console.log("LOOK AT THISS: ", );
 					});
@@ -117,7 +120,7 @@ var pickNumber = 1;
 				// })
 			};
 			var insertRecipesIntoDB = function (recipe) {
-				console.log("RECIPE ingredients:", recipe.ingredients);
+				// console.log("RECIPE ingredients:", recipe.ingredients);
 
 				// var addCookingTime = function (){
 				// 	if (recipe.totalTimeInSeconds >= cooking[2]) {
@@ -130,7 +133,7 @@ var pickNumber = 1;
 				// }
 				// console.log("da recipe:", recipe)
 				// var recipeImg = recipe.smallImageUrls ? recipe.smallImageUrls[0] + "0-c": recipe.imageUrlsBySize[Object.keys(recipe.imageUrlsBySize)[0]].replace("90","900")
-				console.log(recipe.label, recipe.image, recipe.url, 2 );
+				// console.log(recipe.label, recipe.image, recipe.url, 2 );
 				client.query("INSERT INTO Recipes (name, image, directionsUrl, sourceid) VALUES ('" + recipe.label + "', '" + recipe.image + "', '" + recipe.url + "'," + 2 + ")", function (err) {
 					if (err){
 						console.log("Edamam recipe already saved in db", err)
@@ -143,7 +146,6 @@ var pickNumber = 1;
 				})
 
 			};
-			console.log(yummlyRecipes)
 			// yummlyRecipes = JSON.parse(yummlyRecipes);
 			yummlyRecipes.forEach(function (item) {
 				// getIngredientsFromYummly(item.recipe)

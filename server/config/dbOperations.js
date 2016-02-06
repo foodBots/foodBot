@@ -139,7 +139,7 @@ module.exports = {
     '(' +
        'id SERIAL NOT NULL PRIMARY KEY, ' +
        'name varchar(255), ' +
-       'description varchar(400),' +
+       'description varchar(1000),' +
        'price int NOT NULL' +
     ')' 
 }
