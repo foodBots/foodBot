@@ -2,22 +2,12 @@ var pg = require('pg');
 var Promise = require('bluebird');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
 var client;
+var r = require('redis').createClient();
 
-//can probably make this a helper function
 var makeConnect = function() {
 	client = new pg.Client(connectionString);
 	client.connect();	
 }
-
-/*helper: 
-	A. Abstract PG Query
-		1. create connection
-		2. do query
-		3. send response
-
-	B. Abstract out query text and req inputs
-		1. fn(query, input)
-*/
 
 module.exports = {
 
@@ -25,9 +15,6 @@ module.exports = {
 		makeConnect();
 		// Get User ID
 		var uid = req.params.id;
-
-		// Create Postgres Connection
-
 
 		// Create Query for all recipes user has created or seenRecipe
 		var userRecipesQuery = client.query("SELECT name, ingredients, image, rating, directionsurl, liked FROM Recipes INNER JOIN UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid="+uid+" AND liked=true;");
@@ -48,7 +35,7 @@ module.exports = {
 
 	addUserMeal : function (req, res){
 		makeConnect()
-		console.log(typeof req.body, typeof req.body.rejected)
+		var uid = req.params.id;
 		var rejected = req.body.rejected;
 		var liked = req.body.liked;
 
@@ -57,9 +44,6 @@ module.exports = {
 			rejected = JSON.parse(rejected)
 			liked = JSON.parse(liked)
 		}
-
-		// Get Client Data
-		var uid = req.params.id;
 
 		// Create Insert Meal Query
 		if (rejected) {
@@ -73,20 +57,37 @@ module.exports = {
 				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;
 			});
 		}
-
-	var redis = require('redis');
-	var r = redis.createClient();
-
-	r.on('connect', function() {
-  	console.log("redis connected")
-	})
-
-	r.set('meal1', "{'thing1': '20 dollars', 'thing2': '2 dollars'}", function() { console.log("meal1 set")
-	})
-	
-	r.get('meal1', function(err, stuff) {
-		console.log("stuff is", stuff)
-		res.send(stuff)
-	})
 	}
+
+	// addToCart: function(req, res) {
+	// 	r.flushall();
+	// 	var user = req.params.id
+	// 	var order = req.body
+
+	// 	r.get(user, function(err, data) {
+	// 		if (data === null) {
+	// 			r.set("cart", 1)
+	// 			r.get("cart", function(err, result) {
+	// 				//result from get cannot be stored
+	// 				var store = {result: order}
+	// 				console.log(store)
+	// 				r.set(user, JSON.stringify(store))
+	// 				r.get(user, function(err, done) {
+	// 					res.send(done)
+	// 				})										
+	// 			})
+
+	// 		// else {
+	// 		// 	order = order + "," + data;								
+	// 		// 	r.set(user, order)
+	// 		// 	r.get(user, function(err, done) {
+	// 		// 		totalCart.items.push(done)
+	// 		// 		console.log(totalCart, "JSON should parse this yes?")
+	// 		// 		res.send(JSON.stringify(totalCart))
+	// 		// 	})
+	// 		// }
+		
+	// 		}
+	// 	})
+	// }
 };

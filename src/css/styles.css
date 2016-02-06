@@ -48,12 +48,6 @@
           transform: translateY(-100%);
 }
 
-.flexbox-container {
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-}
-
 .flexbox-container > div {
   width: 50%;
   padding: 10px;
@@ -168,25 +162,6 @@
   left: 0;
 }
 
-.slick-slider {
-    @include reset(ul);
-
-    /* almost fill the viewport */
-    position: relative;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 80px;
-    white-space: nowrap; /* inline elements will go on forever */
-    overflow: hidden;
-}
-
-.slick-slide {
-      position: relative; /* position things inside */
-      display: inline-block; /* act as an inline element */
-      height: 100%; /* take up whole height of slider parent */
-      width: 100vw !important; /* be as wide as the viewport */
-}
 
 .footer-styles {
   bottom: 0px;
@@ -210,6 +185,10 @@ li {
   list-style-type: none;
 }
 */
+table {
+  width: 100%;
+}
+
 ul {
   height: 100px;
   border: solid;
@@ -225,11 +204,17 @@ ul > li {
 }
 
 .modal-lg {
-  padding-top: 30%;
+  padding-top: 10%;
   width: 40%;
+  height: 75%;
 }
 
-.slick-track {
-  height: 50vh;
+.headContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: flex-start;
+  
 }
-

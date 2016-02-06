@@ -33,7 +33,7 @@ module.exports = {
 						var addMatchToUsersProfileQuery = client.query("UPDATE Profiles SET match = '" + numberUID + "' WHERE id ='" + matchUserID + "'")
 						var removePairFromMatchesQueueQuery = client.query("DELETE FROM matchesQueue WHERE userone = '" + matchUserID + "'")
 						if (res) {
-							res.sendStatus(200);
+							res.send (200);
 						}
 					}
 				}

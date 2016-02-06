@@ -5,6 +5,11 @@ import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib
 import $ from 'jquery';
 import RaisedButton from 'material-ui/lib/raised-button';
 
+
+import firebase from 'firebase'
+let newFire = new firebase('https://dazzling-inferno-511.firebaseio.com/')
+let order =  newFire.child('shoppingCart')
+
 export default class Recipe extends React.Component {
 
   constructor(props) {
@@ -51,8 +56,12 @@ export default class Recipe extends React.Component {
   }
 
   addToCart (element) {
-    this.likeOrReject(element.id, true);
-    this.props.showModal()
+    this.likeOrReject(element.id, true);    
+    order.push({
+      name: element.name,
+      price: 10.98
+    })
+    this.props.showModal(element)
     this.refs.ReactSwipe.swipe.next()
   }
 
@@ -65,9 +74,9 @@ export default class Recipe extends React.Component {
         </CardMedia>
         <CardText>
         <h4>Estimated Cost</h4>
-          <strong>It is going to cost this much to buy</strong>
+          <strong>{element.price}</strong>
         </CardText>
-               <CardActions>
+        <CardActions>
           <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
           <RaisedButton label="Save for Later" primary={true} onClick={this.yes.bind(this, element)} />
           <RaisedButton label="Add to Cart" secondary={true} onClick={this.addToCart.bind(this, element)} />

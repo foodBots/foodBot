@@ -1,8 +1,11 @@
 import React from 'react';
-import {RaisedButton, DropDownMenu, MenuItem, Checkbox, TextField} from 'material-ui'
+import {RaisedButton, LeftNav, DropDownMenu, MenuItem, Checkbox, TextField} from 'material-ui'
 import Catalyst from 'react-catalyst';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
+
+injectTapEventPlugin();
+
 
 const styles = {
   block: {
@@ -19,7 +22,6 @@ class ProfileMake extends React.Component {
     super(props);
     this.styles = {
       'display': 'block',
-      'textAlign': 'center',
       'margin': '5px'
     };
     this.choices = {
@@ -29,17 +31,7 @@ class ProfileMake extends React.Component {
       allergies: ["Dairy", "Egg", "Gluten", "Peanut", "Seafood"]
     };
     this.allergies = [];
-    // this.state = {
-    //   prep: {
-    //     value: 0,
-    //     text: ""
-    //   },
-    //   diet: {
-    //     value: 0,
-    //     text: ""
-    //   }
-    // }
-
+    this.state = {open: false}
   }
 
   renderChoice(element, index){
@@ -79,13 +71,12 @@ class ProfileMake extends React.Component {
   }
 
   renderAllergies(element, index) {
-    // injectTapEventPlugin();
     return (
       <td key={index}><Checkbox ref={element} iconStyle = {{left: "5"}} label={element} style={styles.checkbox} onCheck={this.handleAllergies.bind(this, element)} /></td>
     )
   }
 
-  render() {
+  renderProfUpdateForm() {
     injectTapEventPlugin();
     const choiceButton = this.choices.type
     const diets = Object.keys(this.choices.diet)
@@ -127,6 +118,26 @@ class ProfileMake extends React.Component {
       </div>
       </div>
     </div>
+    )
+  }
+  render(){
+    return (
+      <div>
+      <h3>Your Profile</h3>
+        {this.renderProfUpdateForm()}
+        <RaisedButton
+          label="Open LeftNav"
+          onTouchTap={this.props.handleToggle}/>
+         <LeftNav
+          docked={false}
+          width={200}
+          open={this.props.open}
+          onRequestChange={open => this.props.handleToggle}>
+          <MenuItem onTouchTap={this.props.handleClose}>Close</MenuItem>
+          <MenuItem onTouchTap={this.props.handleClose}>Close</MenuItem>
+        </LeftNav>
+      </div>
+
     )
   }
 }

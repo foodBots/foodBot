@@ -32,12 +32,10 @@ class SignIn extends React.Component {
     }
     this.refs.signinForm.reset();
     // post email and password
-    console.log(user);
     $.post('/foodBot/auth/signin', user).done((result) => {
       user = result;
       user.route = 'Swipe Recipes';
       this.props.history.pushState(user, '/')
-      console.log(user);
     })
     .fail((error) => {
       if(error.status === 400) {
@@ -59,7 +57,6 @@ class SignIn extends React.Component {
 
   render() {
     return (
-
       <div>
         <Header />
         <div className="signin-container">
