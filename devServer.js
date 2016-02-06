@@ -75,5 +75,7 @@ var createUserPhotosTable = client.query(db.createUserPhotosTable);
 var createOrdersTable = client.query(db.createOrdersTable);
 var createRecipeCostTable = client.query(db.createRecipeCostTable);
 var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
+var createIngredientsTable = client.query(db.createIngredientsTable);
+var createRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
 
 module.exports = app;
