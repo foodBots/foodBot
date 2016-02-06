@@ -2,9 +2,9 @@
 var matchController = require('../controllers/matchController.js');
 var recipeController = require('../controllers/recipeController.js');
 var userController = require('../controllers/userController.js');
-
 var profileController = require('../controllers/profileController.js');
 var mealController = require('../controllers/mealController.js');
+var photoController = require('../controllers/photoController.js');
 
 var helpers = require('./helpers.js');
 var auth = require('./authOperations.js');
@@ -13,7 +13,7 @@ var keys = require('./apiKeys.js');
 var passport = require('passport');
 
 module.exports = function(app, express) {
-  app.get('/', auth.checkUser);
+  // app.get('/', auth.checkUser);
   app.post('/foodBot/auth/signup', userController.signup);
   app.post('/foodBot/auth/signin', userController.signin);
 
@@ -33,11 +33,16 @@ module.exports = function(app, express) {
   app.put('/foodBot/profile/:id', profileController.updateUserProfile);
   app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
 
+  app.get('/foodBot/photos/:id', photoController.getPhotos);
+  app.post('/foodBot/photos/:id', photoController.multer.single('file'), photoController.uploadPhotos);
+
   passport.serializeUser(function(user, done) {
+    console.log('serialze', user);
     done(null, user.email);
   });
 
   passport.deserializeUser(function(user, done) {
+    console.log('deserialize', user);
     done(null, user);
   });
 
@@ -69,6 +74,8 @@ module.exports = function(app, express) {
             photos: req.user.photos[0].value
           }
         req.DBid = userObj.id;
+        req.session.user = userObj;
+        console.log('req DBid',req.session.user);
         res.redirect('/');
         // res.json(userObj);
         }

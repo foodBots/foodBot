@@ -1,39 +1,53 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import $ from 'jquery';
-import Dropzone from 'react-dropzone';
+import DropzoneComponent from 'react-dropzone-component';
 
+const djsConfig = {
+  previewTemplate: ReactDOMServer.renderToStaticMarkup(
+    <div className="dz-preview dz-file-preview">
+      <div className="dz-details">
+        <img data-dz-thumbnail />
+      </div>
+      <div className="dz-progress"><span className="dz-upload" data-dz-uploadprogress></span></div>
+      <div className="dz-error-message"><span data-dz-errormessage></span></div>
+    </div>
+  ),
+  dictDefaultMessage: 'Upload Photo'
+}
 
 class PhotoUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      photos: [1,2,3,4]
+      photos: []
+    };
+    //change this to recipeId when integrated
+    this.appendData = (file, xhr, formData) => {
+      formData.append('recipeId', 1);
+    };
+    //change this to props.userId when integrated
+    this.componentConfig = {
+      showFiletypeIcon: false,
+      postUrl: '/foodbot/photos/1',
+    };
+    this.djsConfig = {
+      uploadMultiple: false
+    };
+    this.eventHandlers = {
+      sending: this.appendData
     }
-  }
-
-  onDrop(photos) {
-    this.setState({
-      photos: photos
-    }, function() {
-      console.log('Received photos: ', this.state.photos);
-      this.forceUpdate();
-    });
 
   }
 
   render() {
     return(
       <div >
-        <Dropzone ref="dropzone" onDrop={this.onDrop.bind(this)}>
-          <div>Try dropping some photos here, or click to select photos to upload.</div>
-        </Dropzone>
-        <div>
-        <h2>Uploading {this.state.photos.length} photos...</h2>
-        <div>{this.state.photos.map((file) => {
-          <img src={file.preview} />
-          console.log('file is ', file);
-        })}</div>
-        </div>
+        <DropzoneComponent
+          config={this.componentConfig}
+          djsConfig={djsConfig}
+          eventHandlers={this.eventHandlers}
+         />
       </div>
     )
   }

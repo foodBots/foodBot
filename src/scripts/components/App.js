@@ -207,7 +207,7 @@ export default class App extends React.Component {
      )
     }
     //SWIPE RECIPES
-    if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
+    else if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />

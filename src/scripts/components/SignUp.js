@@ -67,7 +67,8 @@ class SignUp extends React.Component {
         $.post('/foodBot/auth/signup', user)
         .done((result) => {
           console.log('result', result, 'user', user);
-          user.id = result.id;
+          const returnedId = result.id;
+          // user.id = result.id;
           const prof = {
             diet: this.state.diet,
             cookingTime: this.state.prep.value +1,
@@ -75,7 +76,7 @@ class SignUp extends React.Component {
             allergies: this.state.allergies
           }
           console.log('profObj', prof, 'state allergies', this.state.allergies)
-          $.post('/foodBot/profile/'+ user.id, prof)
+          $.post('/foodBot/profile/'+ returnedId, prof)
           .done((result) => {
             user.route = 'Swipe Recipes';
             user.diet = this.state.diet;
