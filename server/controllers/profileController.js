@@ -47,7 +47,7 @@ module.exports = {
     var userId = parseInt(req.params.id);
     var allergies = req.body.allergies;
     var client = new pg.Client(connectionString);
-    console.log(req.body.diet);
+    console.log('userID',userId);
 
 
   	client.connect();

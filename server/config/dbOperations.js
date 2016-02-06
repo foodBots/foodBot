@@ -55,7 +55,14 @@ module.exports = {
   createMatchesQueueTable: 'CREATE TABLE IF NOT EXISTS MatchesQueue' +
     '('+
      'userOne int references Profiles(id) NOT NULL'+
-     ')'
+     ')',
 
-}
+    // sql command for userphoto table
+  createUserPhotosTable: 'CREATE TABLE IF NOT EXISTS UserPhotos' +
+    '('+
+    'name varchar(255) PRIMARY KEY,' +
+    'id int references Users(id) NOT NULL,' +
+    'recipeid int references Recipes(id) NOT NULL' +
+    ')'
+};
 
