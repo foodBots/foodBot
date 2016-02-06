@@ -1,4 +1,6 @@
 // var insertIntoMeasuresTable = require('./models/measurementsModel')
+var searchTerms = ['fish', 'chicken', 'vegetables', 'salad'];
+var searchController = require('../controllers/searchTermsController');
 
 module.exports = {
 
@@ -110,7 +112,29 @@ module.exports = {
       'quantity real,' +
       'measure varchar(50),' +
       'recipeid int references Recipes(id)' +
-    ')'
+    ')',
+
+  createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY, ' +
+      'name varchar(255)' +
+    ')',
+
+  checkForSeededResults: function (err, data) {
+    console.log("WTF")
+    if (err) {
+      console.log("ERROR:", err)
+    }
+    else {
+      console.log("data: ",data)
+      if (data.rows.length === 0) {
+        searchController.seedSearchTerms()
+      }
+      else {
+        console.log("sucessss")
+      }
+    }
+  } 
 };
 // ,
 
