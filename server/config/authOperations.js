@@ -3,7 +3,7 @@ var isLoggedIn = function(req) {
 };
 
 exports.checkUser = function(req, res, next){
-  // console.log('in check user',  req.session);
+  console.log('in check user',  req.session);
   if (!req.isAuthenticated()) {
     res.redirect('/signin');
   } else {

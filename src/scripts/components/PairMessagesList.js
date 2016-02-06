@@ -10,7 +10,6 @@ export default class PairMessagesList extends React.Component {
     this.state = {
       messages: [],
       submitChat: (message) => {
-        console.log(message)
         this.setState({messages: this.state.messages.concat(message)})
       }
     }

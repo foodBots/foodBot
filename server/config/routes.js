@@ -77,7 +77,6 @@ module.exports = function(app, express) {
         req.session.user = userObj;
         console.log('req DBid',req.session.user);
         res.redirect('/');
-        // res.json(userObj);
         }
       });
     });

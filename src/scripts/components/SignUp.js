@@ -75,7 +75,6 @@ class SignUp extends React.Component {
             foodie: isFoodie,
             allergies: this.state.allergies
           }
-          console.log('profObj', prof, 'state allergies', this.state.allergies)
           $.post('/foodBot/profile/'+ returnedId, prof)
           .done((result) => {
             user.route = 'Swipe Recipes';
@@ -83,7 +82,6 @@ class SignUp extends React.Component {
             user.cookingTime = this.state.prep.value;
             user.foodie = this.state.chosenType === "foodie";
             user.allergies = this.state.allergies
-            console.log('result after profile post', result, 'user', user);
             this.props.history.pushState(user, '/');
           })
           .fail((error) =>{

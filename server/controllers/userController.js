@@ -14,7 +14,7 @@ module.exports = {
       } else if (data.rows.length > 0) {
         res.status(400).json('User with that email already exists');
       } else {
-        var createUserQuery = client.query("INSERT INTO Users (password, email, name) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"','"+req.body.name+"') RETURNING id;", function(err, data) {
+        var createUserQuery = client.query("INSERT INTO Users (password, email, name) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"','"+req.body.name+"') RETURNING id;", function(err, newData) {
           if(err) {
             console.log('error creating user', err);
             res.status(500).json("We're sorry, an error has occurred");
@@ -97,36 +97,33 @@ module.exports = {
          id: id,
          userData: userData,
          profileData: {},
-         recipesData: [],
-         matchData: {id: "", recipes: []}
+         recipesData: []
        };
 
        var profileQuery = client.query("SELECT * FROM PROFILES AS P where P.id='"+id+"';")
         profileQuery.on('row', function(data) {
           console.log("data from profile query", data);
           allUserData.profileData = data;
-          allUserData.matchData.id = data.match
         });
 
        var userQuery = client.query("SELECT * FROM PROFILES as P, UserRecipes as U where P.id = U.profileid and P.id='"+id+"';")
         userQuery.on('row', function(data) {
           allUserData.recipesData.push({
-            'recipeid' :data.recipeid,
-             'created' :data.created
+            'recipeid': data.recipeid,
+             'created': data.created
          });
         });
 
-        var matchQuery = client.query("SELECT * FROM USERRECIPES WHERE profileid IN (SELECT match from profiles where id='"+id+"');")
-          var matchRec = allUserData.matchData.recipes
-          matchQuery.on('row', function(data) {
-            if(!data.created && data.liked)
-            matchRec.push(data)
-          });
-
-        matchQuery.on('end', function(data) {
+        // var matchQuery = client.query("SELECT * FROM USERRECIPES WHERE profileid IN (SELECT match from profiles where id='"+id+"');")
+        //   var matchRec = allUserData.matchData.recipes
+        //   matchQuery.on('row', function(data) {
+        //     if(!data.created && data.liked)
+        //     matchRec.push(data)
+        //   });
+        userQuery.on('end', function(data) {
+          console.log("I got to the end of sign in")
           res.send(allUserData)
          });
-
         }
       });
   },

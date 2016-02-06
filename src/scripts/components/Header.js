@@ -5,7 +5,7 @@
 
 import React from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-// injectTapEventPlugin();
+injectTapEventPlugin();
 
 
 //This should be destructured
@@ -31,20 +31,16 @@ export default class Header extends React.Component {
       <div>
         <AppBar
           title="FoodRobot"
-          iconElementLeft={<ActionHome style={iconStyles}/>}
+          className="headContainer"
           iconElementRight={
-        <IconMenu
-          iconButtonElement={
-        <IconButton><MoreVertIcon /></IconButton>
-           }
+        <IconMenu          
+          iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-      >
+          anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
+        <MenuItem primaryText="Profile Settings" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="View Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Buy Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="Profile Settings" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-
         <MenuItem primaryText="Sign out" href="/signin" />
       </IconMenu>}/>
     </div>
