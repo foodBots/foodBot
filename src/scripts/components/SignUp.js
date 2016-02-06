@@ -64,11 +64,13 @@ class SignUp extends React.Component {
           password: this.refs.password.getValue()
         }
 
+        console.log("user posted is", user)
+
         $.post('/foodBot/auth/signup', user)
         .done((result) => {
           console.log('result', result, 'user', user);
           const returnedId = result.id;
-          // user.id = result.id;
+          user.id = result.id;
           const prof = {
             diet: this.state.diet,
             cookingTime: this.state.prep.value +1,
