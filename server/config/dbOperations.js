@@ -111,31 +111,41 @@ module.exports = {
       'name varchar(255),' +
       'quantity real,' +
       'measure varchar(50),' +
-      'recipeid int references Recipes(id)' +
+      'description varchar(255),' + 
+      'recipeid int references Recipes(id),' +
+      'groceryid int references GroceryPrices(id)' +
     ')',
 
   createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
     '(' +
       'id SERIAL NOT NULL PRIMARY KEY, ' +
-      'name varchar(255)' +
+      'name varchar(255), ' +
+      'page int DEFAULT 0' +
     ')',
 
   checkForSeededResults: function (err, data) {
-    console.log("WTF")
     if (err) {
       console.log("ERROR:", err)
     }
     else {
-      console.log("data: ",data)
+      // console.log("data: ",data)
       if (data.rows.length === 0) {
         searchController.seedSearchTerms()
       }
-      else {
-        console.log("sucessss")
-      }
     }
-  } 
-};
+  },
+
+  createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
+    '(' +
+       'id SERIAL NOT NULL PRIMARY KEY, ' +
+       'name varchar(255), ' +
+       'description varchar(400),' +
+       'price int NOT NULL' +
+    ')' 
+}
+
+
+
 // ,
 
 //   createMeasuresTable: 'CREATE TABLE IF NOT EXISTS Measurements' +

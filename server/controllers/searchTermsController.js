@@ -20,7 +20,7 @@ module.exports = {
 
 	seedSearchTerms: function () {
 	client.connect();  
-		console.log("inserting in RecipeSearchTerms: ", module.exports.formatSearchTerms())
+		// console.log("inserting in RecipeSearchTerms: ", module.exports.formatSearchTerms())
 
 		client.query("INSERT INTO RecipeSearchTerms (name) VALUES " + module.exports.formatSearchTerms() + "", function (err, result){
 			console.log("ERROR:", err)

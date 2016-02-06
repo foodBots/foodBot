@@ -69,5 +69,6 @@ var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
 var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
 var createIngredientsTable = client.query(db.createIngredientsTable);
 var createRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
+var createGroceriesTable = client.query(db.createGroceryPriceTable)
 
 module.exports = app;
