@@ -63,6 +63,21 @@ module.exports = {
     'name varchar(255) PRIMARY KEY,' +
     'id int references Users(id) NOT NULL,' +
     'recipeid int references Recipes(id) NOT NULL' +
+    ')',
+
+  createOrdersTable: 'CREATE TABLE IF NOT EXISTS Orders' +
+    '('+
+    'id serial NOT NULL PRIMARY KEY,' +
+    'profileid int references Users(id) NOT NULL,' +
+    'total int' +
+    ')',
+
+  createRecipeCostTable: 'CREATE TABLE IF NOT EXISTS RecipeCost' +
+    '('+
+    'id serial NOT NULL PRIMARY KEY,' +
+    'orderid int references Orders(id) NOT NULL,' +
+    'recipeid int references Recipes(id) NOT NULL,' +
+    'total int' +
     ')'
 };
 

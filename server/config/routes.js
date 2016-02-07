@@ -5,6 +5,8 @@ var userController = require('../controllers/userController.js');
 var profileController = require('../controllers/profileController.js');
 var mealController = require('../controllers/mealController.js');
 var photoController = require('../controllers/photoController.js');
+var ordersController = require('../controllers/ordersController.js');
+
 
 var helpers = require('./helpers.js');
 var auth = require('./authOperations.js');
@@ -35,6 +37,10 @@ module.exports = function(app, express) {
 
   app.get('/foodBot/photos/:id', photoController.getPhotos);
   app.post('/foodBot/photos/:id', photoController.multer.single('file'), photoController.uploadPhotos);
+
+  app.get('/foodBot/orders/:userid', ordersController.getOrder);
+  app.post('/foodBot/orders/:userid', ordersController.createOrder);
+
 
   passport.serializeUser(function(user, done) {
     console.log('serialze', user);
