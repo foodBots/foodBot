@@ -2,11 +2,11 @@ var pg = require('pg');
 var Promise = require('bluebird');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
 var client;
-var r = require('redis').createClient();
+// var r = require('redis').createClient();
 
 var makeConnect = function() {
 	client = new pg.Client(connectionString);
-	client.connect();	
+	client.connect();
 }
 
 module.exports = {
@@ -49,7 +49,7 @@ module.exports = {
 		if (rejected) {
 			rejected.forEach(function (recipeID) {
 				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)") ;
-			});		
+			});
 		}
 		if (liked) {
 			liked.forEach(function (recipeID) {
@@ -58,4 +58,37 @@ module.exports = {
 			});
 		}
 	}
+
+	// addToCart: function(req, res) {
+	// 	r.flushall();
+	// 	var user = req.params.id
+	// 	var order = req.body
+
+	// 	r.get(user, function(err, data) {
+	// 		if (data === null) {
+	// 			r.set("cart", 1)
+	// 			r.get("cart", function(err, result) {
+	// 				//result from get cannot be stored
+	// 				var store = {result: order}
+	// 				console.log(store)
+	// 				r.set(user, JSON.stringify(store))
+	// 				r.get(user, function(err, done) {
+	// 					res.send(done)
+	// 				})
+	// 			})
+
+	// 		// else {
+	// 		// 	order = order + "," + data;
+	// 		// 	r.set(user, order)
+	// 		// 	r.get(user, function(err, done) {
+	// 		// 		totalCart.items.push(done)
+	// 		// 		console.log(totalCart, "JSON should parse this yes?")
+	// 		// 		res.send(JSON.stringify(totalCart))
+	// 		// 	})
+	// 		// }
+
+	// 		}
+	// 	})
+	// }
+
 };

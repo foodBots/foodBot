@@ -20,7 +20,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(session({
   secret: 'FOOD1234567890BOT',
-  cookie: { maxAge: 60000 }
+  resave: false,
+  saveUninitialized: false
 }));
 // use passport
 app.use( passport.initialize());
@@ -52,7 +53,7 @@ app.listen(3000, function(err) {
     console.log(err);
     return;
   }
-  
+
   console.log('Listening at http://postgres@localhost:3000');
 });
 
@@ -71,6 +72,9 @@ var createProfilesTable = client.query(db.createProfilesTable);
 var createUserRecipesTable = client.query(db.createUserRecipesTable);
 var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
 var createUserPhotosTable = client.query(db.createUserPhotosTable);
+var createOrdersTable = client.query(db.createOrdersTable);
+var createRecipeCostTable = client.query(db.createRecipeCostTable);
+
 
 
 module.exports = app;
