@@ -26,10 +26,10 @@ export default class Subtotal extends React.Component {
             <SubtotalTable
                 recentItem={this.props.recentItem}
                 cart={this.props.cart} 
-                subtotal={this.props.subtotal}/>
+                subtotal={this.props.total}/>
           </Modal.Body>
           <Modal.Footer>
-          <RaisedButton label="Remove" secondary={true} onClick={this.props.removeRecent}/>
+          <RaisedButton label="Remove" secondary={true} onClick={this.props.removeFromCart}/>
           <RaisedButton label="Keep Swiping!" secondary={true} onClick={this.props.saveMatch}/>          
           </Modal.Footer>
           </Modal> 

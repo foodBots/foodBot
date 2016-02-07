@@ -8,9 +8,9 @@ export default class SubtotalTable extends React.Component {
       super(props);
     }
 
-  renderRow (element) {
+  renderRow (element, index) {
     return (
-    <tr>
+    <tr key={index}>
       <td>{element.name}</td> 
       <td>${element.price}</td>
     </tr>
@@ -26,7 +26,7 @@ export default class SubtotalTable extends React.Component {
         <th>Meal Name</th>
         <th>Price</th> 
       </tr>
-      {this.props.cart.map((element) => this.renderRow(element))}                        
+      {this.props.cart.map((element, index) => this.renderRow(element, index))}                        
       <tr>        
       </tr>
       <tr>

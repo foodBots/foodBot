@@ -8,19 +8,29 @@ import RecipeChoose from './RecipeChoose'
 import RecipesBuy from './RecipesBuy'
 import Subtotal from './Subtotal'
 import SoMoWindow from './SoMoWindow'
-
+import Rebase from 're-base'
 
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
+let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/')
+
 
 //This needs to be refactored to the Explore and Socialize Page
 import RecipeLanding from './RecipeLanding'
 
 export default class App extends React.Component {
 
+  componentDidMount() {
+   base.syncState('shoppingCart' + this.state.id, {
+      context: this,
+      state: 'cart',
+      asArray: true
+    })
+  }
+
   componentWillMount(){
-    //1. Get liked recipes from database that have not been created
-    console.log(this.state.matchRecipes)
+    this.state.getTotal();
+
   }
   
   constructor(props) {
@@ -30,7 +40,17 @@ export default class App extends React.Component {
       //USER INFO
       id: this.props.location.state.id,
       username: this.props.location.state.email,      
-      chosenRecipes: [],
+      chosenRecipes: [],      
+      cart: [],
+
+      getTotal: () => {
+        let newTotal = 0;
+        this.state.cart.forEach((element) => newTotal += element.price)
+        this.setState({total: newTotal})
+      },
+
+      recentItem: "",      
+      activeItem: "",
 
       //NAV BAR
       open: false,
@@ -43,50 +63,58 @@ export default class App extends React.Component {
         this.setState({open: false})
       },
 
-      //MODAL
+      //SUBTOTAL VIEW
       isModalOpen: false,
       close: () => {
         this.setState({ isModalOpen: false });
-      },
-      cart: [],
+      },      
       
-      recentItem: "",      
-      activeItem: "",
+      showModal: (element) => {        
+        let recent = {          
+          id: element.id,
+          name: element.name,
+          image: element.img,
+          price: element.price          
+        }
+      
+      this.setState({cart: this.state.cart.concat(recent), recentItem: recent, isModalOpen: true}, () => {
+          this.state.getTotal().bind(this)}) 
+      },
+
+      removeFromCart: () => {
+        let cart = this.state.cart.slice()        
+        var item = cart.pop()
+        let newTotal = this.state.total
+        newTotal = newTotal - item.price        
+        this.setState({cart: cart, total: newTotal})  
+      },
+
+      removeOrder: (element) => {
+        let cart = this.state.cart.slice()        
+        cart.splice(cart.indexOf(element), 1)
+        let newTotal = this.state.total
+        newTotal = newTotal - element.price
+        this.setState({cart: cart, total: newTotal})
+      },
 
       openSocialModal: (element) => {
         this.setState({ isModalOpen: true, activeItem: element.name });
         console.log(this.state.activeItem, "Inside the App now")
       },
 
-      showModal: (element) => {        
-        let recent = {
-          name: element.name,
-          img: element.img,
-          price: 10
+      orderCheckout: () => {
+        console.log(this.state.cart, this.state.total)
+        let order = {
+          recipes: this.state.cart,
+          order: {
+            total: this.state.total
+          }
         }
-                
-        let subtotal = this.state.subtotal
-        subtotal += recent.price
 
-        this.setState({recentItem: recent, subtotal: subtotal, cart: this.state.cart.concat(recent)})        
-        this.setState({ isModalOpen: true })                
+        $.post('/foodbot/orders/' + this.state.id, order)
+          .done((result) => this.state.redirect('/'))
       },
 
-      removeOrder: (element) => {
-        let cart = this.state.cart.slice()        
-        cart.splice(cart.indexOf(element), 1)
-        let newTotal = this.state.subtotal
-        newTotal = newTotal - element.price
-
-        this.setState({cart: cart, subtotal: newTotal})
-      },
-
-      calculateTotal: () => {
-
-      },
-
-      subtotal: 0,
-        
       //PROFILE MAKE
       prep: {
         value: 0,
@@ -159,6 +187,7 @@ export default class App extends React.Component {
             obj.img = currElement.image.replace('s90', 's300-c');
             obj.ingredients = currElement.ingredients;
             obj.cookingtime = currElement.cookingtime;
+            obj.price = 12;
             return obj;
         });
           this.setState({recipes: r});
@@ -284,8 +313,9 @@ export default class App extends React.Component {
           //Props
           isModalOpen={this.state.isModalOpen}
           recentItem = {this.state.recentItem}
+          removeFromCart = {this.state.removeFromCart}
           cart = {this.state.cart}
-          subtotal={this.state.subtotal}/>            
+          total={this.state.total}/>            
        </div>
       )
     }
@@ -318,8 +348,9 @@ export default class App extends React.Component {
           <RecipesBuy 
             recipes={this.state.recipesObj.liked}
             cart={this.state.cart}
-            total={this.state.subtotal}
-            removeOrder={this.state.removeOrder}/>
+            total={this.state.total}
+            removeOrder={this.state.removeOrder}
+            orderCheckout={this.state.orderCheckout.bind(this)}/>
         </div>
       )
     }
