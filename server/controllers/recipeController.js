@@ -3,7 +3,7 @@ var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/
 var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
-var priceController = require('./priceController');
+// var priceController = require('./priceController');
 var parseString = require('xml2js').parseString;
 
 
@@ -101,11 +101,16 @@ var pickNumber = 1;
 							if (choice.Itemname[0] !== 'NOITEM') {
 								var description = choice.ItemDescription[0].length > 1000 ? choice.ItemDescription[0].substr(0,1000) : choice.ItemDescription[0];
 							// console.log("productList:", productList, "index:", index, "choice", choice);
-								client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ");", function(err, productData) {
+								client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ") RETURNING id;", function(err, productData) {
 									if (err) {
 										console.log("Error in inserting to GroceryPrices:", err);
 									} else {
+										var groceryid = productData.rows[0].id;
 										// console.log("GroceryPrices result:", productData);
+										var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description, groceryid) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "'," + groceryid + ")", function (err, data) {
+											if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
+											// priceController.findPrice(item);
+										});
 									}
 								})
 							}
@@ -113,11 +118,6 @@ var pickNumber = 1;
 					    // console.log("LOOK AT THISS: ", );
 					});
 				})
-				// var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "')", function (err, data) {
-				// 	if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
-				// 	else { console.log("NO ERROR:", data)}
-				// 	// priceController.findPrice(item);
-				// })
 			};
 			var insertRecipesIntoDB = function (recipe) {
 				// console.log("RECIPE ingredients:", recipe.ingredients);
