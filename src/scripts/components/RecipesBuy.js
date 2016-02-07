@@ -26,7 +26,7 @@ class RecipesBuy extends React.Component {
         <Card >
         <CardHeader
           title={element.name}
-          avatar={element.img}
+          avatar={element.image}
           subtitle={element.price}
           actAsExpander={true}
           showExpandableButton={true}/>
@@ -54,7 +54,11 @@ class RecipesBuy extends React.Component {
             title={"Total Order: $"+this.props.total}/>
         </Card>
         <br />
-        <RaisedButton style={this.buttonStyles} secondary={true} label="Check Out with Amazon Fresh"/>
+        <RaisedButton 
+            style={this.buttonStyles} 
+            secondary={true} 
+            label="Complete Order" 
+            onClick={this.props.orderCheckout}/>
       </div>
     )
   }

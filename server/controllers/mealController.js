@@ -58,36 +58,4 @@ module.exports = {
 			});
 		}
 	}
-
-	// addToCart: function(req, res) {
-	// 	r.flushall();
-	// 	var user = req.params.id
-	// 	var order = req.body
-
-	// 	r.get(user, function(err, data) {
-	// 		if (data === null) {
-	// 			r.set("cart", 1)
-	// 			r.get("cart", function(err, result) {
-	// 				//result from get cannot be stored
-	// 				var store = {result: order}
-	// 				console.log(store)
-	// 				r.set(user, JSON.stringify(store))
-	// 				r.get(user, function(err, done) {
-	// 					res.send(done)
-	// 				})										
-	// 			})
-
-	// 		// else {
-	// 		// 	order = order + "," + data;								
-	// 		// 	r.set(user, order)
-	// 		// 	r.get(user, function(err, done) {
-	// 		// 		totalCart.items.push(done)
-	// 		// 		console.log(totalCart, "JSON should parse this yes?")
-	// 		// 		res.send(JSON.stringify(totalCart))
-	// 		// 	})
-	// 		// }
-		
-	// 		}
-	// 	})
-	// }
 };
