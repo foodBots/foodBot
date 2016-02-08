@@ -14,8 +14,10 @@ var counter = 0;
 // Which type of food to search for (e.g. Chicken, fish)
 
 var helper = require('../config/helpers.js');
+// var priceController = require('./priceController');
 var searchTerms = require('./searchTermsController.js');
 var parseString = require('xml2js').parseString;
+
 
 
 
@@ -202,6 +204,7 @@ var getRecipesFromYummly = function (uid) {
         startQuery.on("end", function (){
           var randomSearchQuery = chooseRandomSearchQuery();
           console.log('randomSearchQuery:', randomSearchQuery);
+
           // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
             client.query('SELECT name from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
               var foodName = result.rows[0].name;

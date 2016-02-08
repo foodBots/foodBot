@@ -96,6 +96,6 @@ var seedRecipeSourcesTable = client.query("SELECT * from RecipeSources", db.chec
 var createRecipeSearchTerms = client.query(db.createRecipeSearchTerms);
 var seedRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
 
-
+// client.end(); 
 
 module.exports = app;
