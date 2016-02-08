@@ -16,6 +16,8 @@ var cooking = {
 }
 var pageNumber = 1;
 var pickNumber = 1;
+// Which type of food to search for (e.g. Chicken, fish)
+
 	// getRecipesFromEdaman = function (){
 	// 	request("https://api.edamam.com/search?&&app_id=" + apiKeys.edamam.id + "&app_key=" + apiKeys.edamam.key + "", function (err, data){
 	// 		console.log(JSON.parse(data.body).hits)
