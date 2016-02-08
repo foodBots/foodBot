@@ -2,8 +2,36 @@ var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
 var client = new pg.Client(connectionString);
 client.connect();  
-var foodItems = ['fish', 'salad', 'chicken', 'vegetables']
-var recipeSources = ['Yummly', 'Edamam']
+var foodItems = [
+  'fish', 
+  'potato',
+  'chicken', 
+  'beef', 
+  'turkey', 
+  'spicy', 
+  'savory',
+  'crunchy',
+  'bbq',
+  'sauteed',
+  'roasted',
+  'slowcooked',
+  'grilled',
+  'steamed',
+  'cheesy',
+  'salmon',
+  'veggie',
+  'vegetables', 
+  'tempeh',
+  'salad', 
+  'lentil',
+  'tempeh',
+  'quinoa',
+  'bean',
+  'hearty',
+  'toast'
+];
+var recipeSources = ['Yummly', 'Edamam'];
+
 module.exports = {
 
 	formatSearchTerms: function (seedItems) {
@@ -30,6 +58,9 @@ module.exports = {
 		client.query("INSERT INTO recipeSources (name) VALUES " + module.exports.formatSearchTerms(recipeSources) + "", function (err, result) {
 			console.log("ERROR:", err)
 		});
-	}
+	},
+  retrieveNumberOfSearchTerms: function() {
+    return foodItems.length;
+  }
 
 }

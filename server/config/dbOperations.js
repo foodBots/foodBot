@@ -95,6 +95,43 @@ module.exports = {
      'userOne int references Profiles(id) NOT NULL'+
      ')',
 
+  createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
+      '(' +
+        'id SERIAL NOT NULL PRIMARY KEY, ' +
+        'name varchar(255),' +
+        'quantity real,' +
+        'measure varchar(50),' +
+        'description varchar(255),' + 
+        'recipeid int references Recipes(id),' +
+        'groceryid int references GroceryPrices(id)' +
+      ')',
+
+  createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
+      '(' +
+        'id SERIAL NOT NULL PRIMARY KEY, ' +
+        'name varchar(255), ' +
+        'page int DEFAULT 0' +
+      ')',
+
+  checkForSeededResults: function (err, data) {
+      if (err) {
+        console.log("ERROR:", err)
+      }
+      else {
+        // console.log("data: ",data)
+        if (data.rows.length === 0) {
+          searchController.seedSearchTerms()
+        }
+      }
+    },
+
+  createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
+      '(' +
+         'id SERIAL NOT NULL PRIMARY KEY, ' +
+         'name varchar(255), ' +
+         'description varchar(400),' +
+         'price int NOT NULL' +
+      ')', 
     // sql command for userphoto table
   createUserPhotosTable: 'CREATE TABLE IF NOT EXISTS UserPhotos' +
     '('+
