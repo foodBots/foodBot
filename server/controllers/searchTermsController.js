@@ -62,5 +62,3 @@ module.exports = {
   retrieveNumberOfSearchTerms: function() {
     return foodItems.length;
   }
-
-}
