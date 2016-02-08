@@ -15,6 +15,12 @@ module.exports = {
     'googleID varchar(255) UNIQUE' +
     ')',
 
+  createRecipeSourcesTable: 'CREATE TABLE IF NOT EXISTS RecipeSources' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY,' + 
+      'name varchar(50)' +
+    ')',
+
   //sql command for user profile
   createRecipeSourcesTable: 'CREATE TABLE IF NOT EXISTS RecipeSources' +
     '(' +
@@ -105,6 +111,15 @@ module.exports = {
     'total int' +
     ')',
 
+    createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
+    '(' +
+       'id SERIAL NOT NULL PRIMARY KEY, ' +
+       'name varchar(255), ' +
+       'description varchar(1000),' +
+       'price int NOT NULL' +
+    ')' ,
+>>>>>>> Ordered the same as the creation of the tables
+
   createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
     '(' +
       'id SERIAL NOT NULL PRIMARY KEY, ' +
@@ -135,13 +150,7 @@ module.exports = {
     }
   },
 
-  createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
-    '(' +
-       'id SERIAL NOT NULL PRIMARY KEY, ' +
-       'name varchar(255), ' +
-       'description varchar(1000),' +
-       'price int NOT NULL' +
-    ')' 
+
 }
 
 
