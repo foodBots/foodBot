@@ -67,14 +67,35 @@ client.connect();
 //create db tables
 
 var createUsersTable = client.query(db.createUsersTable);
+
+var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
+
 var createRecipesTable = client.query(db.createRecipesTable);
+
+var createGroceriesTable = client.query(db.createGroceryPriceTable);
+
+var createIngredientsTable = client.query(db.createIngredientsTable);
+
+var createRecipeIngredientsTable = client.query(db.createRecipeIngredientsTable);
+
 var createProfilesTable = client.query(db.createProfilesTable);
+
 var createUserRecipesTable = client.query(db.createUserRecipesTable);
+
 var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
+
 var createUserPhotosTable = client.query(db.createUserPhotosTable);
+
 var createOrdersTable = client.query(db.createOrdersTable);
+
 var createRecipeCostTable = client.query(db.createRecipeCostTable);
 
+var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
+var seedRecipeSourcesTable = client.query("SELECT * from RecipeSources", db.checkForSourceIds);
 
+var createRecipeSearchTerms = client.query(db.createRecipeSearchTerms);
+var seedRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
+
+// client.end(); 
 
 module.exports = app;
