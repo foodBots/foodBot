@@ -15,17 +15,30 @@ var auth = require('./authOperations.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var keys = require('./apiKeys.js');
 var passport = require('passport');
+var LocalStorage = require('node-localstorage').LocalStorage;
+
 
 module.exports = function(app, express) {
-  // app.get('/', auth.checkUser);30
+
+  app.get('/', userController.checkCreds);
+  
+
   app.post('/foodBot/auth/signup', userController.signup);
+  app.get('/foodBot/auth/signin', userController.endSession);
+  
   app.post('/foodBot/auth/signin', userController.signin);
+  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
+
 
   app.get('/foodBot/auth/logout', userController.logout);
+  app.get('/foodBot/', userController.checkCreds );
 
   app.get('/foodBot/recipes/:id', /*auth.checkUser,*/ recipeController.retrieveSuggestedRecipes);
 
   app.get('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.retrieveMyRecipes);
+
+  app.get('/foodBot/meals/explore/:id', /*auth.checkUser,*/ mealController.exploreUserMeals);
+
   app.post('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.addUserMeal);
 
   app.get('/foodBot/match/:id', /*auth.checkUser,*/ matchController.retrieveMatch);
@@ -33,7 +46,8 @@ module.exports = function(app, express) {
   app.delete('/foodBot/match/:id', /*auth.checkUser,*/ matchController.deleteMatch);
 
   app.get('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.retrieveOneUser);
-  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
+
+
   app.put('/foodBot/profile/:id', profileController.updateUserProfile);
   app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
 
@@ -44,13 +58,11 @@ module.exports = function(app, express) {
   app.post('/foodBot/orders/:userid', ordersController.createOrder);
 
 
-  passport.serializeUser(function(user, done) {
-    console.log('serialze', user);
+  passport.serializeUser(function(user, done) {    
     done(null, user.email);
   });
 
   passport.deserializeUser(function(user, done) {
-    console.log('deserialize', user);
     done(null, user);
   });
 
@@ -79,11 +91,13 @@ module.exports = function(app, express) {
           userObj = {
             name: req.user.displayName,
             id: userData.id,
-            photos: req.user.photos[0].value
+            photos: req.user.photos[0].value,
+            route: "Swipe Recipes"
           }
+        
         req.DBid = userObj.id;
         req.session.user = userObj;
-        console.log('req DBid',req.session.user);
+
         res.redirect('/');
         }
       });

@@ -116,10 +116,8 @@ module.exports = {
     'id serial NOT NULL PRIMARY KEY,' +
     'orderid int references Orders(id) NOT NULL,' +
     'recipeid int references Recipes(id) NOT NULL,' +
-    'total int' +
+    'price int' +
     ')',
-
-
 
   createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
     '(' +
@@ -154,8 +152,6 @@ module.exports = {
 }
 
 
-
-// ,
 
 //   createMeasuresTable: 'CREATE TABLE IF NOT EXISTS Measurements' +
 //     '(' +

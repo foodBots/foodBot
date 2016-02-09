@@ -11,18 +11,20 @@ import IconButton from 'material-ui/lib/icon-button';
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
 
-
-
 export default class RecipeLanding extends React.Component {
 
-  constructor() {
-  super();
+  componentWillMount() {
+    this.props.getExploreRecipes(this.props.id)
+   }
+
+  constructor(props) {
+  super(props);
+   
    this.gridStyles = {
-    // root: {
-    //   display: 'flex',
-    //   flexWrap: 'wrap',
-    //   justifyContent: 'space-around',
-    // },
+    root: {
+     width: "100%"
+
+    },
     gridList: {
       width: "100%",
       height: "100%",
@@ -33,31 +35,27 @@ export default class RecipeLanding extends React.Component {
 }
 
   handleTouchTap(element) {    
-    console.log("inside RecipeLanding", element)
     this.props.openSocialModal(element);
   }
 
   handleAction(element) {
-    console.log(element.name)
+    event.preventDefault();
+    console.log("hello")
   }
 
-
-//TODO: Don't grab matchRecipes here. This is the explore page.
-//Display "cooked recipes" from users with similar nutritional profiles
-//
   render() {    
     return (
-    <div>
+    <div className="myrecipe-container" style={this.gridStyles.root}>
+    <h1>Explore Recipes</h1>
       <GridList
         cellHeight={250}
         style={this.gridStyles}>      
-      {this.props.matchRecipes.map(tile => (
-        <GridTile
-          key={tile.name}
+      {this.props.exploreRecipes.map((tile, index) => (
+        <GridTile          
+          key={index}
           title={tile.name}
           subtitle={<span>by <b>{tile.rating}</b></span>}
-          onTouchTap={this.handleTouchTap.bind(this, tile)}
-          actionIcon={<IconButton onTouchTap={this.handleAction.bind(this, tile)}><StarBorder color="white"/></IconButton>}>
+          actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><StarBorder color="white"/></IconButton>}>
           <img src={tile.image} />
         </GridTile>
       ))}
@@ -68,3 +66,4 @@ export default class RecipeLanding extends React.Component {
 }
 
     
+          // onTouchTap={this.handleTouchTap.bind(this, tile)}

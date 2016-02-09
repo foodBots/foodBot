@@ -198,7 +198,7 @@ module.exports = {
 				var sendData = {recipes: recipeResults }
 				// console.log("sending this thingy:",sendData)	
 				res.status(200).json(sendData);
-				var lowOnViableRecipes = 1000;
+				var lowOnViableRecipes = 100;
 				if (totalMatches < lowOnViableRecipes) {
 					client.end();
 					getRecipesFromYummly(uid);

@@ -43,7 +43,7 @@ module.exports = {
     var cookingTime = parseInt(req.body.cookingTime);
     var diet = req.body.diet.text;
     var foodie = (req.body.foodie === "true");
-    console.log('FOODIE BEFORE:', req.body.foodie, 'FOODIE AFTER:', foodie);
+    console.log('1. FOODIE BEFORE:', req.body.foodie, 'FOODIE AFTER:', foodie);
     var userId = parseInt(req.params.id);
     var allergies = req.body.allergies;
     var client = new pg.Client(connectionString);
@@ -55,6 +55,7 @@ module.exports = {
       if (data.rowCount > 0) {
         var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
           console.log("update querrrry", data)
+          res.status(201);
         });
         res.sendStatus(201);
       } else {
@@ -68,9 +69,8 @@ module.exports = {
        });
       }
     });
-  	updateOrNewQuery.on('end', function() {
+    updateOrNewQuery.on('end', function() {
       console.log('ended?');
-      // next();
       client.end();
       // res.sendStatus(201);
     });

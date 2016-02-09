@@ -6,13 +6,12 @@ import PairMessagesList from './PairMessagesList'
 
 
 export default class SoMoWindow extends React.Component {
-    
+
     constructor(props){
         super(props)
         this.state = {
           messages: [],
           submitChat: (message) => {
-            console.log(message)
             this.setState({messages: this.state.messages.concat(message)})          
           },
           activeItem: this.props.activeItem
@@ -54,16 +53,20 @@ export default class SoMoWindow extends React.Component {
                 bsSize="large"
                 enforceFocus={true}>
             <Modal.Header closeButton>
-                <h3>{this.props.activeItem}</h3>                      
+                <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
             </Modal.Header>
             <Modal.Body>
                 <h2>Comment Window</h2>
                  <PairMessagesList 
-                    username={this.props.username}/>
+                    name={this.props.name}
+                    activeItemId={this.props.activeItemId}
+                    activeProfId={this.props.activeProfId}
+                    activeItemPrice={this.props.activeItemPrice}/>
             </Modal.Body>
             <Modal.Footer>
-            <RaisedButton label="Add to Cart" secondary={true} />
-            <RaisedButton label="Close" secondary={true} onClick={this.props.close}/>          
+            <RaisedButton label="Close" secondary={true} onClick={this.props.close}/>
+            <RaisedButton label="Save" secondary={true} onClick={this.props.addToLiked}/>                    
+            <RaisedButton label="Add to Cart" primary={true} onClick={this.props.addToCart} />
             </Modal.Footer>
             </Modal> 
         )

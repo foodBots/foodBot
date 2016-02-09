@@ -4,6 +4,19 @@ var auth = require('../config/authOperations.js');
 var Promise = require('bluebird');
 
 module.exports = {
+  checkCreds: function(req, res) {
+    console.log("1. First checking to see that we even get inside")
+    console.log("3.req.session stuff is...", req.session.user)
+    res.send(req.session.user)
+  },
+
+  endSession: function(req, res) {
+    console.log("session ending")
+    //Something to destroy a session
+    client.end()
+
+  },
+
   signup: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
@@ -122,6 +135,7 @@ module.exports = {
         //   });
         userQuery.on('end', function(data) {
           console.log("I got to the end of sign in")
+          client.end()
           res.send(allUserData)
          });
         }
