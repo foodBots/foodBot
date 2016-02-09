@@ -22,9 +22,11 @@ module.exports = function(app, express) {
 
   app.get('/', userController.checkCreds);
   
-  
+
   app.post('/foodBot/auth/signup', userController.signup);
   app.post('/foodBot/auth/signin', userController.signin);
+  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
+
 
   app.get('/foodBot/auth/logout', userController.logout);
   app.get('/foodBot/', userController.checkCreds );
@@ -44,7 +46,6 @@ module.exports = function(app, express) {
   app.get('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.retrieveOneUser);
 
 
-  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
   app.put('/foodBot/profile/:id', profileController.updateUserProfile);
   app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
 
