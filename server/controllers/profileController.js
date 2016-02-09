@@ -50,40 +50,40 @@ module.exports = {
     console.log('userID',userId);
 
 
-  	client.connect();
-    var updateOrNewQuery = client.query("SELECT * FROM Profiles WHERE id='"+userId+"';", function(err, data) {
-      if (data.rowCount > 0) {
-        var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
-          console.log("update querrrry", data)
-        });
-        res.sendStatus(201);
-      } else {
-  	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, allergies, foodie, diet) VALUES ("+userId+","+cookingTime+",'{"+allergies+"}',"+foodie+",'"+diet+"')", function(err, data) {
-        if (err) {
-          console.log('error inserting profile', err);
-          res.sendStatus(403);
-        }
-        console.log("MAKEA DUH NEW QUERYRRYRYRY", data);
-        res.sendStatus(201);
-       });
+	client.connect();
+  var updateOrNewQuery = client.query("SELECT * FROM Profiles WHERE id='"+userId+"';", function(err, data) {
+    if (data.rowCount > 0) {
+      var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
+        console.log("update querrrry", data)
+      });
+      res.sendStatus(201);
+    } else {
+     var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, allergies, foodie, diet) VALUES ("+userId+","+cookingTime+",'{"+allergies+"}',"+foodie+",'"+diet+"')", function(err, data) {
+      if (err) {
+        console.log('error inserting profile', err);
+        res.sendStatus(403);
       }
-    });
-  	updateOrNewQuery.on('end', function() {
-      console.log('ended?');
-      // next();
-      client.end();
-      // res.sendStatus(201);
-    });
-  },
-  retrieveAllUsers: function(req, res, next) {
-    var client = new pg.Client(connectionString);
-    client.connect();
-    var query = client.query('SELECT * FROM Profiles;');
-    query.on('row', function(allUserData) {
-      res.status(200).json(allUserData);
-    });
-    query.on('end', function() {
-      client.end();
-    })
-  }
+      console.log("MAKEA DUH NEW QUERYRRYRYRY", data);
+      res.sendStatus(201);
+     });
+    }
+  });
+  updateOrNewQuery.on('end', function() {
+    console.log('ended?');
+    // next();
+    client.end();
+    // res.sendStatus(201);
+  });
+},
+retrieveAllUsers: function(req, res, next) {
+  var client = new pg.Client(connectionString);
+  client.connect();
+  var query = client.query('SELECT * FROM Profiles;');
+  query.on('row', function(allUserData) {
+    res.status(200).json(allUserData);
+  });
+  query.on('end', function() {
+    client.end();
+  })
+}
 };
