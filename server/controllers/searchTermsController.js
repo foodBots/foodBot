@@ -28,7 +28,8 @@ var foodItems = [
   'quinoa',
   'bean',
   'hearty',
-  'toast'
+  'toast',
+  'braised'
 ];
 var recipeSources = ['Yummly', 'Edamam'];
 
@@ -68,3 +69,4 @@ module.exports = {
   retrieveNumberOfSearchTerms: function() {
     return foodItems.length;
   }
+};
