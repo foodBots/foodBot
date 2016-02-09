@@ -60,8 +60,9 @@ module.exports = {
     // sql command for userphoto table
   createUserPhotosTable: 'CREATE TABLE IF NOT EXISTS UserPhotos' +
     '('+
-    'name varchar(255) PRIMARY KEY,' +
-    'id int references Users(id) NOT NULL,' +
+    'id serial NOT NULL PRIMARY KEY,' +
+    'name varchar(255),' +
+    'profileid int references Users(id) NOT NULL,' +
     'recipeid int references Recipes(id) NOT NULL' +
     ')',
 
