@@ -32,6 +32,13 @@ var foodItems = [
 ];
 var recipeSources = ['Yummly', 'Edamam'];
 
+
+// var foodItemsAndPageNumber = foodItems.reduce(function(memo, ele) {
+//   var itemWithPage = {[ele]: 0};
+//   memo.push(itemWithPage);
+//   return memo;
+// }, []);
+
 module.exports = {
 
 	formatSearchTerms: function (seedItems) {
@@ -47,7 +54,6 @@ module.exports = {
 			// add parans
 			// add it to a sting
 	},
-
 	seedSearchTerms: function () {
 		client.query("INSERT INTO RecipeSearchTerms (name) VALUES " + module.exports.formatSearchTerms(foodItems) + "", function (err, result){
 			console.log("ERROR:", err)

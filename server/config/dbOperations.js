@@ -47,109 +47,110 @@ module.exports = {
     ')' ,
 
   createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
-      '(' +
-        'id SERIAL NOT NULL PRIMARY KEY, ' +
-        'name varchar(255),' +
-        'quantity real,' +
-        'measure varchar(50),' +
-        'description varchar(255),' + 
-        'recipeid int references Recipes(id),' +
-        'groceryid int references GroceryPrices(id)' +
-      ')',
-
-    createRecipeIngredientsTable: 'CREATE TABLE IF NOT EXISTS RecipeIngriedients' +
-      '(' +
-        'id serial NOT NULL PRIMARY KEY, ' +
-        'ingredientid int references Ingredients(id), ' +
-        'recipeid int references Recipes(id) ' +
-      ')',
-
-    //sql command for recipe profile
-    createProfilesTable: 'CREATE TABLE IF NOT EXISTS Profiles' +
-      '('+
-       'id int references Users(id) NOT NULL PRIMARY KEY,' +
-       'name varchar(20), ' +
-       'budget int,' +
-       'diet varchar(50), ' +
-       'allergies varchar(50)[], ' +
-       'match int,' +
-       'cookingTime int,' +
-       'foodie bool' +
-       ')',
-
-    //sql command for recipe profile join table
-    createUserRecipesTable: 'CREATE TABLE IF NOT EXISTS UserRecipes' +
-      '('+
-       'profileid int references Profiles(id) NOT NULL,' +
-       'recipeid int references Recipes(id) NOT NULL,' +
-       'created bool DEFAULT FALSE,' +
-       'liked bool NOT NULL,' +
-       'unique (profileid, recipeid)' +
-       ')',
-
-    // sql command for match join table
-    createMatchesQueueTable: 'CREATE TABLE IF NOT EXISTS MatchesQueue' +
-      '('+
-       'userOne int references Profiles(id) NOT NULL'+
-       ')',
-
-      // sql command for userphoto table
-    createUserPhotosTable: 'CREATE TABLE IF NOT EXISTS UserPhotos' +
-      '('+
-      'id serial NOT NULL PRIMARY KEY,' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY, ' +
       'name varchar(255),' +
-      'profileid int references Users(id) NOT NULL,' +
-      'recipeid int references Recipes(id) NOT NULL' +
-      ')',
+      'quantity real,' +
+      'measure varchar(50),' +
+      'description varchar(255),' + 
+      'recipeid int references Recipes(id),' +
+      'groceryid int references GroceryPrices(id)' +
+    ')',
 
-    createOrdersTable: 'CREATE TABLE IF NOT EXISTS Orders' +
-      '('+
-      'id serial NOT NULL PRIMARY KEY,' +
-      'profileid int references Users(id) NOT NULL,' +
-      'total int' +
-      ')',
+  createRecipeIngredientsTable: 'CREATE TABLE IF NOT EXISTS RecipeIngriedients' +
+    '(' +
+      'id serial NOT NULL PRIMARY KEY, ' +
+      'ingredientid int references Ingredients(id), ' +
+      'recipeid int references Recipes(id) ' +
+    ')',
 
-    createRecipeCostTable: 'CREATE TABLE IF NOT EXISTS RecipeCost' +
-      '('+
-      'id serial NOT NULL PRIMARY KEY,' +
-      'orderid int references Orders(id) NOT NULL,' +
-      'recipeid int references Recipes(id) NOT NULL,' +
-      'total int' +
-      ')',
+  //sql command for recipe profile
+  createProfilesTable: 'CREATE TABLE IF NOT EXISTS Profiles' +
+    '('+
+     'id int references Users(id) NOT NULL PRIMARY KEY,' +
+     'name varchar(20), ' +
+     'budget int,' +
+     'diet varchar(50), ' +
+     'allergies varchar(50)[], ' +
+     'match int,' +
+     'cookingTime int,' +
+     'foodie bool' +
+     ')',
+
+  //sql command for recipe profile join table
+  createUserRecipesTable: 'CREATE TABLE IF NOT EXISTS UserRecipes' +
+    '('+
+     'profileid int references Profiles(id) NOT NULL,' +
+     'recipeid int references Recipes(id) NOT NULL,' +
+     'created bool DEFAULT FALSE,' +
+     'liked bool NOT NULL,' +
+     'unique (profileid, recipeid)' +
+     ')',
+
+  // sql command for match join table
+  createMatchesQueueTable: 'CREATE TABLE IF NOT EXISTS MatchesQueue' +
+    '('+
+     'userOne int references Profiles(id) NOT NULL'+
+     ')',
+
+    // sql command for userphoto table
+  createUserPhotosTable: 'CREATE TABLE IF NOT EXISTS UserPhotos' +
+    '('+
+    'id serial NOT NULL PRIMARY KEY,' +
+    'name varchar(255),' +
+    'profileid int references Users(id) NOT NULL,' +
+    'recipeid int references Recipes(id) NOT NULL' +
+    ')',
+
+  createOrdersTable: 'CREATE TABLE IF NOT EXISTS Orders' +
+    '('+
+    'id serial NOT NULL PRIMARY KEY,' +
+    'profileid int references Users(id) NOT NULL,' +
+    'total int' +
+    ')',
+
+  createRecipeCostTable: 'CREATE TABLE IF NOT EXISTS RecipeCost' +
+    '('+
+    'id serial NOT NULL PRIMARY KEY,' +
+    'orderid int references Orders(id) NOT NULL,' +
+    'recipeid int references Recipes(id) NOT NULL,' +
+    'total int' +
+    ')',
 
 
 
-    createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
-      '(' +
-        'id SERIAL NOT NULL PRIMARY KEY, ' +
-        'name varchar(255), ' +
-        'page int DEFAULT 0' +
-      ')',
+  createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY, ' +
+      'name varchar(255), ' +
+      'page int DEFAULT 0' +
+    ')',
 
-    checkForSeededResults: function (err, data) {
-      if (err) {
-        console.log("ERROR:", err)
+  checkForSeededResults: function (err, data) {
+    if (err) {
+      console.log("ERROR:", err)
+    }
+    else {
+      // console.log("data: ",data)
+      if (data.rows.length === 0) {
+        searchController.seedSearchTerms()
       }
-      else {
-        // console.log("data: ",data)
-        if (data.rows.length === 0) {
-          searchController.seedSearchTerms()
-        }
-      }
-    },
+    }
+  },
 
-    checkForSourceIds: function (err, data) {
-      if (err) {
-        console.log("ERROR:", err)
-      }
-      else {
-        // console.log("data: ",data)
-        if (data.rows.length === 0) {
-          searchController.seedRecipeSourceIds()
-        }
+  checkForSourceIds: function (err, data) {
+    if (err) {
+      console.log("ERROR:", err)
+    }
+    else {
+      // console.log("data: ",data)
+      if (data.rows.length === 0) {
+        searchController.seedRecipeSourceIds()
       }
     }
   }
+}
+
 
 
 

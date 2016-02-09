@@ -17,6 +17,7 @@ var helper = require('../config/helpers.js');
 // var priceController = require('./priceController');
 var searchTerms = require('./searchTermsController.js');
 var parseString = require('xml2js').parseString;
+var client = new pg.Client(connectionString);
 
 
 
@@ -32,6 +33,7 @@ var chooseRandomSearchQuery = function() {
   return searchTermId;
 };
 
+<<<<<<< 173b5b9de24269597a8d9b076fcd0dac1db15d71
 
 var	getRecipesFromYummly = function (uid) {
 		client.connect();
@@ -186,6 +188,15 @@ module.exports = {
 			var totalMatches = 0;
 			// SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = 1 ) AND (cookingtime = profileRow.cookingtime OR cookingtime = (profileRow.cookingtime - 1)
 =======
+=======
+var formatAPIPageSearch = function(number) {
+	var startQuery = number*10;
+	var endQuery = (number + 1) * 10;
+	var pageQueryString = "&from=" + startQuery + "&to=" + endQuery;
+	return pageQueryString;
+};
+
+>>>>>>> page optimization for supermarket api
 var getRecipesFromYummly = function (uid) {
     client.connect();
     var yummlyRecipes;
@@ -206,12 +217,16 @@ var getRecipesFromYummly = function (uid) {
           console.log('randomSearchQuery:', randomSearchQuery);
 
           // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
-            client.query('SELECT name from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
+            client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
               var foodName = result.rows[0].name;
-                // console.log("foeaching:", row)
-                request("https://api.edamam.com/search?q=" + foodName + "&from=10&to=20&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
+              var foodPage = result.rows[0].page;
+              var foodPageIncremented = foodPage++;
+                // console.log("foreaching:", row)
+                request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
                   if (err) {console.log('Error in request to edemam', err);} 
                   else {
+                  	console.log("FETCHING EDEMAM DATA BASED ON PAGE", response.body);
+                  	client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPageIncremented + "WHERE ID = " + randomSearchQuery + ";")
                     resolve(JSON.parse(response.body).hits)
                   }
                   // console.log(JSON.parse(response.body).hits)
@@ -294,7 +309,7 @@ var getRecipesFromYummly = function (uid) {
     });
   }
 
-  module.exports = {
+module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {	
 		var client = new pg.Client(connectionString);
 		client.connect();
