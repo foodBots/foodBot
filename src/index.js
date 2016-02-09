@@ -15,7 +15,6 @@ import NotFound from './scripts/components/NotFound';
 import Header from './scripts/components/Header.js'
 import ProfileMake from './scripts/components/ProfileMake'
 import RecipeChoose from './scripts/components/RecipeChoose'
-import RecipeLanding from './scripts/components/RecipeLanding'
 import PhotoUpload from './scripts/components/PhotoUpload'
 
 

@@ -19,7 +19,7 @@ export default class Subtotal extends React.Component {
             bsSize="large"
             enforceFocus={true}>
           <Modal.Header closeButton>
-              <h3>Cart Subtotal (4 items)</h3>          
+              <h3>Cart Subtotal ({this.props.cart.length}) items</h3>          
               <RaisedButton label="Checkout" primary={true} onClick={this.props.goCheckout} />
           </Modal.Header>
           <Modal.Body>

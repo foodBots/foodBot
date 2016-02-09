@@ -1,9 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Rebase from 're-base'
+let chatBase = Rebase.createClass("https://dazzling-inferno-511.firebaseio.com/comments")
 
 //This is the chatform
 
 export default class PairMessagesList extends React.Component {
+
+    componentDidMount() {
+        chatBase.syncState('user' + this.props.activeProfId + 'rec' + this.props.activeItemId, {
+        context: this,
+        state: 'messages',
+        asArray: true
+        })
+    }
 
   constructor(props){
     super(props)
