@@ -18,9 +18,9 @@ module.exports = {
     var client = new pg.Client(connectionString);
     client.connect();
     var userId = req.params.id;
-    var sqlStr = "INSERT INTO UserPhotos (id, name, recipeid) VALUES (" + userId + "," + req.file.filename+","+req.body.recipeId+")";
+    var sqlStr = "INSERT INTO UserPhotos (profileid, name, recipeid) VALUES (" + userId + "," + req.file.filename+","+req.body.recipeId+")";
     console.log(sqlStr);
-    var query = client.query("INSERT INTO UserPhotos (id, name, recipeid) VALUES (" + userId + ",'" + req.file.filename+"'," +req.body.recipeId+ ")", function(err, data){
+    var query = client.query("INSERT INTO UserPhotos (profileid, name, recipeid) VALUES (" + userId + ",'" + req.file.filename+"'," +req.body.recipeId+ ")", function(err, data){
       if(err) {
         console.log('error inserting photo', err);
       }
@@ -38,7 +38,7 @@ module.exports = {
     var client = new pg.Client(connectionString);
     client.connect();
     var userId = req.params.id;
-     var query = client.query("SELECT * from UserPhotos WHERE id = " + userId + ")", function(err, data) {
+     var query = client.query("SELECT * from UserPhotos WHERE profileid = " + userId + ")", function(err, data) {
        if(err) {
          console.log('error getting photos', err);
        }

@@ -6,6 +6,7 @@ import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
 import RecipesBuy from './RecipesBuy'
+import MyRecipes from './MyRecipes'
 import Subtotal from './Subtotal'
 import SoMoWindow from './SoMoWindow'
 import Rebase from 're-base'
@@ -30,17 +31,16 @@ export default class App extends React.Component {
 
   componentWillMount(){
     this.state.getTotal();
-
   }
-  
+
   constructor(props) {
     super(props);
 
     this.state = {
       //USER INFO
       id: this.props.location.state.id,
-      username: this.props.location.state.email,      
-      chosenRecipes: [],      
+      username: this.props.location.state.email,
+      chosenRecipes: [],
       cart: [],
 
       getTotal: () => {
@@ -49,7 +49,7 @@ export default class App extends React.Component {
         this.setState({total: newTotal})
       },
 
-      recentItem: "",      
+      recentItem: "",
       activeItem: "",
 
       //NAV BAR
@@ -67,30 +67,30 @@ export default class App extends React.Component {
       isModalOpen: false,
       close: () => {
         this.setState({ isModalOpen: false });
-      },      
-      
-      showModal: (element) => {        
-        let recent = {          
+      },
+
+      showModal: (element) => {
+        let recent = {
           id: element.id,
           name: element.name,
           image: element.img,
-          price: element.price          
+          price: element.price
         }
-      
+
       this.setState({cart: this.state.cart.concat(recent), recentItem: recent, isModalOpen: true}, () => {
-          this.state.getTotal().bind(this)}) 
+          this.state.getTotal().bind(this)})
       },
 
       removeFromCart: () => {
-        let cart = this.state.cart.slice()        
+        let cart = this.state.cart.slice()
         var item = cart.pop()
         let newTotal = this.state.total
-        newTotal = newTotal - item.price        
-        this.setState({cart: cart, total: newTotal})  
+        newTotal = newTotal - item.price
+        this.setState({cart: cart, total: newTotal})
       },
 
       removeOrder: (element) => {
-        let cart = this.state.cart.slice()        
+        let cart = this.state.cart.slice()
         cart.splice(cart.indexOf(element), 1)
         let newTotal = this.state.total
         newTotal = newTotal - element.price
@@ -201,7 +201,7 @@ export default class App extends React.Component {
         this.state.close();
       },
 
-      goCheckout:() => { 
+      goCheckout:() => {
         event.preventDefault();
         console.log("Go to checkout")
         this.state.redirect("Buy Recipes")
@@ -211,6 +211,7 @@ export default class App extends React.Component {
       getChosenRecipes: (id) => {
         $.get('/foodBot/meals/' + id).
           done((data) => {
+          console.log('chosen recipe data', data);
           this.setState({chosenRecipes: data.recipeView})
         })
       },
@@ -231,7 +232,8 @@ export default class App extends React.Component {
         "Sign Up": "SignUp",
         "Sign out": "SignIn",
         "PairChatRoom": "PairChatRoom",
-        "Buy Recipes": "RecipesBuy"
+        "Buy Recipes": "RecipesBuy",
+        "My Recipes": "MyRecipes"
       },
 
       redirect: (text) => {
@@ -243,8 +245,8 @@ export default class App extends React.Component {
       }
     }
   }
-    
-  
+
+
 
   // //load initial state from db
   // componentDidMount() {
@@ -263,7 +265,7 @@ export default class App extends React.Component {
   //   // });
   // }
 
-  render() {    
+  render() {
     if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
       return (
        <div>
@@ -285,14 +287,14 @@ export default class App extends React.Component {
           />
         </div>
       </div>
-      )    
+      )
     }
     //SWIPE RECIPES
     else if (this.state.componentRoute[this.state.currentView] === "RecipeChoose") {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-        <RecipeChoose          
+        <RecipeChoose
             id={this.state.id}
             getRecipes={this.state.getRecipes.bind(this)}
             setChosenRecipes={this.state.setChosenRecipes.bind(this)}
@@ -301,42 +303,42 @@ export default class App extends React.Component {
             saveMatch = {this.state.saveMatch.bind(this)}
             userMatch={this.state.userMatch}
             showModal={this.state.showModal.bind(this)}
-            recentItem = {this.state.recentItem}/>            
-        <Subtotal 
+            recentItem = {this.state.recentItem}/>
+        <Subtotal
           //Actions
           showModal = {this.state.showModal.bind(this)}
           saveMatch = {this.state.saveMatch.bind(this)}
-          close ={this.state.close.bind(this)}          
+          close ={this.state.close.bind(this)}
           goCheckout = {this.state.goCheckout.bind(this)}
-          redirect = {this.state.redirect.bind(this)}          
+          redirect = {this.state.redirect.bind(this)}
 
           //Props
           isModalOpen={this.state.isModalOpen}
           recentItem = {this.state.recentItem}
           removeFromCart = {this.state.removeFromCart}
           cart = {this.state.cart}
-          total={this.state.total}/>            
+          total={this.state.total}/>
        </div>
       )
     }
      //VIEW PAIR AND RECIPES
-    else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {      
+    else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeLanding                        
+          <RecipeLanding
             match={this.state.match}
             getMatchRecipes={this.state.getMatchRecipes}
-            matchRecipes={this.state.matchRecipes}            
-            
+            matchRecipes={this.state.matchRecipes}
+
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
-          <SoMoWindow 
+          <SoMoWindow
           //Actions
-          close ={this.state.close.bind(this)}                                                  
+          close ={this.state.close.bind(this)}
           isModalOpen={this.state.isModalOpen}/>
-          username={this.state.username}    
+          username={this.state.username}
           activeItem={this.state.activeItem}
           </div>
       )
@@ -345,12 +347,25 @@ export default class App extends React.Component {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipesBuy 
+          <RecipesBuy
             recipes={this.state.recipesObj.liked}
             cart={this.state.cart}
             total={this.state.total}
             removeOrder={this.state.removeOrder}
             orderCheckout={this.state.orderCheckout.bind(this)}/>
+        </div>
+      )
+    }
+    else if(this.state.componentRoute[this.state.currentView] ==="MyRecipes"){
+      return (
+        <div >
+          <Header redirect={this.state.redirect.bind(this)} />
+          <MyRecipes
+            recipes={this.props.location.state.recipesData}
+            chosenRecipes = {this.state.chosenRecipes}
+            userid={this.state.id}
+            getChosenRecipes = {this.state.getChosenRecipes}
+            />
         </div>
       )
     }

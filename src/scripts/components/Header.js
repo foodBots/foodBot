@@ -33,7 +33,7 @@ export default class Header extends React.Component {
           title="FoodRobot"
           className="headContainer"
           iconElementRight={
-        <IconMenu          
+        <IconMenu
           iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
           targetOrigin={{horizontal: 'right', vertical: 'top'}}
           anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
@@ -41,6 +41,7 @@ export default class Header extends React.Component {
         <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="View Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Buy Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
+        <MenuItem primaryText="My Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Sign out" href="/signin" />
       </IconMenu>}/>
     </div>
