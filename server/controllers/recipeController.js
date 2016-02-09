@@ -16,6 +16,9 @@ var cooking = {
 }
 var pageNumber = 1;
 var pickNumber = 1;
+var estimatedPrice = 0;
+var ingredientID = 0;
+var counter = 0;
 // Which type of food to search for (e.g. Chicken, fish)
 
 	// getRecipesFromEdaman = function (){
@@ -30,7 +33,7 @@ var pickNumber = 1;
 		var yummlyRecipes;
 		console.log("in yummly",uid)
 
-		var foodQ = function (){
+		var foodQ = function () {
 			return new Promise (function (resolve, reject) {
 				var start = 0;
 				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=1", function (err, result){
@@ -41,6 +44,7 @@ var pickNumber = 1;
 
 				})
 				startQuery.on("end", function (){
+					console.log("A")
 					// var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
 						client.query('SELECT name from RecipeSearchTerms WHERE id = ' + pickNumber + ' ', function (err, result) {
 							var foodName = result.rows[0].name;
@@ -54,31 +58,6 @@ var pickNumber = 1;
 									// console.log('https://api.edamam.com/search?q=' + row.name + '&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958')
 								// })
 							});
-							// console.log("foodname:", foodName)
-						// })
-						// pick x search terms
-						// for eac
-						// ≈
-						// request("http://api.yummly.com/v1/api/recipes?_app_id=" + apiKeys.yummly.id +
-						// "&_app_key=" + apiKeys.yummly.key +
-						// "&requirePictures=true" +
-						// "&maxTotalTimeInSeconds=" + cooking[data.rows[0].cookingtime] +
-						// "&excludedCourse[]=course^course-Breads" +
-						// "&excludedCourse[]=course^course-Beverages" +
-						// "&excludedCourse[]=course^course-Condiments and Sauces" +
-						// "&excludedCourse[]=course^course-Cocktails" + 
-						// "&maxResult=10" +
-						// "&start=" + start
-						// , function (error, response, body) {
-						// 	// console.log(error, response.statusCode)
-						// 	if (!error && response.statusCode == 200) {
-						// 		yummlyRecipes = body
-						// 		// console.log("result:", yummlyRecipes)
-						// res.end()
-								// resolve(yummlyRecipes);
-						// 	}
-						// })
-
 
 
 					});
@@ -87,71 +66,90 @@ var pickNumber = 1;
 		}
 
 		foodQ().then(function (yummlyRecipes) {
-			console.log("about to insert into db")
-			var addIngriedientToDB = function (item) {
-				// console.log("AddIngredientoDB:", item);
-				request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
-					parseString(xml, function (err, result) {
-						if (err) {
-							console.log("Parsing XML Error")
-						}
-						else {
-							// Pick a better one than the first
-							var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
-							var index = productList.length >= 5 ? 5 : productList.length-1;
-							var choice = productList[index];
-							if (choice.Itemname[0] !== 'NOITEM') {
-								var description = choice.ItemDescription[0].length > 1000 ? choice.ItemDescription[0].substr(0,1000) : choice.ItemDescription[0];
-							// console.log("productList:", productList, "index:", index, "choice", choice);
-								client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ") RETURNING id;", function(err, productData) {
-									if (err) {
-										console.log("Error in inserting to GroceryPrices:", err);
-									} else {
-										var groceryid = productData.rows[0].id;
-										// console.log("GroceryPrices result:", productData);
-										var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description, groceryid) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "'," + groceryid + ")", function (err, data) {
-											if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
-											// priceController.findPrice(item);
-										});
-									}
-								})
+			var addIngriedientToDB = function (item, recipeID) {
+				return new Promise (function (resolve, object) {
+					request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
+						parseString(xml, function (err, result) {
+							if (err) {
+								console.log("Parsing XML Error")
 							}
+							else {
+								// Pick a better one than the first
+								var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
+								var index = productList.length >= 5 ? 5 : productList.length-1;
+								var choice = productList[index];
+
+								if (choice.Itemname[0] !== 'NOITEM') {
+									var description = choice.ItemDescription[0].length > 1000 ? choice.ItemDescription[0].substr(0,1000) : choice.ItemDescription[0];
+								// console.log("productList:", productList, "index:", index, "choice", choice);
+									client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ") RETURNING id;", function(err, productData) {
+											console.log("niiiiiii");
+										if (err) {
+											console.log("Error in inserting to GroceryPrices:", err);
+										} else {
+											var groceryid = productData.rows[0].id;
+											estimatedPrice = choice.Pricing[0];
+											// console.log("GroceryPrices result:", productData);
+											var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description, groceryid) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "'," + groceryid + ") RETURNING id;", function (err, data) {
+													 console.log("sannnnn")
+												if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
+												
+												else {
+													ingredientID = data.rows[0].id
+													var addToRecipeIngredientsQuery = client.query("INSERT INTO RecipeIngriedients (ingredientid, recipeid) VALUES (" + ingredientID + ", " + recipeID + ")")
+													console.log("GOT HERE BRUHHH", ingredientID)
+												}		// priceController.findPrice(item);
+											});
+
+										}
+									})
+								}
+							}
+						});
+					})
+					
+				})
+			};
+
+			var saveRecipeIntoDB = function (recipe, next) {
+				var recipeID;
+
+				client.query("INSERT INTO Recipes (name, image, directionsUrl, sourceid, priceEstimate) VALUES ('" + recipe.label + "', '" + recipe.image + "', '" + recipe.url + "'," + 2 + ", " + estimatedPrice + ") RETURNING id", function (err, data) {
+						if (err){
+							console.log("Edamam recipe already saved in db", err)
+						} else {
+							recipeID = data.rows[0].id;
+							next(recipeID)
+							// console.log("RECIPE ID BRUH:", recipeID, "ingredientID", ingredientID)
+
 						}
-					    // console.log("LOOK AT THISS: ", );
-					});
 				})
-			};
-			var insertRecipesIntoDB = function (recipe) {
-				// console.log("RECIPE ingredients:", recipe.ingredients);
-
-				// var addCookingTime = function (){
-				// 	if (recipe.totalTimeInSeconds >= cooking[2]) {
-				// 		return cookingTime = 3;
-				// 	} else if (recipe.totalTimeInSeconds >= cooking[1] && recipe.totalTimeInSeconds < cooking[2]) {
-				// 		return cookingTime = 2;
-				// 	} else {
-				// 		return cookingTime = 1;
-				// 	} 	
-				// }
-				// console.log("da recipe:", recipe)
-				// var recipeImg = recipe.smallImageUrls ? recipe.smallImageUrls[0] + "0-c": recipe.imageUrlsBySize[Object.keys(recipe.imageUrlsBySize)[0]].replace("90","900")
-				// console.log(recipe.label, recipe.image, recipe.url, 2 );
-				client.query("INSERT INTO Recipes (name, image, directionsUrl, sourceid) VALUES ('" + recipe.label + "', '" + recipe.image + "', '" + recipe.url + "'," + 2 + ")", function (err) {
-					if (err){
-						console.log("Edamam recipe already saved in db", err)
-					} else {
-						console.log("added recipe to database")
+				// return recipeID;
+			}
+			var addRecipeEstimatedPrice = function (recipeID) {
+			console.log("updating:", recipeID)
+				client.query("UPDATE recipes SET priceestimate = (SELECT SUM(price) from (select price from groceryprices left outer join ingredients on (groceryprices.id = ingredients.groceryid) left outer join recipeingriedients on (ingredients.id = recipeingriedients.ingredientid) where recipeingriedients.recipeid = " + recipeID + " ) as estimatedprice) Where id = " + recipeID + "", function (err,result ) {
+					if (err) {
+						console.log( "CODE IS BROKE")
 					}
+				});
+			}
+			var insertRecipesIntoDB = function (recipe) {
+				var recipeID = saveRecipeIntoDB(recipe, function (recipeID) {
+					var arr = [1];
+					recipe.ingredients.forEach(function(ingredient) {
+						arr.push(addIngriedientToDB(ingredient, recipeID))
+					})
+					Promise.all(arr).then(function () {
+						console.log("prmisealll working")
+						addRecipeEstimatedPrice(recipeID)
+					})			
 				})
-				recipe.ingredients.forEach(function(ingredient) {
-					addIngriedientToDB(ingredient);
-				})
+				// var functionsArr = [];
+			}
 
-			};
-			// yummlyRecipes = JSON.parse(yummlyRecipes);
 			yummlyRecipes.forEach(function (item) {
-				// getIngredientsFromYummly(item.recipe)
-				insertRecipesIntoDB(item.recipe);
+				insertRecipesIntoDB(item.recipe)
 			})
 		});
 	}
@@ -159,6 +157,7 @@ var pickNumber = 1;
 module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {	
 	console.log("retrieveSuggestedRecipes")	
+	console.log(1)
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
@@ -170,15 +169,17 @@ module.exports = {
 			if (err) {
 				console.log(err)
 			}
-			// console.log("THIS:",result)
+
+			console.log("THIS:",result)
 		});
 
 		// Instantiate User Allergies Array & Results
 		var userAllergies = [];
 		var recipeResults = [];
-
+		console.log(2)
 		// On row add allergies recieved from db to userAllergies
 		profileQuery.on("row", function (profileRow) {
+			console.log(3)
 			userAllergies = profileRow.allergies;
 			var totalMatches = 0;
 			// SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = 1 ) AND (cookingtime = profileRow.cookingtime OR cookingtime = (profileRow.cookingtime - 1)
@@ -205,6 +206,7 @@ module.exports = {
 			});
 
 			foodQuery.on("end", function (){
+				console.log(4)
 				var sendData = {recipes: recipeResults }
 				// console.log("sending this thingy:",sendData)	
 				res.status(200).json(sendData);
@@ -212,6 +214,7 @@ module.exports = {
 				console.log("getting from yummly")
 				if (totalMatches < lowOnViableRecipes) {
 					client.end();
+					console.log("calling yummly bruh")
 					getRecipesFromYummly(uid);
 					// getRecipesFromEdaman();
 				}
