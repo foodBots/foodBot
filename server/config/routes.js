@@ -24,6 +24,9 @@ module.exports = function(app, express) {
   app.get('/foodBot/recipes/:id', /*auth.checkUser,*/ recipeController.retrieveSuggestedRecipes);
 
   app.get('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.retrieveMyRecipes);
+
+  app.get('/foodBot/meals/explore/:id', /*auth.checkUser,*/ mealController.exploreUserMeals);
+
   app.post('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.addUserMeal);
 
   app.get('/foodBot/match/:id', /*auth.checkUser,*/ matchController.retrieveMatch);

@@ -8,16 +8,16 @@ import RecipeChoose from './RecipeChoose'
 import RecipesBuy from './RecipesBuy'
 import MyRecipes from './MyRecipes'
 import Subtotal from './Subtotal'
+import Explore from './ExploreRecipes'
 import SoMoWindow from './SoMoWindow'
 import Rebase from 're-base'
 
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
-let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/')
+let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shoppingCart')
 
 
 //This needs to be refactored to the Explore and Socialize Page
-import RecipeLanding from './RecipeLanding'
 
 export default class App extends React.Component {
 
@@ -39,8 +39,8 @@ export default class App extends React.Component {
     this.state = {
       //USER INFO
       id: this.props.location.state.id,
-      username: this.props.location.state.email,
-      chosenRecipes: [],
+      username: this.props.location.state.userData.email,      
+      chosenRecipes: [],      
       cart: [],
 
       getTotal: () => {
@@ -51,6 +51,8 @@ export default class App extends React.Component {
 
       recentItem: "",
       activeItem: "",
+      activeItemId: "",
+      activeProfId: "",
 
       //NAV BAR
       open: false,
@@ -67,11 +69,11 @@ export default class App extends React.Component {
       isModalOpen: false,
       close: () => {
         this.setState({ isModalOpen: false });
-      },
-
-      showModal: (element) => {
-        let recent = {
-          id: element.id,
+      },      
+      
+      showModal: (element) => {        
+        let recent = {          
+          recipeid: element.id,
           name: element.name,
           image: element.img,
           price: element.price
@@ -98,8 +100,8 @@ export default class App extends React.Component {
       },
 
       openSocialModal: (element) => {
-        this.setState({ isModalOpen: true, activeItem: element.name });
-        console.log(this.state.activeItem, "Inside the App now")
+        console.log(element, "the element in question is...")
+        this.setState({ isModalOpen: true, activeItem: element.name, activeItemId: element.id, activeProfId: element.profileid});        
       },
 
       orderCheckout: () => {
@@ -204,10 +206,11 @@ export default class App extends React.Component {
       goCheckout:() => {
         event.preventDefault();
         console.log("Go to checkout")
+        this.state.saveMatch
         this.state.redirect("Buy Recipes")
       },
 
-      //RECIPE VIEW
+      //EXPLORE RECIPES
       getChosenRecipes: (id) => {
         $.get('/foodBot/meals/' + id).
           done((data) => {
@@ -215,20 +218,22 @@ export default class App extends React.Component {
           this.setState({chosenRecipes: data.recipeView})
         })
       },
-      getMatchRecipes: (id) => {
-        $.get('/foodBot/meals/' + id).
+      getExploreRecipes: (id) => {
+        console.log("exploring recipes")
+        $.get('/foodBot/meals/explore/' + id).
           done((data) => {
-          console.log("gotMatchRecipes", data)
-          this.setState({matchRecipes: data.recipeView})
+          console.log("got explored recipes", data)
+          this.setState({exploreRecipes: data})
         })
       },
+      exploreRecipes: [],
 
       //ROUTING LOGIC
       currentView: this.props.location.state.route,
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
-        "View Recipes": "RecipeView",
+        "Explore Recipes": "ExploreRecipes",
         "Sign Up": "SignUp",
         "Sign out": "SignIn",
         "PairChatRoom": "PairChatRoom",
@@ -321,25 +326,28 @@ export default class App extends React.Component {
        </div>
       )
     }
-     //VIEW PAIR AND RECIPES
-    else if (this.state.componentRoute[this.state.currentView] === "RecipeView") {
+     //EXPLORE RECIPES FROM OTHER USERS
+    else if (this.state.componentRoute[this.state.currentView] === "ExploreRecipes") {      
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <RecipeLanding
-            match={this.state.match}
-            getMatchRecipes={this.state.getMatchRecipes}
-            matchRecipes={this.state.matchRecipes}
+          <Explore                        
+            id={this.state.id}
+            getExploreRecipes={this.state.getExploreRecipes}
+            exploreRecipes={this.state.exploreRecipes}                              
 
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
           <SoMoWindow
           //Actions
-          close ={this.state.close.bind(this)}
-          isModalOpen={this.state.isModalOpen}/>
-          username={this.state.username}
+          close ={this.state.close.bind(this)}                                                  
+          isModalOpen={this.state.isModalOpen}
+          username={this.state.username}    
+
           activeItem={this.state.activeItem}
+          activeItemId={this.state.activeItemId}
+          activeProfId={this.state.activeProfId}/>
           </div>
       )
     }
@@ -364,8 +372,7 @@ export default class App extends React.Component {
             recipes={this.props.location.state.recipesData}
             chosenRecipes = {this.state.chosenRecipes}
             userid={this.state.id}
-            getChosenRecipes = {this.state.getChosenRecipes}
-            />
+            getChosenRecipes = {this.state.getChosenRecipes}/>
         </div>
       )
     }
