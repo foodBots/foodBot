@@ -155,8 +155,6 @@ module.exports = {
 
 
 
-// ,
-
 //   createMeasuresTable: 'CREATE TABLE IF NOT EXISTS Measurements' +
 //     '(' +
 //       'id SERIAL NOT NULL PRIMARY KEY, ' +

@@ -6,13 +6,12 @@ import PairMessagesList from './PairMessagesList'
 
 
 export default class SoMoWindow extends React.Component {
-    
+
     constructor(props){
         super(props)
         this.state = {
           messages: [],
           submitChat: (message) => {
-            console.log(message)
             this.setState({messages: this.state.messages.concat(message)})          
           },
           activeItem: this.props.activeItem
@@ -59,7 +58,9 @@ export default class SoMoWindow extends React.Component {
             <Modal.Body>
                 <h2>Comment Window</h2>
                  <PairMessagesList 
-                    username={this.props.username}/>
+                    username={this.props.username}
+                    activeItemId={this.props.activeItemId}
+                    activeProfId={this.props.activeProfId}/>
             </Modal.Body>
             <Modal.Footer>
             <RaisedButton label="Add to Cart" secondary={true} />

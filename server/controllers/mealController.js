@@ -2,7 +2,6 @@ var pg = require('pg');
 var Promise = require('bluebird');
 var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/foodbot';
 var client;
-// var r = require('redis').createClient();
 
 var makeConnect = function() {
 	client = new pg.Client(connectionString);
@@ -11,13 +10,41 @@ var makeConnect = function() {
 
 module.exports = {
 
+	exploreUserMeals: function(req, res) {
+		makeConnect();
+		var uid = req.params.id
+		var foodie;
+
+		//TODO: THE PARAMETERS YOU GET BACK WILL CHANGE ONCE API CHANGES.
+		//TODO: MAKE SURE THAT YOU SWITCH "CREATED === TRUE ONCE YOU FLIP CREATED"
+		var getFoodieStatus = function(id) {
+			return new Promise(function(resolve, reject) {
+				console.log("in the promise")
+				client.query("SELECT foodie from profiles where id="+id+";", function(err, data) {					
+					foodie = data.rows[0].foodie
+					if (foodie === "t") {foodie = "true"}
+						else {foodie = "false"}
+						console.log("2. foodie = ", foodie)			
+					resolve(foodie)
+				})				
+			})
+		}
+		getFoodieStatus(uid).then(function(foodie) {			
+			client.query("SELECT recipes.id, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked FROM recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) WHERE liked=true AND created=true AND foodie="+foodie+"", function(err, data) {
+				res.send(data.rows)
+				client.end();
+			})
+		})
+	},
+
 	retrieveUserMeals : function (req, res){
 		makeConnect();
 		// Get User ID
 		var uid = req.params.id;
 
-		// Create Query for all recipes user has created or seenRecipe
-		var userRecipesQuery = client.query("SELECT id, name, ingredients, image, rating, directionsurl, liked FROM Recipes INNER JOIN UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid="+uid+" AND liked=true;");
+
+		// Create Query for all recipes user has liked
+		var userRecipesQuery = client.query("SELECT name, ingredients, image, rating, directionsurl, liked FROM Recipes INNER JOIN UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid="+uid+" AND liked=true;");
 		//TestQ2: Select name, ingredients, image, rating, directionsurl, liked from Recipes Inner Join UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid=17 AND liked=true;
 
 		// Instantiate User Recipes
@@ -93,37 +120,4 @@ module.exports = {
 			});
 		}
 	}
-
-	// addToCart: function(req, res) {
-	// 	r.flushall();
-	// 	var user = req.params.id
-	// 	var order = req.body
-
-	// 	r.get(user, function(err, data) {
-	// 		if (data === null) {
-	// 			r.set("cart", 1)
-	// 			r.get("cart", function(err, result) {
-	// 				//result from get cannot be stored
-	// 				var store = {result: order}
-	// 				console.log(store)
-	// 				r.set(user, JSON.stringify(store))
-	// 				r.get(user, function(err, done) {
-	// 					res.send(done)
-	// 				})
-	// 			})
-
-	// 		// else {
-	// 		// 	order = order + "," + data;
-	// 		// 	r.set(user, order)
-	// 		// 	r.get(user, function(err, done) {
-	// 		// 		totalCart.items.push(done)
-	// 		// 		console.log(totalCart, "JSON should parse this yes?")
-	// 		// 		res.send(JSON.stringify(totalCart))
-	// 		// 	})
-	// 		// }
-
-	// 		}
-	// 	})
-	// }
-
 };

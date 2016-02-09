@@ -11,12 +11,15 @@ import IconButton from 'material-ui/lib/icon-button';
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
 
-
-
 export default class RecipeLanding extends React.Component {
+
+  componentWillMount() {
+    this.props.getExploreRecipes(this.props.id)
+   }
 
   constructor() {
   super();
+   
    this.gridStyles = {
     // root: {
     //   display: 'flex',
@@ -33,27 +36,23 @@ export default class RecipeLanding extends React.Component {
 }
 
   handleTouchTap(element) {    
-    console.log("inside RecipeLanding", element)
     this.props.openSocialModal(element);
   }
 
   handleAction(element) {
-    console.log(element.name)
+    event.preventDefault();
   }
 
-
-//TODO: Don't grab matchRecipes here. This is the explore page.
-//Display "cooked recipes" from users with similar nutritional profiles
-//
   render() {    
     return (
     <div>
+    <h1>Explore Recipes</h1>
       <GridList
         cellHeight={250}
         style={this.gridStyles}>      
-      {this.props.matchRecipes.map(tile => (
+      {this.props.exploreRecipes.map((tile, index) => (
         <GridTile
-          key={tile.name}
+          key={index}
           title={tile.name}
           subtitle={<span>by <b>{tile.rating}</b></span>}
           onTouchTap={this.handleTouchTap.bind(this, tile)}
