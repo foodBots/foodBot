@@ -19,11 +19,15 @@ var LocalStorage = require('node-localstorage').LocalStorage;
 
 
 module.exports = function(app, express) {
-  // app.get('/', auth.checkUser);30
+
+  app.get('/', userController.checkCreds);
+  
+  
   app.post('/foodBot/auth/signup', userController.signup);
   app.post('/foodBot/auth/signin', userController.signin);
 
   app.get('/foodBot/auth/logout', userController.logout);
+  app.get('/foodBot/', userController.checkCreds );
 
   app.get('/foodBot/recipes/:id', /*auth.checkUser,*/ recipeController.retrieveSuggestedRecipes);
 
@@ -84,21 +88,13 @@ module.exports = function(app, express) {
           userObj = {
             name: req.user.displayName,
             id: userData.id,
-            photos: req.user.photos[0].value
+            photos: req.user.photos[0].value,
+            route: "Swipe Recipes"
           }
         
         req.DBid = userObj.id;
         req.session.user = userObj;
 
-        if (typeof localStorage === "undefined" || localStorage === null) {
-          localStorage = new LocalStorage('./scratch');
-        }
-
-        localStorage.clear();
-        localStorage.setItem('sessionUser', userData.id);
-        localStorage.setItem('sessionName', userObj.name);
-        localStorage.setItem('sessionPhoto', userObj.photos);
-        localStorage.setItem('sessionRoute', "Swipe Recipes")
         res.redirect('/');
         }
       });

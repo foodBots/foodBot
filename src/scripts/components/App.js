@@ -31,9 +31,6 @@ export default class App extends React.Component {
   }
 
   componentWillMount(){    
-    console.log(localStorage.getItem('sessionUser'), "session userid");
-    console.log(localStorage.getItem('sessionName'), "session username");
-    console.log(localStorage.getItem('sessionPhoto'), "session photo");
     this.state.getTotal();
   }
 
@@ -42,9 +39,23 @@ export default class App extends React.Component {
 
     this.state = {
       //USER INFO
-      id: localStorage.getItem('sessionUser'),
-      username: localStorage.getItem('sessionName'),
-      photo: localStorage.getItem('sessionPhoto'),      
+      id: this.props.location.state.id,
+      username: this.props.location.state.userData.email,
+      // photo: this.state.location.
+      currentView: this.props.location.state.route,
+      componentRoute: {
+        "Profile Settings": "ProfileMake",
+        "Swipe Recipes": "RecipeChoose",
+        "Explore Recipes": "ExploreRecipes",
+        "Sign Up": "SignUp",
+        "Sign out": "SignIn",
+        "PairChatRoom": "PairChatRoom",
+        "Buy Recipes": "RecipesBuy",
+        "My Recipes": "MyRecipes"
+      },
+
+
+
       chosenRecipes: [],      
       cart: [],
 
@@ -234,17 +245,7 @@ export default class App extends React.Component {
       exploreRecipes: [],
 
       //ROUTING LOGIC
-      currentView: localStorage.getItem('sessionRoute'),
-      componentRoute: {
-        "Profile Settings": "ProfileMake",
-        "Swipe Recipes": "RecipeChoose",
-        "Explore Recipes": "ExploreRecipes",
-        "Sign Up": "SignUp",
-        "Sign out": "SignIn",
-        "PairChatRoom": "PairChatRoom",
-        "Buy Recipes": "RecipesBuy",
-        "My Recipes": "MyRecipes"
-      },
+
 
       redirect: (text) => {
         if (this.state.currentView==="Swipe Recipes") {

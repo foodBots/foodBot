@@ -4,6 +4,12 @@ var auth = require('../config/authOperations.js');
 var Promise = require('bluebird');
 
 module.exports = {
+  checkCreds: function(req, res) {
+    console.log("1. First checking to see that we even get inside")
+    console.log("3.req.session stuff is...", req.session.user)
+    res.send(req.session.user)
+  },
+
   signup: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
