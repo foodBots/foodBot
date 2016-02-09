@@ -4,16 +4,8 @@ var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
 // var priceController = require('./priceController');
-var parseString = require('xml2js').parseString;
-
-
 var client = new pg.Client(connectionString);
 
-var cooking = {
-	1: 600, // half hour in secs
-	2: 1800, // hour in secs
-	3: 3600 // two hour in secs
-}
 var pageNumber = 1;
 var pickNumber = 1;
 var estimatedPrice = 0;
@@ -21,46 +13,70 @@ var ingredientID = 0;
 var counter = 0;
 // Which type of food to search for (e.g. Chicken, fish)
 
+var helper = require('../config/helpers.js');
+// var priceController = require('./priceController');
+var searchTerms = require('./searchTermsController.js');
+var parseString = require('xml2js').parseString;
+var client = new pg.Client(connectionString);
+
+
+
+
 	// getRecipesFromEdaman = function (){
 	// 	request("https://api.edamam.com/search?&&app_id=" + apiKeys.edamam.id + "&app_key=" + apiKeys.edamam.key + "", function (err, data){
 	// 		console.log(JSON.parse(data.body).hits)
 	// 	})
 	// }
+var chooseRandomSearchQuery = function() {
+  var searchTermsQuantity = searchTerms.retrieveNumberOfSearchTerms();
+  var searchTermId = Math.floor((Math.random() * searchTermsQuantity) + 1);
+  return searchTermId;
+};
+
+var formatAPIPageSearch = function(number) {
+	var startQuery = number*10;
+	var endQuery = (number + 1) * 10;
+	var pageQueryString = "&from=" + startQuery + "&to=" + endQuery;
+	return pageQueryString;
+};
 
 
-	getRecipesFromYummly = function (uid) {
+var getRecipesFromYummly = function (uid) {
 		client.connect();
 		var yummlyRecipes;
 
 		var foodQ = function () {
 			return new Promise (function (resolve, reject) {
+				console.log("FOODQ:");
 				var start = 0;
 				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=1", function (err, result){
-					if (result) {
+					if (err) {
+						console.log("Error in selecting recipesource:", result);
+					} else if (result) {
 						start = parseInt(result.rows[0].count) + 2;
 					}
 
 				})
-				startQuery.on("end", function (){
-					// var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
-						client.query('SELECT name from RecipeSearchTerms WHERE id = ' + pickNumber + ' ', function (err, result) {
-							var foodName = result.rows[0].name;
-								// console.log("foeaching:", row)
-								request("https://api.edamam.com/search?q=" + foodName + "&from=10&to=20&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
-									if (err) {console.log('Error in request to edemam', err);} 
-									else {
-										resolve(JSON.parse(response.body).hits)
-									}
-									// console.log(JSON.parse(response.body).hits)
-									// console.log('https://api.edamam.com/search?q=' + row.name + '&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958')
-								// })
-							});
+        startQuery.on("end", function (){
+          var randomSearchQuery = chooseRandomSearchQuery();
+          console.log('randomSearchQuery:', randomSearchQuery);
 
-
-					});
-				});
-			});
-		}
+          // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
+            client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
+              var foodName = result.rows[0].name;
+              var foodPage = result.rows[0].page;
+              foodPage+= 1;
+                request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
+                  if (err) {console.log('Error in request to edemam', err);} 
+                  else {
+                    client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPageIncremented + "WHERE ID = " + randomSearchQuery + ";")
+                    resolve(JSON.parse(response.body).hits)
+                  }
+              });
+          });
+        });
+      });
+    }
 
 		foodQ().then(function (yummlyRecipes) {
 			var addIngriedientToDB = function (item, recipeID) {
@@ -73,7 +89,8 @@ var counter = 0;
 							else {
 								// Pick a better one than the first
 								var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
-								var index = productList.length >= 5 ? 5 : productList.length-1;
+								var index = productList.length > 5 ? 5 : productList.length-1;
+								// console.log("PRODUCT LIST IN REQ", productList);
 								var choice = productList[index];
 
 								if (choice.Itemname[0] !== 'NOITEM') {
@@ -126,7 +143,7 @@ var counter = 0;
 			var addRecipeEstimatedPrice = function (recipeID) {
 				client.query("UPDATE recipes SET priceestimate = (SELECT SUM(price) from (select price from groceryprices left outer join ingredients on (groceryprices.id = ingredients.groceryid) left outer join recipeingriedients on (ingredients.id = recipeingriedients.ingredientid) where recipeingriedients.recipeid = " + recipeID + " ) as estimatedprice) Where id = " + recipeID + "", function (err,result ) {
 					if (err) {
-						console.log( "CODE IS BROKE")
+						console.log( "Error in updating price estimates")
 					}
 				});
 			}

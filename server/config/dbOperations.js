@@ -1,5 +1,3 @@
-// var insertIntoMeasuresTable = require('./models/measurementsModel')
-var searchTerms = ['fish', 'chicken', 'vegetables', 'salad'];
 var searchController = require('../controllers/searchTermsController');
 
 module.exports = {
@@ -54,7 +52,7 @@ module.exports = {
       'name varchar(255),' +
       'quantity real,' +
       'measure varchar(50),' +
-      'description varchar(255),' + 
+      'description varchar(1000),' + 
       'recipeid int references Recipes(id),' +
       'groceryid int references GroceryPrices(id)' +
     ')',
@@ -152,6 +150,7 @@ module.exports = {
     }
   }
 }
+
 
 
 
