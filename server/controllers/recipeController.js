@@ -33,49 +33,50 @@ var chooseRandomSearchQuery = function() {
   return searchTermId;
 };
 
-<<<<<<< 173b5b9de24269597a8d9b076fcd0dac1db15d71
+var formatAPIPageSearch = function(number) {
+	var startQuery = number*10;
+	var endQuery = (number + 1) * 10;
+	var pageQueryString = "&from=" + startQuery + "&to=" + endQuery;
+	return pageQueryString;
+};
 
-var	getRecipesFromYummly = function (uid) {
+
+var getRecipesFromYummly = function (uid) {
 		client.connect();
 		var yummlyRecipes;
 
 		var foodQ = function () {
 			return new Promise (function (resolve, reject) {
+				console.log("FOODQ:");
 				var start = 0;
 				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=1", function (err, result){
-					if (result) {
+					if (err) {
+						console.log("Error in selecting recipesource:", result);
+					} else if (result) {
 						start = parseInt(result.rows[0].count) + 2;
 					}
 
 				})
-		    startQuery.on("end", function (){
-		      var randomSearchQuery = chooseRandomSearchQuery();
-		      console.log('randomSearchQuery:', randomSearchQuery);
+        startQuery.on("end", function (){
+          var randomSearchQuery = chooseRandomSearchQuery();
+          console.log('randomSearchQuery:', randomSearchQuery);
 
-		      // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
-		        client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
-		          var foodName = result.rows[0].name;
-		          var foodPage = result.rows[0].page;
-		          var foodPageIncremented = foodPage++;
-		            // console.log("foreaching:", row)
-		            request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
-		              if (err) {console.log('Error in request to edemam', err);} 
-		              else {
-		                console.log("FETCHING EDEMAM DATA BASED ON PAGE", response.body);
-		                client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPageIncremented + "WHERE ID = " + randomSearchQuery + ";")
-		                resolve(JSON.parse(response.body).hits)
-		              }
-		              // console.log(JSON.parse(response.body).hits)
-		              // console.log('https://api.edamam.com/search?q=' + row.name + '&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958')
-		            // })
-		          });
-		          // console.log("foodname:", foodName)
-		        // })
-		        // pick x search terms
-		      });
-		    });
-		  });
-		}
+          // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
+            client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
+              var foodName = result.rows[0].name;
+              var foodPage = result.rows[0].page;
+              foodPage+= 1;
+                request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
+                  if (err) {console.log('Error in request to edemam', err);} 
+                  else {
+                    client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPageIncremented + "WHERE ID = " + randomSearchQuery + ";")
+                    resolve(JSON.parse(response.body).hits)
+                  }
+              });
+          });
+        });
+      });
+    }
 
 		foodQ().then(function (yummlyRecipes) {
 			var addIngriedientToDB = function (item, recipeID) {
@@ -88,7 +89,8 @@ var	getRecipesFromYummly = function (uid) {
 							else {
 								// Pick a better one than the first
 								var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
-								var index = productList.length >= 5 ? 5 : productList.length-1;
+								var index = productList.length > 5 ? 5 : productList.length-1;
+								// console.log("PRODUCT LIST IN REQ", productList);
 								var choice = productList[index];
 
 								if (choice.Itemname[0] !== 'NOITEM') {
@@ -141,7 +143,7 @@ var	getRecipesFromYummly = function (uid) {
 			var addRecipeEstimatedPrice = function (recipeID) {
 				client.query("UPDATE recipes SET priceestimate = (SELECT SUM(price) from (select price from groceryprices left outer join ingredients on (groceryprices.id = ingredients.groceryid) left outer join recipeingriedients on (ingredients.id = recipeingriedients.ingredientid) where recipeingriedients.recipeid = " + recipeID + " ) as estimatedprice) Where id = " + recipeID + "", function (err,result ) {
 					if (err) {
-						console.log( "CODE IS BROKE")
+						console.log( "Error in updating price estimates")
 					}
 				});
 			}
@@ -163,151 +165,6 @@ var	getRecipesFromYummly = function (uid) {
 			})
 		});
 	}
-
-module.exports = {
-	retrieveSuggestedRecipes: function (req, res) {	
-		var client = new pg.Client(connectionString);
-		client.connect();
-		// Get User ID & amt of recipes
-		var uid = parseInt(req.params.id);		
-		var amtOfRecipes = req.body.amount || 20;
-
-		// Query allergies for User and Recipes
-		var profileQuery = client.query("SELECT * FROM Profiles WHERE id = " + uid + "", function (err, result){
-			if (err) {
-				console.log(err)
-			}
-		});
-
-		// Instantiate User Allergies Array & Results
-		var userAllergies = [];
-		var recipeResults = [];
-		// On row add allergies recieved from db to userAllergies
-		profileQuery.on("row", function (profileRow) {
-			userAllergies = profileRow.allergies;
-			var totalMatches = 0;
-			// SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = 1 ) AND (cookingtime = profileRow.cookingtime OR cookingtime = (profileRow.cookingtime - 1)
-=======
-=======
-var formatAPIPageSearch = function(number) {
-	var startQuery = number*10;
-	var endQuery = (number + 1) * 10;
-	var pageQueryString = "&from=" + startQuery + "&to=" + endQuery;
-	return pageQueryString;
-};
-
->>>>>>> page optimization for supermarket api
-var getRecipesFromYummly = function (uid) {
-    client.connect();
-    var yummlyRecipes;
-    console.log("in yummly",uid)
-
-    var foodQ = function (){
-      return new Promise (function (resolve, reject) {
-        var start = 0;
-        var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=1", function (err, result){
-          if (result) {
-            start = parseInt(result.rows[0].count) + 2;
-          }
-          console.log("start: ", start)
-
-        })
-        startQuery.on("end", function (){
-          var randomSearchQuery = chooseRandomSearchQuery();
-          console.log('randomSearchQuery:', randomSearchQuery);
-
-          // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
-            client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
-              var foodName = result.rows[0].name;
-              var foodPage = result.rows[0].page;
-              var foodPageIncremented = foodPage++;
-                // console.log("foreaching:", row)
-                request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
-                  if (err) {console.log('Error in request to edemam', err);} 
-                  else {
-                  	console.log("FETCHING EDEMAM DATA BASED ON PAGE", response.body);
-                  	client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPageIncremented + "WHERE ID = " + randomSearchQuery + ";")
-                    resolve(JSON.parse(response.body).hits)
-                  }
-                  // console.log(JSON.parse(response.body).hits)
-                  // console.log('https://api.edamam.com/search?q=' + row.name + '&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958')
-                // })
-              });
-              // console.log("foodname:", foodName)
-            // })
-            // pick x search terms
-          });
-        });
-      });
-    }
-
-		foodQ().then(function (yummlyRecipes) {
-      console.log("about to insert into db")
-      var addIngriedientToDB = function (item) {
-        console.log("AddIngredientoDB:", item);
-        request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
-          parseString(xml, function (err, result) {
-            if (err) {
-              console.log("Parsing XML Error")
-            }
-            else {
-              // Pick a better one than the first
-              var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
-              var index = productList.length >= 5 ? 5 : productList.length-1;
-              var choice = productList[index];
-              console.log("productList:", productList, "index:", index, "choice", choice);
-              client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname + "','" + choice.ItemDescription + "'," + choice.Pricing[0] + ");", function(err, productData) {
-                if (err) {
-                  console.log("Error in inserting to GroceryPrices:", err);
-                } else {
-                  console.log("GroceryPrices result:", productData);
-                }
-              })
-            }
-              // console.log("LOOK AT THISS: ", );
-          });
-        })
-        // var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "')", function (err, data) {
-        //  if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
-        //  else { console.log("NO ERROR:", data)}
-        //  // priceController.findPrice(item);
-        // });
-      };
-      var insertRecipesIntoDB = function (recipe) {
-        console.log("RECIPE ingredients:", recipe.ingredients);
-
-        // var addCookingTime = function (){
-        //  if (recipe.totalTimeInSeconds >= cooking[2]) {
-        //    return cookingTime = 3;
-        //  } else if (recipe.totalTimeInSeconds >= cooking[1] && recipe.totalTimeInSeconds < cooking[2]) {
-        //    return cookingTime = 2;
-        //  } else {
-        //    return cookingTime = 1;
-        //  }   
-        // }
-        // console.log("da recipe:", recipe)
-        // var recipeImg = recipe.smallImageUrls ? recipe.smallImageUrls[0] + "0-c": recipe.imageUrlsBySize[Object.keys(recipe.imageUrlsBySize)[0]].replace("90","900")
-        console.log(recipe.label, recipe.image, recipe.url, 2 );
-        client.query("INSERT INTO Recipes (name, image, directionsUrl, sourceid) VALUES ('" + recipe.label + "', '" + recipe.image + "', '" + recipe.url + "'," + 2 + ")", function (err) {
-          if (err){
-            console.log("Edamam recipe already saved in db", err)
-          } else {
-            console.log("added recipe to database")
-          }
-        })
-        recipe.ingredients.forEach(function(ingredient) {
-          addIngriedientToDB(ingredient);
-        })
-
-      };
-      console.log(yummlyRecipes)
-      // yummlyRecipes = JSON.parse(yummlyRecipes);
-      yummlyRecipes.forEach(function (item) {
-        // getIngredientsFromYummly(item.recipe)
-        insertRecipesIntoDB(item.recipe);
-      })
-    });
-  }
 
 module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {	
