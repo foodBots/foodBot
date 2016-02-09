@@ -1,20 +1,12 @@
-var path = require('path');
 var express = require('express');
 var session = require('express-session');
-
-//Extras
+var path = require('path');
 var bodyParser = require('body-parser');
-var db = require('./server/config/dbOperations.js');
-var User = require('./server/controllers/userController.js');
-
-//Webpack
-// var webpack = require('webpack');
-// var config = require('./webpack.config.dev');
-// var compiler = webpack(config);
+var db = require('./config/dbOperations.js');
+var User = require('./controllers/userController.js');
 
 var app = express();
 
-//Body Parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(session({
@@ -24,33 +16,13 @@ app.use(session({
   cookie: { secure: true }
 }))
 
-//Hot Reloading
-// app.use(require('webpack-dev-middleware')(compiler, {
-//   noInfo: true,
-//   publicPath: config.output.publicPath
-// }));
+// app.use(cookieParser());
+app.use(express.static(__dirname + '/../build'));
 
-// app.use(require('webpack-hot-middleware')(compiler));
+require('./config/routes.js')(app, express);
 
-app.use(express.static(__dirname + '/dist'));
-
-require('./server/config/routes.js')(app, express);
-
-var port = process.env.PORT || 3000;
-
-app.get('*', function(req, res) {
-  // console.log(path.join(__dirname, 'index.html'));
-  res.sendFile(path.join(__dirname, '/dist/index.html'));
-});
-
-app.listen(3000, function(err) {
-  if (err) {
-    console.log(err);
-    return;
-  }
-
-  console.log('Listening at http://postgres@localhost:3000');
-});
+var port = process.env.PORT || 8000;
+app.listen(port);
 
 //postgres set up
 var pg = require('pg');
@@ -69,6 +41,5 @@ var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
 var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
 var createIngredientsTable = client.query(db.createIngredientsTable);
 var createRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
-var createGroceriesTable = client.query(db.createGroceryPriceTable)
 
 module.exports = app;
