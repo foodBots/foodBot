@@ -8,54 +8,62 @@ module.exports = {
   createUsersTable: 'CREATE TABLE IF NOT EXISTS Users' +
     '(' +
     'id SERIAL NOT NULL PRIMARY KEY,' +
-    'name VARCHAR(255) NOT NULL,' +
+    'name VARCHAR(255),' +
     'email VARCHAR(255) NOT NULL,' +
-    'password VARCHAR(255),' +
-    "photo varchar(255) DEFAULT 'https://cdn1.iconfinder.com/data/icons/cooking-and-food/510/14-chef-512.png'," +
-    'googleID varchar(255) UNIQUE' +
+    "photo varchar(455) DEFAULT 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiLi7Ln69zKAhUNxWMKHZo6CKMQjRwIBw&url=http%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fcooks-people&bvm=bv.113370389,d.cGc&psig=AFQjCNFk8JDd74HqUtWZAypvRUyzolx3UA&ust=1454631766701909'," +
+    'googleID varchar(255) UNIQUE,' +
+    'password varchar(455)' +
     ')',
 
   createRecipeSourcesTable: 'CREATE TABLE IF NOT EXISTS RecipeSources' +
     '(' +
       'id SERIAL NOT NULL PRIMARY KEY,' + 
       'name varchar(50)' +
-    ')',
-
-  //sql command for user profile
-  createRecipeSourcesTable: 'CREATE TABLE IF NOT EXISTS RecipeSources' +
-    '(' +
-      'id SERIAL NOT NULL PRIMARY KEY,' + 
-      'name varchar(50)' +
-    ')',
-
-  createRecipeSourcesTable: 'CREATE TABLE IF NOT EXISTS RecipeSources' +
-    '(' +
-      'id SERIAL NOT NULL PRIMARY KEY,' + 
-      'name varchar(50)' +
-    ')',
-
-  createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
-    '(' +
-      'id SERIAL NOT NULL PRIMARY KEY, ' +
-      'name varchar(255)' +
     ')',
 
   createRecipesTable: 'CREATE TABLE IF NOT EXISTS Recipes' +
     '(' +
-    'id serial NOT NULL PRIMARY KEY, ' +
-    'name varchar(255) NOT NULL,' +
-    'ingredients varchar(50)[], ' +
-    'directions varchar(255)[], ' +
-    'directionsUrl varchar(255), ' +
-    'exactCookingTime int, ' +
-    'cookingTime int, ' +
-    'region varchar(25), '+
-    'cost int ,' +
-    "image varchar(255) DEFAULT 'http://lh4.ggpht.com/iEyogFzb2gMbVBLSjgPL0qSETW76pRG1hQYRjLOnmU4JDgMdc65v53OZ3WWSvuRO_kY'," +
-    'complexity int,' +
-    'recipesourceid varchar(255) UNIQUE,' +
-    'sourceid int references RecipeSources(id) NOT NULL,' +
-    'rating int' +
+      'id serial NOT NULL PRIMARY KEY, ' +
+      'name varchar(255) NOT NULL,' +
+      'ingredients varchar(50)[], ' +
+      'directions varchar(255)[], ' +
+      'directionsUrl varchar(255), ' +
+      'exactCookingTime int, ' +
+      'cookingTime int, ' +
+      'region varchar(25), '+
+      'cost int ,' +
+      "image varchar(255) DEFAULT 'http://lh4.ggpht.com/iEyogFzb2gMbVBLSjgPL0qSETW76pRG1hQYRjLOnmU4JDgMdc65v53OZ3WWSvuRO_kY'," +
+      'complexity int,' +
+      'recipesourceid varchar(255) UNIQUE,' +
+      'sourceid int references RecipeSources(id) NOT NULL,' +
+      'rating int,' +
+      'priceEstimate int' +
+    ')',
+  
+    createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
+    '(' +
+       'id SERIAL NOT NULL PRIMARY KEY, ' +
+       'name varchar(255), ' +
+       'description varchar(1000),' +
+       'price int NOT NULL' +
+    ')' ,
+
+  createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
+    '(' +
+      'id SERIAL NOT NULL PRIMARY KEY, ' +
+      'name varchar(255),' +
+      'quantity real,' +
+      'measure varchar(50),' +
+      'description varchar(255),' + 
+      'recipeid int references Recipes(id),' +
+      'groceryid int references GroceryPrices(id)' +
+    ')',
+
+  createRecipeIngredientsTable: 'CREATE TABLE IF NOT EXISTS RecipeIngriedients' +
+    '(' +
+      'id serial NOT NULL PRIMARY KEY, ' +
+      'ingredientid int references Ingredients(id), ' +
+      'recipeid int references Recipes(id) ' +
     ')',
 
   //sql command for recipe profile
@@ -111,25 +119,7 @@ module.exports = {
     'total int' +
     ')',
 
-    createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
-    '(' +
-       'id SERIAL NOT NULL PRIMARY KEY, ' +
-       'name varchar(255), ' +
-       'description varchar(1000),' +
-       'price int NOT NULL' +
-    ')' ,
->>>>>>> Ordered the same as the creation of the tables
 
-  createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
-    '(' +
-      'id SERIAL NOT NULL PRIMARY KEY, ' +
-      'name varchar(255),' +
-      'quantity real,' +
-      'measure varchar(50),' +
-      'description varchar(255),' + 
-      'recipeid int references Recipes(id),' +
-      'groceryid int references GroceryPrices(id)' +
-    ')',
 
   createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
     '(' +
@@ -150,7 +140,17 @@ module.exports = {
     }
   },
 
-
+  checkForSourceIds: function (err, data) {
+    if (err) {
+      console.log("ERROR:", err)
+    }
+    else {
+      // console.log("data: ",data)
+      if (data.rows.length === 0) {
+        searchController.seedRecipeSourceIds()
+      }
+    }
+  }
 }
 
 
