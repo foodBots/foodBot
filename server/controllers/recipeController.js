@@ -31,7 +31,6 @@ var counter = 0;
 	getRecipesFromYummly = function (uid) {
 		client.connect();
 		var yummlyRecipes;
-		console.log("in yummly",uid)
 
 		var foodQ = function () {
 			return new Promise (function (resolve, reject) {
@@ -40,11 +39,9 @@ var counter = 0;
 					if (result) {
 						start = parseInt(result.rows[0].count) + 2;
 					}
-					console.log("start: ", start)
 
 				})
 				startQuery.on("end", function (){
-					console.log("A")
 					// var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
 						client.query('SELECT name from RecipeSearchTerms WHERE id = ' + pickNumber + ' ', function (err, result) {
 							var foodName = result.rows[0].name;
@@ -83,7 +80,6 @@ var counter = 0;
 									var description = choice.ItemDescription[0].length > 1000 ? choice.ItemDescription[0].substr(0,1000) : choice.ItemDescription[0];
 								// console.log("productList:", productList, "index:", index, "choice", choice);
 									client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ") RETURNING id;", function(err, productData) {
-											console.log("niiiiiii");
 										if (err) {
 											console.log("Error in inserting to GroceryPrices:", err);
 										} else {
@@ -91,19 +87,19 @@ var counter = 0;
 											estimatedPrice = choice.Pricing[0];
 											// console.log("GroceryPrices result:", productData);
 											var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description, groceryid) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "'," + groceryid + ") RETURNING id;", function (err, data) {
-													 console.log("sannnnn")
 												if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
 												
 												else {
 													ingredientID = data.rows[0].id
 													var addToRecipeIngredientsQuery = client.query("INSERT INTO RecipeIngriedients (ingredientid, recipeid) VALUES (" + ingredientID + ", " + recipeID + ")")
-													console.log("GOT HERE BRUHHH", ingredientID)
 													resolve();
 												}		// priceController.findPrice(item);
 											});
 
 										}
 									})
+								} else {
+									resolve ();
 								}
 							}
 						});
@@ -128,7 +124,6 @@ var counter = 0;
 				// return recipeID;
 			}
 			var addRecipeEstimatedPrice = function (recipeID) {
-			console.log("updating:", recipeID)
 				client.query("UPDATE recipes SET priceestimate = (SELECT SUM(price) from (select price from groceryprices left outer join ingredients on (groceryprices.id = ingredients.groceryid) left outer join recipeingriedients on (ingredients.id = recipeingriedients.ingredientid) where recipeingriedients.recipeid = " + recipeID + " ) as estimatedprice) Where id = " + recipeID + "", function (err,result ) {
 					if (err) {
 						console.log( "CODE IS BROKE")
@@ -141,9 +136,7 @@ var counter = 0;
 					recipe.ingredients.forEach(function(ingredient) {
 						arr.push(addIngriedientToDB(ingredient, recipeID))
 					})
-					console.log("arr", a)
 					Promise.all(arr).then(function () {
-						console.log("prmisealll working")
 						addRecipeEstimatedPrice(recipeID)
 					})			
 				})
@@ -158,8 +151,6 @@ var counter = 0;
 
 module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {	
-	console.log("retrieveSuggestedRecipes")	
-	console.log(1)
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
@@ -171,8 +162,6 @@ module.exports = {
 			if (err) {
 				console.log(err)
 			}
-
-			console.log("THIS:",result)
 		});
 
 		// Instantiate User Allergies Array & Results
@@ -206,15 +195,12 @@ module.exports = {
 			});
 
 			foodQuery.on("end", function (){
-				console.log(4)
 				var sendData = {recipes: recipeResults }
 				// console.log("sending this thingy:",sendData)	
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 1000;
-				console.log("getting from yummly")
 				if (totalMatches < lowOnViableRecipes) {
 					client.end();
-					console.log("calling yummly bruh")
 					getRecipesFromYummly(uid);
 					// getRecipesFromEdaman();
 				}
