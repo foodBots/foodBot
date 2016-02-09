@@ -17,15 +17,14 @@ export default class RecipeLanding extends React.Component {
     this.props.getExploreRecipes(this.props.id)
    }
 
-  constructor() {
-  super();
+  constructor(props) {
+  super(props);
    
    this.gridStyles = {
-    // root: {
-    //   display: 'flex',
-    //   flexWrap: 'wrap',
-    //   justifyContent: 'space-around',
-    // },
+    root: {
+     width: "100%"
+
+    },
     gridList: {
       width: "100%",
       height: "100%",
@@ -41,22 +40,22 @@ export default class RecipeLanding extends React.Component {
 
   handleAction(element) {
     event.preventDefault();
+    console.log("hello")
   }
 
   render() {    
     return (
-    <div>
+    <div className="myrecipe-container" style={this.gridStyles.root}>
     <h1>Explore Recipes</h1>
       <GridList
         cellHeight={250}
         style={this.gridStyles}>      
       {this.props.exploreRecipes.map((tile, index) => (
-        <GridTile
+        <GridTile          
           key={index}
           title={tile.name}
           subtitle={<span>by <b>{tile.rating}</b></span>}
-          onTouchTap={this.handleTouchTap.bind(this, tile)}
-          actionIcon={<IconButton onTouchTap={this.handleAction.bind(this, tile)}><StarBorder color="white"/></IconButton>}>
+          actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><StarBorder color="white"/></IconButton>}>
           <img src={tile.image} />
         </GridTile>
       ))}
@@ -67,3 +66,4 @@ export default class RecipeLanding extends React.Component {
 }
 
     
+          // onTouchTap={this.handleTouchTap.bind(this, tile)}

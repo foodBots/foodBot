@@ -7,6 +7,10 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import Avatar from 'material-ui/lib/avatar';
 
 class RecipesBuy extends React.Component {
+  componentWillMount(){
+    this.props.getTotal();
+  }
+
   constructor(props) {
     super(props);
     this.cardStyles = {

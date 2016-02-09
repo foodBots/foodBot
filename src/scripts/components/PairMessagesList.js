@@ -1,18 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Rebase from 're-base'
-let chatBase = Rebase.createClass("https://dazzling-inferno-511.firebaseio.com/comments")
 
 //This is the chatform
+let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shoppingCart')
 
 export default class PairMessagesList extends React.Component {
 
     componentDidMount() {
-        chatBase.syncState('user' + this.props.activeProfId + 'rec' + this.props.activeItemId, {
+        this.ref = base.syncState('user' + this.props.activeProfId + 'rec' + this.props.activeItemId, {
         context: this,
         state: 'messages',
         asArray: true
         })
+    }
+
+    componentWillUnmount() {
+      base.removeBinding(this.ref);
     }
 
   constructor(props){
@@ -47,7 +51,7 @@ export default class PairMessagesList extends React.Component {
 
   renderMessage(message, index){
     return (
-      <li className="message" key={index}>{this.props.username}: {message}</li>
+      <li className="message" key={index}>{this.props.name}: {message}</li>
     )
   }
 

@@ -22,15 +22,15 @@ module.exports = {
 				console.log("in the promise")
 				client.query("SELECT foodie from profiles where id="+id+";", function(err, data) {					
 					foodie = data.rows[0].foodie
-					if (foodie === "t") {foodie = "true"}
-						else {foodie = "false"}
+					if (foodie === true) {foodie = "true"}
+						else {foodie = false}
 						console.log("2. foodie = ", foodie)			
 					resolve(foodie)
 				})				
 			})
 		}
 		getFoodieStatus(uid).then(function(foodie) {			
-			client.query("SELECT recipes.id, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked FROM recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) WHERE liked=true AND created=true AND foodie="+foodie+"", function(err, data) {
+			client.query("SELECT recipes.id, recipes.priceestimate, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked FROM recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) WHERE liked=true AND created=true AND foodie="+foodie+"", function(err, data) {
 				res.send(data.rows)
 				client.end();
 			})
@@ -103,16 +103,17 @@ module.exports = {
 		// Create Insert Meal Query
 		if (rejected) {
 			rejected.forEach(function (recipeID) {
-				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)", function(err, data){
+				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)", function(err, data){
 					if (err) {
 						console.log('error inserting userRecipes rejected');
 					}
 				});
 			});
-		}		if (liked) {
+		} if (liked) {
 			liked.forEach(function (recipeID) {
 				// var recipeID = recipe.mealID;
-				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)", function(err, data){
+				console.log(recipeID, "this is ID", typeof recipeID, "type of", uid, "USER ID IS....")
+				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)", function(err, data){
 					if (err) {
 						console.log('error inserting userRecipes liked');
 					}

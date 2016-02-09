@@ -23,7 +23,7 @@ let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shopp
 export default class App extends React.Component {
 
   componentDidMount() {
-   base.syncState('shoppingCart' + this.state.id, {
+   base.syncState('user' + this.state.id + 'shoppingCart', {
       context: this,
       state: 'cart',
       asArray: true
@@ -40,23 +40,22 @@ export default class App extends React.Component {
     this.state = {
       //USER INFO
       id: this.props.location.state.id,
-      username: this.props.location.state.userData.email,
+      name: this.props.location.state.userData.email,
       // photo: this.state.location.
       currentView: this.props.location.state.route,
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
-        "Explore Recipes": "ExploreRecipes",
+        "Explore Recipes": "ExploreRecipes",        
+        "Sign Out": "SignIn",
         "Sign Up": "SignUp",
-        "Sign out": "SignIn",
         "PairChatRoom": "PairChatRoom",
         "Buy Recipes": "RecipesBuy",
         "My Recipes": "MyRecipes"
       },
 
-
-
       chosenRecipes: [],      
+
       cart: [],
 
       getTotal: () => {
@@ -69,6 +68,8 @@ export default class App extends React.Component {
       activeItem: "",
       activeItemId: "",
       activeProfId: "",
+      activeItemPrice: "",
+      activeImage: "",
 
       //NAV BAR
       open: false,
@@ -115,9 +116,26 @@ export default class App extends React.Component {
         this.setState({cart: cart, total: newTotal})
       },
 
-      openSocialModal: (element) => {
-        console.log(element, "the element in question is...")
-        this.setState({ isModalOpen: true, activeItem: element.name, activeItemId: element.id, activeProfId: element.profileid});        
+      addToCart: () => {
+       let recent = {          
+          recipeid: this.state.activeItemId,
+          name: this.state.activeItem,
+          price: this.state.activeItemPrice,
+          profileid: this.state.activeProfId
+        }
+        
+        console.log("the recent.....", recent)
+        this.setState({ cart: this.state.cart.concat(recent), recentItem: recent, isModalOpen: false})
+      },
+
+      addToLiked: () => {
+        this.state.recipesObj.liked.push(this.state.activeItemId)
+        this.setState({recipesObj: this.state.recipesObj})
+        this.state.saveMatch()
+      },
+
+      openSocialModal: (element) => {        
+        this.setState({ isModalOpen: true, activeItem: element.name, activeItemId: element.id, activeProfId: element.profileid, activeItemPrice: element.priceestimate, activeImage: element.image});        
       },
 
       orderCheckout: () => {
@@ -130,7 +148,9 @@ export default class App extends React.Component {
         }
 
         $.post('/foodbot/orders/' + this.state.id, order)
-          .done((result) => this.state.redirect('My Recipes'))
+          .done((result) => {
+            this.setState({cart: [], total: 0})
+            this.state.redirect('My Recipes')})
       },
 
       //PROFILE MAKE
@@ -205,7 +225,7 @@ export default class App extends React.Component {
             obj.img = currElement.image.replace('s90', 's300-c');
             obj.ingredients = currElement.ingredients;
             obj.cookingtime = currElement.cookingtime;
-            obj.price = 12;
+            obj.price = currElement.priceestimate;            
             return obj;
         });
           this.setState({recipes: r});
@@ -215,6 +235,12 @@ export default class App extends React.Component {
         this.state.setChosenRecipes(this.state.recipesObj.liked);
         $.post('/foodBot/meals/' + this.state.id, this.state.recipesObj)
         .done((result) => {
+          this.setState({
+            recipesObj: {
+              liked: [],
+              rejected: []
+            }
+          })
         })
         this.state.close();
       },
@@ -222,7 +248,7 @@ export default class App extends React.Component {
       goCheckout:() => {
         event.preventDefault();
         console.log("Go to checkout")
-        this.state.saveMatch
+        // this.state.saveMatch
         this.state.redirect("Buy Recipes")
       },
 
@@ -244,9 +270,8 @@ export default class App extends React.Component {
       },
       exploreRecipes: [],
 
+      
       //ROUTING LOGIC
-
-
       redirect: (text) => {
         if (this.state.currentView==="Swipe Recipes") {
           this.state.saveMatch();
@@ -338,10 +363,10 @@ export default class App extends React.Component {
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <Explore                        
+            className="myrecipe-container"
             id={this.state.id}
             getExploreRecipes={this.state.getExploreRecipes}
-            exploreRecipes={this.state.exploreRecipes}                              
-
+            exploreRecipes={this.state.exploreRecipes}                                          
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
@@ -349,11 +374,14 @@ export default class App extends React.Component {
           //Actions
           close ={this.state.close.bind(this)}                                                  
           isModalOpen={this.state.isModalOpen}
-          username={this.state.username}    
-
+          addToCart={this.state.addToCart.bind(this)}
+          addToLiked={this.state.addToLiked.bind(this)}
+          name={this.state.name}              
           activeItem={this.state.activeItem}
           activeItemId={this.state.activeItemId}
-          activeProfId={this.state.activeProfId}/>
+          activeProfId={this.state.activeProfId}
+          activeImage={this.state.activeImage}
+          activeItemPrice={this.state.activeItemPrice}/>
           </div>
       )
     }
@@ -365,6 +393,7 @@ export default class App extends React.Component {
             recipes={this.state.recipesObj.liked}
             cart={this.state.cart}
             total={this.state.total}
+            getTotal={this.state.getTotal.bind(this)}
             removeOrder={this.state.removeOrder}
             orderCheckout={this.state.orderCheckout.bind(this)}/>
         </div>

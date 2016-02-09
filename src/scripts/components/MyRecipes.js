@@ -28,7 +28,7 @@ export default class MyRecipes extends React.Component {
       }
     }
     this.state = {
-      currRecipeId: this.props.recipes[0].id,
+      currRecipeId: this.props.recipes[0].recipeid,
       uploadCount:0
     }
     this.increaseUploadCount = this.increaseUploadCount.bind(this);

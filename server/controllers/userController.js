@@ -10,6 +10,13 @@ module.exports = {
     res.send(req.session.user)
   },
 
+  endSession: function(req, res) {
+    console.log("session ending")
+    //Something to destroy a session
+    client.end()
+
+  },
+
   signup: function(req, res) {
     var client = new pg.Client(connectionString);
     client.connect();
@@ -128,6 +135,7 @@ module.exports = {
         //   });
         userQuery.on('end', function(data) {
           console.log("I got to the end of sign in")
+          client.end()
           res.send(allUserData)
          });
         }

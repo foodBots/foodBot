@@ -125,9 +125,6 @@ class ProfileMake extends React.Component {
       <div>
       <h3>Your Profile</h3>
         {this.renderProfUpdateForm()}
-        <RaisedButton
-          label="Open LeftNav"
-          onTouchTap={this.props.handleToggle}/>
       </div>
 
     )
