@@ -67,7 +67,7 @@ var counter = 0;
 
 		foodQ().then(function (yummlyRecipes) {
 			var addIngriedientToDB = function (item, recipeID) {
-				return new Promise (function (resolve, object) {
+				return new Promise (function (resolve, reject) {
 					request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
 						parseString(xml, function (err, result) {
 							if (err) {
@@ -98,6 +98,7 @@ var counter = 0;
 													ingredientID = data.rows[0].id
 													var addToRecipeIngredientsQuery = client.query("INSERT INTO RecipeIngriedients (ingredientid, recipeid) VALUES (" + ingredientID + ", " + recipeID + ")")
 													console.log("GOT HERE BRUHHH", ingredientID)
+													resolve();
 												}		// priceController.findPrice(item);
 											});
 
@@ -136,10 +137,11 @@ var counter = 0;
 			}
 			var insertRecipesIntoDB = function (recipe) {
 				var recipeID = saveRecipeIntoDB(recipe, function (recipeID) {
-					var arr = [1];
+					var arr = [];
 					recipe.ingredients.forEach(function(ingredient) {
 						arr.push(addIngriedientToDB(ingredient, recipeID))
 					})
+					console.log("arr", a)
 					Promise.all(arr).then(function () {
 						console.log("prmisealll working")
 						addRecipeEstimatedPrice(recipeID)
@@ -176,10 +178,8 @@ module.exports = {
 		// Instantiate User Allergies Array & Results
 		var userAllergies = [];
 		var recipeResults = [];
-		console.log(2)
 		// On row add allergies recieved from db to userAllergies
 		profileQuery.on("row", function (profileRow) {
-			console.log(3)
 			userAllergies = profileRow.allergies;
 			var totalMatches = 0;
 			// SELECT * FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = 1 ) AND (cookingtime = profileRow.cookingtime OR cookingtime = (profileRow.cookingtime - 1)
