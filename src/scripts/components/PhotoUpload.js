@@ -7,13 +7,12 @@ const djsConfig = {
   previewTemplate: ReactDOMServer.renderToStaticMarkup(
     <div className="dz-preview dz-file-preview">
       <div className="dz-details">
-        <img data-dz-thumbnail />
       </div>
       <div className="dz-progress"><span className="dz-upload" data-dz-uploadprogress></span></div>
       <div className="dz-error-message"><span data-dz-errormessage></span></div>
     </div>
   ),
-  dictDefaultMessage: 'Upload Photo'
+  dictDefaultMessage: ''
 }
 
 class PhotoUpload extends React.Component {
@@ -24,22 +23,24 @@ class PhotoUpload extends React.Component {
     };
     //change this to recipeId when integrated
     this.appendData = (file, xhr, formData) => {
-      formData.append('recipeId', 1);
+      formData.append('recipeId', this.props.recipeid);
     };
     //change this to props.userId when integrated
     this.componentConfig = {
       showFiletypeIcon: false,
-      postUrl: '/foodbot/photos/1',
+      postUrl: '/foodbot/photos/' + this.props.userid,
     };
     this.djsConfig = {
       uploadMultiple: false
     };
     this.eventHandlers = {
-      sending: this.appendData
+      sending: this.appendData,
+      success: this.props.increaseUploadCount
     }
 
   }
 
+  //this component is not rendered on screen, file upload is trigged via camera icon
   render() {
     return(
       <div >

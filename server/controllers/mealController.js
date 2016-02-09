@@ -17,7 +17,7 @@ module.exports = {
 		var uid = req.params.id;
 
 		// Create Query for all recipes user has created or seenRecipe
-		var userRecipesQuery = client.query("SELECT name, ingredients, image, rating, directionsurl, liked FROM Recipes INNER JOIN UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid="+uid+" AND liked=true;");
+		var userRecipesQuery = client.query("SELECT id, name, ingredients, image, rating, directionsurl, liked FROM Recipes INNER JOIN UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid="+uid+" AND liked=true;");
 		//TestQ2: Select name, ingredients, image, rating, directionsurl, liked from Recipes Inner Join UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid=17 AND liked=true;
 
 		// Instantiate User Recipes
@@ -28,10 +28,38 @@ module.exports = {
 			userRecipes.push(row);
 		});
 		userRecipesQuery.on("end", function () {
-			var sendData = {recipeView: userRecipes}
+			var sendData = {recipeView: userRecipes};
 			res.send(sendData);
 		});
 	},
+
+	retrieveMyRecipes : function (req, res){
+		makeConnect();
+		// Get User ID
+		var userid = req.params.id;
+
+		// Create Query for all recipes user has created or seenRecipe
+
+		var userRecipesQuery = client.query("select ur.profileid, ur.recipeid, r.name as recipeName, r.image as recipeImage, r.rating, u.name as userImage from userrecipes ur left outer join userphotos u on ur.recipeid=u.recipeid inner join recipes r on r.id=ur.recipeid where ur.profileid="+userid+" AND ur.liked=true");
+		//TestQ2: Select name, ingredients, image, rating, directionsurl, liked from Recipes Inner Join UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid=17 AND liked=true;
+
+		// Instantiate User Recipes
+		var userRecipes = [];
+
+		// Push all db userRecipes to userRecipes Array
+		userRecipesQuery.on("row", function (row) {
+			if (row.userimage) {
+				row.userimage = '/img/' + row.userimage;
+			}
+			userRecipes.push(row);
+		});
+		userRecipesQuery.on("end", function () {
+			var sendData = {recipeView: userRecipes}
+			console.log('data being sent back',sendData)
+			res.send(sendData);
+		});
+	},
+
 
 	addUserMeal : function (req, res){
 		makeConnect()
