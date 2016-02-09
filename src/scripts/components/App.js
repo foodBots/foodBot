@@ -112,7 +112,7 @@ export default class App extends React.Component {
         }
 
         $.post('/foodbot/orders/' + this.state.id, order)
-          .done((result) => this.state.redirect('/'))
+          .done((result) => this.state.redirect('My Recipes'))
       },
 
       //PROFILE MAKE

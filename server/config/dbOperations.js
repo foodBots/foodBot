@@ -48,7 +48,8 @@ module.exports = {
      'profileid int references Profiles(id) NOT NULL,' +
      'recipeid int references Recipes(id) NOT NULL,' +
      'created bool DEFAULT FALSE,' +
-     'liked bool NOT NULL' +
+     'liked bool NOT NULL,' +
+     'unique (profileid, recipeid)' +
      ')',
 
   // sql command for match join table
