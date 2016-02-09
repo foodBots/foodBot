@@ -14,6 +14,7 @@ import Rebase from 're-base'
 
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
+
 let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shoppingCart')
 
 
@@ -29,7 +30,10 @@ export default class App extends React.Component {
     })
   }
 
-  componentWillMount(){
+  componentWillMount(){    
+    console.log(localStorage.getItem('sessionUser'), "session userid");
+    console.log(localStorage.getItem('sessionName'), "session username");
+    console.log(localStorage.getItem('sessionPhoto'), "session photo");
     this.state.getTotal();
   }
 
@@ -38,8 +42,9 @@ export default class App extends React.Component {
 
     this.state = {
       //USER INFO
-      id: this.props.location.state.id,
-      username: this.props.location.state.userData.email,      
+      id: localStorage.getItem('sessionUser'),
+      username: localStorage.getItem('sessionName'),
+      photo: localStorage.getItem('sessionPhoto'),      
       chosenRecipes: [],      
       cart: [],
 
@@ -229,7 +234,7 @@ export default class App extends React.Component {
       exploreRecipes: [],
 
       //ROUTING LOGIC
-      currentView: this.props.location.state.route,
+      currentView: localStorage.getItem('sessionRoute'),
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",

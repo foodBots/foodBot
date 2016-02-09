@@ -13,17 +13,17 @@ var storage = multer.diskStorage({
 
 module.exports = {
   uploadPhotos: function (req, res) {
-    console.log('uploadPhotos controller', req.body, req.file);
-
+    console.log("1. establishing we get into photo upload")
     var client = new pg.Client(connectionString);
     client.connect();
     var userId = req.params.id;
     var sqlStr = "INSERT INTO UserPhotos (profileid, name, recipeid) VALUES (" + userId + "," + req.file.filename+","+req.body.recipeId+")";
-    console.log(sqlStr);
+
     var query = client.query("INSERT INTO UserPhotos (profileid, name, recipeid) VALUES (" + userId + ",'" + req.file.filename+"'," +req.body.recipeId+ ")", function(err, data){
       if(err) {
         console.log('error inserting photo', err);
       }
+      console.log("2. upload photos query is successful", req.file.filename)
       res.status(201).json(req.file.filename);
     });
     query.on('end', function() {
@@ -34,7 +34,7 @@ module.exports = {
     storage: storage
   }),
   getPhotos: function(req,res) {
-    console.log('getPhotos controller', req.body, req.file);
+    console.log('3. Within GetPhotos Container', req.body, req.file);
     var client = new pg.Client(connectionString);
     client.connect();
     var userId = req.params.id;
@@ -42,7 +42,7 @@ module.exports = {
        if(err) {
          console.log('error getting photos', err);
        }
-       console.log('user photos data', data);
+       console.log('4. Photos are done', data);
        res.status(200).json(data);
      });
      query.on('end', function() {

@@ -55,6 +55,7 @@ module.exports = {
       if (data.rowCount > 0) {
         var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
           console.log("update querrrry", data)
+          res.status(201);
         });
         res.sendStatus(201);
       } else {
@@ -68,9 +69,9 @@ module.exports = {
        });
       }
     });
-  	updateOrNewQuery.on('end', function() {
+    updateOrNewQuery.on('end', function() {
       console.log('ended?');
-      // next();
+
       client.end();
       // res.sendStatus(201);
     });

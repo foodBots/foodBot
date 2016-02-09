@@ -33,13 +33,14 @@ class SignIn extends React.Component {
     this.refs.signinForm.reset();
     // post email and password
     $.post('/foodBot/auth/signin', user).done((result) => {
+      console.log(result, "result is....")
       user = result;
       user.route = 'Swipe Recipes';
       this.props.history.pushState(user, '/')
     })
     .fail((error) => {
       if(error.status === 400) {
-        alert("NOOOO")
+        alert("Sorry. wrong password. You should fix me too")
         this.setState({error:error.responseText});
         // console.log(error.responseText);
         // this.refs.signupForm.reset();

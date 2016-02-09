@@ -17,7 +17,6 @@ import ProfileMake from './scripts/components/ProfileMake'
 import RecipeChoose from './scripts/components/RecipeChoose'
 import PhotoUpload from './scripts/components/PhotoUpload'
 
-
 //incl API key
 const routes = (
   <Router history={createHistory()}>

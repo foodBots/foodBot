@@ -15,6 +15,8 @@ var auth = require('./authOperations.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var keys = require('./apiKeys.js');
 var passport = require('passport');
+var LocalStorage = require('node-localstorage').LocalStorage;
+
 
 module.exports = function(app, express) {
   // app.get('/', auth.checkUser);30
@@ -36,6 +38,8 @@ module.exports = function(app, express) {
   app.delete('/foodBot/match/:id', /*auth.checkUser,*/ matchController.deleteMatch);
 
   app.get('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.retrieveOneUser);
+
+
   app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
   app.put('/foodBot/profile/:id', profileController.updateUserProfile);
   app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
@@ -47,13 +51,11 @@ module.exports = function(app, express) {
   app.post('/foodBot/orders/:userid', ordersController.createOrder);
 
 
-  passport.serializeUser(function(user, done) {
-    console.log('serialze', user);
+  passport.serializeUser(function(user, done) {    
     done(null, user.email);
   });
 
   passport.deserializeUser(function(user, done) {
-    console.log('deserialize', user);
     done(null, user);
   });
 
@@ -84,9 +86,19 @@ module.exports = function(app, express) {
             id: userData.id,
             photos: req.user.photos[0].value
           }
+        
         req.DBid = userObj.id;
         req.session.user = userObj;
-        console.log('req DBid',req.session.user);
+
+        if (typeof localStorage === "undefined" || localStorage === null) {
+          localStorage = new LocalStorage('./scratch');
+        }
+
+        localStorage.clear();
+        localStorage.setItem('sessionUser', userData.id);
+        localStorage.setItem('sessionName', userObj.name);
+        localStorage.setItem('sessionPhoto', userObj.photos);
+        localStorage.setItem('sessionRoute', "Swipe Recipes")
         res.redirect('/');
         }
       });

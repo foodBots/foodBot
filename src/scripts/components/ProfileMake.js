@@ -128,14 +128,6 @@ class ProfileMake extends React.Component {
         <RaisedButton
           label="Open LeftNav"
           onTouchTap={this.props.handleToggle}/>
-         <LeftNav
-          docked={false}
-          width={200}
-          open={this.props.open}
-          onRequestChange={open => this.props.handleToggle}>
-          <MenuItem onTouchTap={this.props.handleClose}>Close</MenuItem>
-          <MenuItem onTouchTap={this.props.handleClose}>Close</MenuItem>
-        </LeftNav>
       </div>
 
     )
@@ -143,3 +135,11 @@ class ProfileMake extends React.Component {
 }
 
 export default ProfileMake;
+        //  <LeftNav
+        //   docked={false}
+        //   width={200}
+        //   open={this.props.open}
+        //   onRequestChange={open => this.props.handleToggle}>
+        //   <MenuItem onTouchTap={this.props.handleClose}>Close</MenuItem>
+        //   <MenuItem onTouchTap={this.props.handleClose}>Close</MenuItem>
+        // </LeftNav>
