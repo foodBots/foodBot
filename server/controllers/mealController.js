@@ -76,13 +76,20 @@ module.exports = {
 		// Create Insert Meal Query
 		if (rejected) {
 			rejected.forEach(function (recipeID) {
-				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)") ;
+				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)", function(err, data){
+					if (err) {
+						console.log('error inserting userRecipes rejected');
+					}
+				});
 			});
-		}
-		if (liked) {
+		}		if (liked) {
 			liked.forEach(function (recipeID) {
 				// var recipeID = recipe.mealID;
-				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)") ;
+				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)", function(err, data){
+					if (err) {
+						console.log('error inserting userRecipes liked');
+					}
+				}) ;
 			});
 		}
 	}

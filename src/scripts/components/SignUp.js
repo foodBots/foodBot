@@ -84,10 +84,11 @@ class SignUp extends React.Component {
             user.cookingTime = this.state.prep.value;
             user.foodie = this.state.chosenType === "foodie";
             user.allergies = this.state.allergies
+            console.log('created user', user)
             this.props.history.pushState(user, '/');
           })
           .fail((error) =>{
-            console.log('error creating profile');
+            console.log('error creating profile', error);
           })
         })
         .fail((error) => {

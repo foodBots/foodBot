@@ -31,7 +31,7 @@ module.exports = function(app, express) {
   app.delete('/foodBot/match/:id', /*auth.checkUser,*/ matchController.deleteMatch);
 
   app.get('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.retrieveOneUser);
-  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile, matchController.createMatch);
+  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
   app.put('/foodBot/profile/:id', profileController.updateUserProfile);
   app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
 

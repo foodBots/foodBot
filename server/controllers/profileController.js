@@ -56,16 +56,23 @@ module.exports = {
         var updateQuery = client.query("UPDATE Profiles SET (cookingTime, foodie, diet) = ("+cookingTime+","+foodie+",'"+diet+"') WHERE id = "+userId+";", function(err, data) {
           console.log("update querrrry", data)
         });
-        res.status(201);
+        res.sendStatus(201);
       } else {
   	   var newQuery = client.query("INSERT INTO Profiles (id, cookingTime, allergies, foodie, diet) VALUES ("+userId+","+cookingTime+",'{"+allergies+"}',"+foodie+",'"+diet+"')", function(err, data) {
-        console.log("MAKEA DUH NEW QUERYRRYRYRY", data, "error making data", err);
+        if (err) {
+          console.log('error inserting profile', err);
+          res.sendStatus(403);
+        }
+        console.log("MAKEA DUH NEW QUERYRRYRYRY", data);
+        res.sendStatus(201);
        });
       }
     });
   	updateOrNewQuery.on('end', function() {
       console.log('ended?');
-      next();
+      // next();
+      client.end();
+      // res.sendStatus(201);
     });
   },
   retrieveAllUsers: function(req, res, next) {

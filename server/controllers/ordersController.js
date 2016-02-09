@@ -20,16 +20,16 @@ module.exports = {
       req.body.recipes.forEach(function(recipe, index) {
         // console.log('current recipe id', recipe);
         if(index === req.body.recipes.length-1) {
-          s += "(" + data.rows[0].id + "," + recipe.recipeid+","+recipe.total+")";
+          s += "(" + data.rows[0].id + "," + recipe.id+","+recipe.price+")";
         } else {
-          s += "(" + data.rows[0].id + "," + recipe.recipeid+","+recipe.total+"),";
+          s += "(" + data.rows[0].id + "," + recipe.id+","+recipe.price+"),";
         }
       });
 
       ////FLIP RECIPE ID to COOKED/BOUGHT
 
 
-      // console.log('sql str', s);
+      console.log('sql str', s);
       var recipeCostQuery = client.query(s, function(err, data) {
         if (err) {
           console.log('error inserting recipeCost', err);
