@@ -14,7 +14,8 @@ module.exports = {
       } else if (data.rows.length > 0) {
         res.status(400).json('User with that email already exists');
       } else {
-        var createUserQuery = client.query("INSERT INTO Users (password, email, name) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"','"+req.body.name+"') RETURNING id;", function(err, newData) {
+        var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, newData) {
+          console.log(newData)
           if(err) {
             console.log('error creating user', err);
             res.status(500).json("We're sorry, an error has occurred");
@@ -23,7 +24,6 @@ module.exports = {
             id: newData.rows[0].id,
             email: newData.rows[0].email
           }
-          console.log(newData)
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {

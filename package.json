@@ -111,6 +111,7 @@
     "react-flexbox": "^3.0.0",
     "react-flexbox-grid": "^0.9.4",
     "request": "^2.69.0",
-    "url-loader": "^0.5.7"
+    "url-loader": "^0.5.7",
+    "xml2js": "^0.4.16"
   }
 }
