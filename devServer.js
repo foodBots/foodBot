@@ -1,6 +1,7 @@
 var path = require('path');
 var express = require('express');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 
 //Extras
 var bodyParser = require('body-parser');
@@ -18,6 +19,7 @@ var app = express();
 //Body Parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(session({
   secret: 'FOOD1234567890BOT',
   resave: false,
@@ -27,6 +29,7 @@ app.use(session({
 app.use( passport.initialize());
 // store passport authentication in the session
 app.use( passport.session());
+// app.use(cors());
 
 
 //Hot Reloading
@@ -54,7 +57,7 @@ app.listen(3000, function(err) {
     return;
   }
 
-  console.log('Listening at http://postgres@localhost:3000');
+  console.log('Listening at http://localhost:3000');
 });
 
 //postgres set up
@@ -96,6 +99,6 @@ var seedRecipeSourcesTable = client.query("SELECT * from RecipeSources", db.chec
 var createRecipeSearchTerms = client.query(db.createRecipeSearchTerms);
 var seedRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
 
-// client.end(); 
+// client.end();
 
 module.exports = app;

@@ -23,14 +23,44 @@ let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shopp
 export default class App extends React.Component {
 
   componentDidMount() {
-   base.syncState('user' + this.state.id + 'shoppingCart', {
+    base.syncState('user' + this.state.id + 'shoppingCart', {
       context: this,
       state: 'cart',
       asArray: true
     })
+    //get init user req session.
+    $.get('/foodBot/auth/signin').done((result)=> {
+      // console.log('init results', result);
+      const returnedId = result.id;
+      //initialize profile
+      this.state.id = returnedId;
+      this.state.currentView = 'Swipe Recipes';
+      // $.post('')
+      // const prof = {
+      //   diet: '',
+      //   cookingTime: 1,
+      //   foodie: true,
+      //   allergies: []
+      // };
+      // $.post('/foodBot/profile/'+ returnedId, prof)
+      // .done((result) => {
+      //   // user.route = 'Swipe Recipes';
+      //   // user.diet = this.state.diet;
+      //   // user.cookingTime = this.state.prep.value;
+      //   // user.foodie = this.state.chosenType === "foodie";
+      //   // user.allergies = this.state.allergies
+      //   console.log('retrieved user', result)
+      // })
+      // .fail((error) =>{
+      //   console.log('error creating profile', error);
+      // })
+    })
+    .fail((error) => {
+      console.log('error getting user session', error);
+    })
   }
 
-  componentWillMount(){    
+  componentWillMount(){
     this.state.getTotal();
   }
 
@@ -39,14 +69,16 @@ export default class App extends React.Component {
 
     this.state = {
       //USER INFO
-      id: this.props.location.state.id,
-      name: this.props.location.state.userData.email,
+      id: 0,
+      name: '',
       // photo: this.state.location.
-      currentView: this.props.location.state.route,
+
+      //ROUTING LOGIC
+      currentView: 'Profile Settings',
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
-        "Explore Recipes": "ExploreRecipes",        
+        "Explore Recipes": "ExploreRecipes",
         "Sign Out": "SignIn",
         "Sign Up": "SignUp",
         "PairChatRoom": "PairChatRoom",
@@ -54,8 +86,7 @@ export default class App extends React.Component {
         "My Recipes": "MyRecipes"
       },
 
-      chosenRecipes: [],      
-
+      chosenRecipes: [],
       cart: [],
 
       getTotal: () => {
@@ -86,10 +117,10 @@ export default class App extends React.Component {
       isModalOpen: false,
       close: () => {
         this.setState({ isModalOpen: false });
-      },      
-      
-      showModal: (element) => {        
-        let recent = {          
+      },
+
+      showModal: (element) => {
+        let recent = {
           recipeid: element.id,
           name: element.name,
           image: element.img,
@@ -117,14 +148,14 @@ export default class App extends React.Component {
       },
 
       addToCart: () => {
-       let recent = {          
+       let recent = {
           recipeid: this.state.activeItemId,
           name: this.state.activeItem,
           price: this.state.activeItemPrice,
           image: this.state.activeImage,
           profileid: this.state.activeProfId
         }
-        
+
         console.log("the recent.....", recent)
         this.setState({ cart: this.state.cart.concat(recent), recentItem: recent, isModalOpen: false})
       },
@@ -135,8 +166,8 @@ export default class App extends React.Component {
         this.state.saveMatch()
       },
 
-      openSocialModal: (element) => {        
-        this.setState({ isModalOpen: true, activeItem: element.name, activeItemId: element.id, activeProfId: element.profileid, activeItemPrice: element.priceestimate, activeImage: element.image});        
+      openSocialModal: (element) => {
+        this.setState({ isModalOpen: true, activeItem: element.name, activeItemId: element.id, activeProfId: element.profileid, activeItemPrice: element.priceestimate, activeImage: element.image});
       },
 
       orderCheckout: () => {
@@ -198,7 +229,7 @@ export default class App extends React.Component {
 
         $.ajax({
           url: '/foodBot/profile/'+id,
-          type: 'PUT',
+          type: 'POST',
           data: prof
         }).done((result)=> {
           this.state.redirect("Swipe Recipes")
@@ -228,7 +259,7 @@ export default class App extends React.Component {
             obj.img = currElement.image.replace('s90', 's300-c');
             obj.ingredients = currElement.ingredients;
             obj.cookingtime = currElement.cookingtime;
-            obj.price = currElement.priceestimate;            
+            obj.price = currElement.priceestimate;
             return obj;
         });
           this.setState({recipes: r});
@@ -274,8 +305,7 @@ export default class App extends React.Component {
       },
       exploreRecipes: [],
 
-      
-      //ROUTING LOGIC
+
       redirect: (text) => {
         if (this.state.currentView==="Swipe Recipes") {
           this.state.saveMatch();
@@ -343,25 +373,25 @@ export default class App extends React.Component {
       )
     }
      //EXPLORE RECIPES FROM OTHER USERS
-    else if (this.state.componentRoute[this.state.currentView] === "ExploreRecipes") {      
+    else if (this.state.componentRoute[this.state.currentView] === "ExploreRecipes") {
       return (
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
-          <Explore                        
+          <Explore
             className="myrecipe-container"
             id={this.state.id}
             getExploreRecipes={this.state.getExploreRecipes}
-            exploreRecipes={this.state.exploreRecipes}                                          
+            exploreRecipes={this.state.exploreRecipes}
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
           <SoMoWindow
           //Actions
-          close ={this.state.close.bind(this)}                                                  
+          close ={this.state.close.bind(this)}
           isModalOpen={this.state.isModalOpen}
           addToCart={this.state.addToCart.bind(this)}
           addToLiked={this.state.addToLiked.bind(this)}
-          name={this.state.name}              
+          name={this.state.name}
           activeItem={this.state.activeItem}
           activeItemId={this.state.activeItemId}
           activeProfId={this.state.activeProfId}
@@ -389,7 +419,6 @@ export default class App extends React.Component {
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <MyRecipes
-            recipes={this.props.location.state.recipesData}
             chosenRecipes = {this.state.chosenRecipes}
             userid={this.state.id}
             getChosenRecipes = {this.state.getChosenRecipes}/>
@@ -401,6 +430,7 @@ export default class App extends React.Component {
     }
   }
 }
+            // recipes={this.props.location.state.recipesData}
 // UPDATE PROFILE
 //     else if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
 //      return (

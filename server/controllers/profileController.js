@@ -34,7 +34,8 @@ module.exports = {
     });
     updateQuery.on('end', function() {
       console.log('ended update');
-      next();
+      //next();
+      client.end();
     });
   },
 

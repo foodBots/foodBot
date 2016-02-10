@@ -15,23 +15,25 @@ var auth = require('./authOperations.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var keys = require('./apiKeys.js');
 var passport = require('passport');
-var LocalStorage = require('node-localstorage').LocalStorage;
-
+// var LocalStorage = require('node-localstorage').LocalStorage;
 
 module.exports = function(app, express) {
 
-  app.get('/', userController.checkCreds);
-  
+  //app.get('/', userController.checkCreds);
 
   app.post('/foodBot/auth/signup', userController.signup);
-  app.get('/foodBot/auth/signin', userController.endSession);
-  
+  // app.get('/foodBot/auth/signin', userController.endSession);
+
   app.post('/foodBot/auth/signin', userController.signin);
   app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
 
+  app.get('/foodBot/auth/signin', function(req, res) {
+    console.log('initial user after signin', req.session.user);
+    res.json(req.session.user);
+  });
 
   app.get('/foodBot/auth/logout', userController.logout);
-  app.get('/foodBot/', userController.checkCreds );
+  // app.get('/foodBot/', userController.checkCreds );
 
   app.get('/foodBot/recipes/:id', /*auth.checkUser,*/ recipeController.retrieveSuggestedRecipes);
 
@@ -58,11 +60,13 @@ module.exports = function(app, express) {
   app.post('/foodBot/orders/:userid', ordersController.createOrder);
 
 
-  passport.serializeUser(function(user, done) {    
+  passport.serializeUser(function(user, done) {
+    // console.log('serialze', user);
     done(null, user.email);
   });
 
   passport.deserializeUser(function(user, done) {
+    // console.log('deserialize', user);
     done(null, user);
   });
 
@@ -83,6 +87,7 @@ module.exports = function(app, express) {
   app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/foodBot/auth/google' }),
     function(req, res) {
+      // console.log('got here');
       var userObj = {};
       userController.storeUser(req.user, function(err, userData) {
         if (err) {
@@ -94,11 +99,15 @@ module.exports = function(app, express) {
             photos: req.user.photos[0].value,
             route: "Swipe Recipes"
           }
-        
+
         req.DBid = userObj.id;
         req.session.user = userObj;
 
+        console.log('session id',req.session.id, 'userid', req.DBid, 'req.session.user', req.session.user);
+        // res.status(200).json(userObj);
+        // res.redirect('/?user=' + userObj.id);
         res.redirect('/');
+        // next();
         }
       });
     });

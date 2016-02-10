@@ -10,12 +10,11 @@ module.exports = {
     res.send(req.session.user)
   },
 
-  endSession: function(req, res) {
-    console.log("session ending")
-    //Something to destroy a session
-    client.end()
-
-  },
+  // endSession: function(req, res) {
+  //   console.log("session ending")
+  //   //Something to destroy a session
+  //   client.end()
+  // },
 
   signup: function(req, res) {
     var client = new pg.Client(connectionString);
@@ -27,20 +26,19 @@ module.exports = {
       } else if (data.rows.length > 0) {
         res.status(400).json('User with that email already exists');
       } else {
+        var userData ={};
         var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, newData) {
           console.log(newData)
           if(err) {
             console.log('error creating user', err);
             res.status(500).json("We're sorry, an error has occurred");
           }
-          var userData = {
-            id: newData.rows[0].id,
-            email: newData.rows[0].email
-          }
+          userData.id = newData.rows[0].id;
+          userData.email = newData.rows[0].email;
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {
-          auth.createSession(req, res, req.body.email)
+          auth.createSession(req, res, userData);
         });
       }
     });
@@ -134,9 +132,11 @@ module.exports = {
         //     matchRec.push(data)
         //   });
         userQuery.on('end', function(data) {
-          console.log("I got to the end of sign in")
-          client.end()
-          res.send(allUserData)
+          console.log("I got to the end of sign in");
+          client.end();
+          auth.createSession(req, res, allUserData);
+          // req.session.user = allUserData;
+          res.send(allUserData);
          });
         }
       });

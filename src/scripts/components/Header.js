@@ -42,7 +42,7 @@ export default class Header extends React.Component {
         <MenuItem primaryText="Explore Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="Buy Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
         <MenuItem primaryText="My Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="Sign out" href="/signin" />
+        <MenuItem primaryText="Sign out" href="/foodBot/auth/logout" />
       </IconMenu>}/>
     </div>
 

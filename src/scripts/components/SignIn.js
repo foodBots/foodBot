@@ -23,6 +23,7 @@ class SignIn extends React.Component {
     this.clearError = this.clearError.bind(this);
   }
 
+
   signIn(e) {
     // injectTapEventPlugin();
     e.preventDefault();
