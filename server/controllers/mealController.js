@@ -37,6 +37,7 @@ module.exports = {
 	},
 
 	retrieveUserMeals : function (req, res){
+		console.log("retrieving user meals")
 		makeConnect();
 		// Get User ID
 		var uid = req.params.id;
@@ -61,6 +62,7 @@ module.exports = {
 	},
 
 	retrieveMyRecipes : function (req, res){
+		console.log("retrieving MY meals")
 		makeConnect();
 		// Get User ID
 		var userid = req.params.id;
@@ -82,50 +84,41 @@ module.exports = {
 		});
 		userRecipesQuery.on("end", function () {
 			var sendData = {recipeView: userRecipes}
-			console.log('data being sent back',sendData)
-			res.send(sendData);
+			res.send(sendData)
 			client.end();
 		});
 	},
 
 
-	addUserMeal : function (req, res) {
+	addUserMeal: function (req, res) {
 		makeConnect();
 		var uid = req.params.id;
-		var rejected = req.body.rejected;
-		var liked = req.body.liked;
+		var rejected = req.body.rejected || [];
+		var liked = req.body.liked || [];
+
+		//note: if remove happens, you need to slice it off in the client side
 
 		// In case reject passed as string: '[1,2]' instead of array
 		if (typeof rejected === "string") {
 			rejected = JSON.parse(rejected);
 			liked = JSON.parse(liked);
-		}
-
-		// Create Insert Meal Query
-		if (rejected) {
-			rejected.forEach(function (recipeID) {
-				var addRejectedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)", function(err, data){
-					if (err) {
-						console.log('error inserting userRecipes rejected');
-					}
-				});
-				addRejectedQuery.on('end', function() {
-					client.end();
-				});
-			});
-		} if (liked) {
-			liked.forEach(function (recipeID) {
-				// var recipeID = recipe.mealID;
-				console.log(recipeID, "this is ID", typeof recipeID, "type of", uid, "USER ID IS....")
-				var addLikedQuery = client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)", function(err, data){
-					if (err) {
-						console.log('error inserting userRecipes liked');
-					}
-				});
-				addLikedQuery.on('end', function() {
-					client.end();
-				});
-			});
-		}
+		}		
+		rejected.forEach(function(recipeID) {
+			client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)", function(err, done) {
+				if (err) {"reject fail"}
+				else {
+					console.log("reject success")
+				}
+			})
+		})
+		liked.forEach(function(recipeID) {
+			client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)", function(err, data){
+				if (err) {"success fail"}
+				else {
+					console.log("success success")
+				}
+			})
+		})
+		res.sendStatus(201)
 	}
-};
+}

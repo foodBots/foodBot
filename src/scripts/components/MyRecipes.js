@@ -53,10 +53,7 @@ export default class MyRecipes extends React.Component {
     console.log(element.name, element.recipeid)
     this.setState({currRecipeId: element.recipeid});
     $('.dz-default').trigger('click');
-    //upload photo
   }
-
-
 
   render() {
     return (
