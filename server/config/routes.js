@@ -25,7 +25,10 @@ module.exports = function(app, express) {
   // app.get('/foodBot/auth/signin', userController.endSession);
 
   app.post('/foodBot/auth/signin', userController.signin);
-  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
+  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile, function(req,res) {
+    console.log('redirect after adding profile');
+    res.redirect('/');
+  });
 
   app.get('/foodBot/auth/signin', function(req, res) {
     console.log('initial user after signin', req.session.user);
@@ -103,7 +106,7 @@ module.exports = function(app, express) {
         req.DBid = userObj.id;
         req.session.user = userObj;
 
-        console.log('session id',req.session.id, 'userid', req.DBid, 'req.session.user', req.session.user);
+        // console.log('session id',req.session.id, 'userid', req.DBid, 'req.session.user', req.session.user);
         // res.status(200).json(userObj);
         // res.redirect('/?user=' + userObj.id);
         res.redirect('/');

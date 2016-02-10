@@ -38,13 +38,16 @@ module.exports = {
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {
-          auth.createSession(req, res, userData);
+          client.end();
+          // auth.createSession(req, res, userData);
+          // console.log('created user session during signup', req.session);
+          // res.redirect('/');
         });
       }
     });
   },
   storeUser: function(profile, next) {
-       var userObj = {
+    var userObj = {
       name: profile.displayName,
       email: profile.email,
       photo: profile.photos[0].value,
@@ -136,6 +139,7 @@ module.exports = {
           client.end();
           auth.createSession(req, res, allUserData);
           // req.session.user = allUserData;
+          console.log('created user session', req.session);
           res.send(allUserData);
          });
         }
