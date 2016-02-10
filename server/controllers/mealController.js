@@ -19,16 +19,16 @@ module.exports = {
 		var getFoodieStatus = function(id) {
 			return new Promise(function(resolve, reject) {
 				console.log("in the promise")
-				client.query("SELECT foodie from profiles where id="+id+";", function(err, data) {					
+				client.query("SELECT foodie from profiles where id="+id+";", function(err, data) {
 					foodie = data.rows[0].foodie
 					if (foodie === true) {foodie = "true"}
 						else {foodie = false}
-						console.log("2. foodie = ", foodie)			
+						console.log("2. foodie = ", foodie)
 					resolve(foodie)
-				})				
+				})
 			})
 		}
-		getFoodieStatus(uid).then(function(foodie) {			
+		getFoodieStatus(uid).then(function(foodie) {
 			client.query("SELECT recipes.id, recipes.priceestimate, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked FROM recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) WHERE liked=true AND created=true AND foodie="+foodie+"", function(err, data) {
 				res.send(data.rows)
 				client.end();
@@ -56,6 +56,7 @@ module.exports = {
 		userRecipesQuery.on("end", function () {
 			var sendData = {recipeView: userRecipes};
 			res.send(sendData);
+			client.end();
 		});
 	},
 
@@ -83,20 +84,21 @@ module.exports = {
 			var sendData = {recipeView: userRecipes}
 			console.log('data being sent back',sendData)
 			res.send(sendData);
+			client.end();
 		});
 	},
 
 
-	addUserMeal : function (req, res){
-		makeConnect()
+	addUserMeal : function (req, res) {
+		makeConnect();
 		var uid = req.params.id;
 		var rejected = req.body.rejected;
 		var liked = req.body.liked;
 
 		// In case reject passed as string: '[1,2]' instead of array
 		if (typeof rejected === "string") {
-			rejected = JSON.parse(rejected)
-			liked = JSON.parse(liked)
+			rejected = JSON.parse(rejected);
+			liked = JSON.parse(liked);
 		}
 
 		// Create Insert Meal Query
@@ -107,6 +109,9 @@ module.exports = {
 						console.log('error inserting userRecipes rejected');
 					}
 				});
+				addRejectedQuery.on('end', function() {
+					client.end();
+				});
 			});
 		} if (liked) {
 			liked.forEach(function (recipeID) {
@@ -116,7 +121,10 @@ module.exports = {
 					if (err) {
 						console.log('error inserting userRecipes liked');
 					}
-				}) ;
+				});
+				addLikedQuery.on('end', function() {
+					client.end();
+				});
 			});
 		}
 	}

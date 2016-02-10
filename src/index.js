@@ -21,13 +21,11 @@ import PhotoUpload from './scripts/components/PhotoUpload'
 const routes = (
   <Router history={createHistory()}>
     <Route path="/" component={App}/>
-
     <Route path="/signup" component={SignUp}/>
     <Route path="/signin" component={SignIn}/>
     <Route path="/signout" component={SignIn}/>
     <Route path="/header" component={Header}/>
     <Route path="/photos" component={PhotoUpload}/>
-    <Route path="/:user" component={App}/>
     <Route path="*" component={NotFound}/>
 
   </Router>

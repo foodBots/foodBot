@@ -15,30 +15,25 @@ var auth = require('./authOperations.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var keys = require('./apiKeys.js');
 var passport = require('passport');
-var LocalStorage = require('node-localstorage').LocalStorage;
-
+// var LocalStorage = require('node-localstorage').LocalStorage;
 
 module.exports = function(app, express) {
 
-  app.get('/', userController.checkCreds);
-
+  //app.get('/', userController.checkCreds);
 
   app.post('/foodBot/auth/signup', userController.signup);
-  app.get('/foodBot/auth/signin', userController.endSession);
+  // app.get('/foodBot/auth/signin', userController.endSession);
 
   app.post('/foodBot/auth/signin', userController.signin);
-<<<<<<< 1fa11ea14da4b27a7ddc684c0cf1d7bb91013398
   app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
 
-=======
   app.get('/foodBot/auth/signin', function(req, res) {
-    console.log(req.session.user);
+    console.log('initial user after signin', req.session.user);
     res.json(req.session.user);
   });
->>>>>>> user authentication with google auth
 
   app.get('/foodBot/auth/logout', userController.logout);
-  app.get('/foodBot/', userController.checkCreds );
+  // app.get('/foodBot/', userController.checkCreds );
 
   app.get('/foodBot/recipes/:id', /*auth.checkUser,*/ recipeController.retrieveSuggestedRecipes);
 

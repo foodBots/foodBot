@@ -89,7 +89,7 @@ var getRecipesFromYummly = function (uid) {
 							else {
 								// Pick a better one than the first
 								var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
-								var index = productList.length > 5 ? 5 : productList.length-1;
+								var index = productList.length > 5 ? 4 : productList.length-1;
 								// console.log("PRODUCT LIST IN REQ", productList);
 								var choice = productList[index];
 

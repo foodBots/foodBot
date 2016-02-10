@@ -35,7 +35,7 @@ export default class App extends React.Component {
       //initialize profile
       this.state.id = returnedId;
       this.state.currentView = 'Swipe Recipes';
-      $.post('')
+      // $.post('')
       // const prof = {
       //   diet: '',
       //   cookingTime: 1,
@@ -74,7 +74,7 @@ export default class App extends React.Component {
       // photo: this.state.location.
 
       //ROUTING LOGIC
-      currentView: this.props.location.state.route,
+      currentView: 'Profile Settings',
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
