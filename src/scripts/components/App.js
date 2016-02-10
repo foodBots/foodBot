@@ -438,7 +438,22 @@ export default class App extends React.Component {
           <MyRecipes
             chosenRecipes = {this.state.chosenRecipes}
             userid={this.state.id}
+            showModal={this.state.showModal.bind(this)}
             getChosenRecipes = {this.state.getChosenRecipes}/>
+          <Subtotal
+            //Actions
+            showModal = {this.state.showModal.bind(this)}
+            saveMatch = {this.state.saveMatch.bind(this)}
+            close ={this.state.close.bind(this)}
+            goCheckout = {this.state.goCheckout.bind(this)}
+            redirect = {this.state.redirect.bind(this)}
+
+            //Props
+            isModalOpen={this.state.isModalOpen}
+            recentItem = {this.state.recentItem}
+            removeFromCart = {this.state.removeFromCart}
+            cart = {this.state.cart}
+            total={this.state.total}/>
         </div>
       )
     }
