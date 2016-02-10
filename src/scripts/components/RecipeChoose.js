@@ -45,14 +45,12 @@ export default class Recipe extends React.Component {
   }
 
   next(element) {
-    this.likeOrReject(element.id, false);
-    this.props.recipes.pop();
+    this.likeOrReject(element.id, false);    
     this.refs.ReactSwipe.swipe.next()
   }
 
   yes (element) {
     this.likeOrReject(element.id, true);
-    this.props.recipes.pop()    
     this.refs.ReactSwipe.swipe.next()
   }
 
