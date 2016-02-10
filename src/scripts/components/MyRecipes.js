@@ -32,7 +32,7 @@ export default class MyRecipes extends React.Component {
       }
     }
     this.state = {
-      currRecipeId: this.props.recipes[0].recipeid,
+      currRecipeId: 0,
       uploadCount:0
     }
     this.increaseUploadCount = this.increaseUploadCount.bind(this);
@@ -54,19 +54,9 @@ export default class MyRecipes extends React.Component {
     this.setState({currRecipeId: element.recipeid});
     $('.dz-default').trigger('click');
     //upload photo
-
-    //query db again to get new photos after photo uploaded
-    // setTimeout(()=>{
-    //   this.props.getChosenRecipes(this.props.userid);
-    // }, 10000)
   }
 
 
-
-//Display "my recipes" from and allow photo upload
-          /* onTouchTap={this.handleTouchTap.bind(this, tile)}
-          style={this.gridStyles}
-          */
 
   render() {
     return (

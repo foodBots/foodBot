@@ -19,9 +19,6 @@ var searchTerms = require('./searchTermsController.js');
 var parseString = require('xml2js').parseString;
 var client = new pg.Client(connectionString);
 
-
-
-
 	// getRecipesFromEdaman = function (){
 	// 	request("https://api.edamam.com/search?&&app_id=" + apiKeys.edamam.id + "&app_key=" + apiKeys.edamam.key + "", function (err, data){
 	// 		console.log(JSON.parse(data.body).hits)
@@ -69,7 +66,7 @@ var getRecipesFromYummly = function (uid) {
               var foodPage = result.rows[0].page;
               foodPage+= 1;
                 request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
-                  if (err) {console.log('Error in request to edemam', err);} 
+                  if (err) {console.log('Error in request to edemam', err);}
                   else {
                     client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPage + "WHERE ID = " + randomSearchQuery + ";")
                     resolve(JSON.parse(response.body).hits)
@@ -108,7 +105,7 @@ var getRecipesFromYummly = function (uid) {
 											// console.log("GroceryPrices result:", productData);
 											var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description, groceryid) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "'," + groceryid + ") RETURNING id;", function (err, data) {
 												if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
-												
+
 												else {
 													ingredientID = data.rows[0].id
 													var addToRecipeIngredientsQuery = client.query("INSERT INTO RecipeIngriedients (ingredientid, recipeid) VALUES (" + ingredientID + ", " + recipeID + ")")
@@ -124,7 +121,7 @@ var getRecipesFromYummly = function (uid) {
 							}
 						});
 					})
-					
+
 				})
 			};
 
@@ -160,7 +157,7 @@ var getRecipesFromYummly = function (uid) {
 					Promise.all(arr).then(function () {
 						console.log(recipeID, "2.inside the promise and trying to do the thing where I add recipeprice")
 						addRecipeEstimatedPrice(recipeID)
-					})			
+					})
 				})
 				// var functionsArr = [];
 			}
@@ -172,11 +169,11 @@ var getRecipesFromYummly = function (uid) {
 	}
 
 module.exports = {
-	retrieveSuggestedRecipes: function (req, res) {	
+	retrieveSuggestedRecipes: function (req, res) {
 		var client = new pg.Client(connectionString);
 		client.connect();
 		// Get User ID & amt of recipes
-		var uid = parseInt(req.params.id);		
+		var uid = parseInt(req.params.id);
 		var amtOfRecipes = req.body.amount || 20;
 
 		// Query allergies for User and Recipes
@@ -218,7 +215,7 @@ module.exports = {
 
 			foodQuery.on("end", function (){
 				var sendData = {recipes: recipeResults }
-				// console.log("sending this thingy:",sendData)	
+				// console.log("sending this thingy:",sendData)
 				res.status(200).json(sendData);
 				var lowOnViableRecipes = 100;
 				if (totalMatches < lowOnViableRecipes) {

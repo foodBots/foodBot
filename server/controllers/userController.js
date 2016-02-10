@@ -136,6 +136,7 @@ module.exports = {
         userQuery.on('end', function(data) {
           console.log("I got to the end of sign in")
           client.end()
+          req.session.user = allUserData;
           res.send(allUserData)
          });
         }
