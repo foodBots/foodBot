@@ -8,7 +8,6 @@ var apiKeys = require('../config/apiKeys');
 module.exports = {
 
 	addRecipesToCart: function (req, res){
-		var boughtRecipes = ["tacos","burritos","bacon"]
 		var createRecipeCart = function (userID, recipeName) {
 			var createCart = {
 				method: 'POST',

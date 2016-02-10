@@ -43,9 +43,7 @@ class RecipesBuy extends React.Component {
       </div>
     )
   }
-
-  //TODO: When posting the order to PG, these foods have to be marked as "created/bought"
-  //
+  
   render() {
     const recipes = this.props.cart
     return(

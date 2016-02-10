@@ -24,7 +24,7 @@ export default class PairMessagesList extends React.Component {
     this.state = {
       messages: [],
       submitChat: (message) => {
-        this.setState({messages: this.state.messages.concat(message)})
+        this.setState({messages: this.state.messages.concat(this.props.name+": "+message)})
       }
     }
   }
@@ -49,9 +49,9 @@ export default class PairMessagesList extends React.Component {
     )
   }
 
-  renderMessage(message, index){
+  renderMessage(message, index){    
     return (
-      <li className="message" key={index}>{this.props.name}: {message}</li>
+      <li className="message" key={index}>{message}</li>
     )
   }
 
