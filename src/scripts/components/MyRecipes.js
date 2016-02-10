@@ -14,6 +14,10 @@ import PhotoUpload from './PhotoUpload'
 
 export default class MyRecipes extends React.Component {
 
+  componentWillMount() {
+    this.props.getChosenRecipes(this.props.userid);
+  }
+  
   constructor(props) {
     super(props);
     this.styles = {
@@ -57,9 +61,6 @@ export default class MyRecipes extends React.Component {
     // }, 10000)
   }
 
-  componentWillMount() {
-    this.props.getChosenRecipes(this.props.userid);
-  }
 
 
 //Display "my recipes" from and allow photo upload

@@ -41,7 +41,7 @@ var formatAPIPageSearch = function(number) {
 };
 
 
-var getRecipesFromYummly = function (uid) {
+var getRecipesFromYummly = function (uid) {		
 		client.connect();
 		var yummlyRecipes;
 
@@ -49,7 +49,9 @@ var getRecipesFromYummly = function (uid) {
 			return new Promise (function (resolve, reject) {
 				console.log("FOODQ:");
 				var start = 0;
-				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=1", function (err, result){
+				//What does this mean? and why does it return undefined?
+				//Obviously because nothing in here HAS A SOURCEID OF 1.
+				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=2", function (err, result){
 					if (err) {
 						console.log("Error in selecting recipesource:", result);
 					} else if (result) {
@@ -69,7 +71,7 @@ var getRecipesFromYummly = function (uid) {
                 request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
                   if (err) {console.log('Error in request to edemam', err);} 
                   else {
-                    client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPageIncremented + "WHERE ID = " + randomSearchQuery + ";")
+                    client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPage + "WHERE ID = " + randomSearchQuery + ";")
                     resolve(JSON.parse(response.body).hits)
                   }
               });
@@ -79,6 +81,7 @@ var getRecipesFromYummly = function (uid) {
     }
 
 		foodQ().then(function (yummlyRecipes) {
+			
 			var addIngriedientToDB = function (item, recipeID) {
 				return new Promise (function (resolve, reject) {
 					request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
@@ -141,6 +144,7 @@ var getRecipesFromYummly = function (uid) {
 				// return recipeID;
 			}
 			var addRecipeEstimatedPrice = function (recipeID) {
+				console.log("1. I'm attempting to addRecipeEstimatedPrice")
 				client.query("UPDATE recipes SET priceestimate = (SELECT SUM(price) from (select price from groceryprices left outer join ingredients on (groceryprices.id = ingredients.groceryid) left outer join recipeingriedients on (ingredients.id = recipeingriedients.ingredientid) where recipeingriedients.recipeid = " + recipeID + " ) as estimatedprice) Where id = " + recipeID + "", function (err,result ) {
 					if (err) {
 						console.log( "Error in updating price estimates")
@@ -154,6 +158,7 @@ var getRecipesFromYummly = function (uid) {
 						arr.push(addIngriedientToDB(ingredient, recipeID))
 					})
 					Promise.all(arr).then(function () {
+						console.log(recipeID, "2.inside the promise and trying to do the thing where I add recipeprice")
 						addRecipeEstimatedPrice(recipeID)
 					})			
 				})

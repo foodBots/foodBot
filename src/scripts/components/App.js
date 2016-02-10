@@ -121,6 +121,7 @@ export default class App extends React.Component {
           recipeid: this.state.activeItemId,
           name: this.state.activeItem,
           price: this.state.activeItemPrice,
+          image: this.state.activeImage,
           profileid: this.state.activeProfId
         }
         
@@ -150,6 +151,8 @@ export default class App extends React.Component {
         $.post('/foodbot/orders/' + this.state.id, order)
           .done((result) => {
             this.setState({cart: [], total: 0})
+
+            //Needs to get My Recipes ASAP
             this.state.redirect('My Recipes')})
       },
 
@@ -252,7 +255,6 @@ export default class App extends React.Component {
         this.state.redirect("Buy Recipes")
       },
 
-      //EXPLORE RECIPES
       getChosenRecipes: (id) => {
         $.get('/foodBot/meals/' + id).
           done((data) => {
@@ -260,6 +262,8 @@ export default class App extends React.Component {
           this.setState({chosenRecipes: data.recipeView})
         })
       },
+
+      //EXPLORE RECIPES
       getExploreRecipes: (id) => {
         console.log("exploring recipes")
         $.get('/foodBot/meals/explore/' + id).
@@ -281,25 +285,6 @@ export default class App extends React.Component {
       }
     }
   }
-
-
-
-  // //load initial state from db
-  // componentDidMount() {
-
-  //   // $.post('/foodBot/auth/signin', user).done((result) => {
-  //   //   user = result;
-  //   //   user.route = 'Swipe Recipes';
-  //   // })
-  //   // .fail((error) => {
-  //   //   if(error.status === 400) {
-  //   //     alert("NOOOO")
-  //   //     this.setState({error:error.responseText});
-  //   //     // console.log(error.responseText);
-  //   //     // this.refs.signupForm.reset();
-  //   //   }
-  //   // });
-  // }
 
   render() {
     if (this.state.componentRoute[this.state.currentView] === "ProfileMake") {
@@ -401,7 +386,7 @@ export default class App extends React.Component {
     }
     else if(this.state.componentRoute[this.state.currentView] ==="MyRecipes"){
       return (
-        <div >
+        <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <MyRecipes
             recipes={this.props.location.state.recipesData}

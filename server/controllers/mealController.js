@@ -5,18 +5,17 @@ var client;
 
 var makeConnect = function() {
 	client = new pg.Client(connectionString);
+	client.end();
 	client.connect();
 }
 
 module.exports = {
 
-	exploreUserMeals: function(req, res) {
+	exploreUserMeals: function(req, res) {		
 		makeConnect();
 		var uid = req.params.id
 		var foodie;
 
-		//TODO: THE PARAMETERS YOU GET BACK WILL CHANGE ONCE API CHANGES.
-		//TODO: MAKE SURE THAT YOU SWITCH "CREATED === TRUE ONCE YOU FLIP CREATED"
 		var getFoodieStatus = function(id) {
 			return new Promise(function(resolve, reject) {
 				console.log("in the promise")
