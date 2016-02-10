@@ -46,7 +46,6 @@ var getRecipesFromYummly = function (uid) {
 			return new Promise (function (resolve, reject) {
 				console.log("FOODQ:");
 				var start = 0;
-				//What does this mean? and why does it return undefined?
 				//Obviously because nothing in here HAS A SOURCEID OF 1.
 				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=2", function (err, result){
 					if (err) {
@@ -54,7 +53,6 @@ var getRecipesFromYummly = function (uid) {
 					} else if (result) {
 						start = parseInt(result.rows[0].count) + 2;
 					}
-
 				})
         startQuery.on("end", function (){
           var randomSearchQuery = chooseRandomSearchQuery();

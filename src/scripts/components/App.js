@@ -258,7 +258,6 @@ export default class App extends React.Component {
             obj.name = currElement.name;
             obj.img = currElement.image.replace('s90', 's300-c');
             obj.ingredients = currElement.ingredients;
-            obj.cookingtime = currElement.cookingtime;
             obj.price = currElement.priceestimate;
             return obj;
         });
