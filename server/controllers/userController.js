@@ -27,7 +27,7 @@ module.exports = {
         res.status(400).json('User with that email already exists');
       } else {
         var userData ={};
-        var createUserQuery = client.query("INSERT INTO Users (password, email) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"') RETURNING id;", function(err, newData) {
+        var createUserQuery = client.query("INSERT INTO Users (password, email, name) VALUES (crypt('"+req.body.password+"', gen_salt('bf', 8)),'"+req.body.email+"','"+req.body.name+"') RETURNING id;", function(err, newData) {
           console.log(newData)
           if(err) {
             console.log('error creating user', err);
@@ -39,9 +39,6 @@ module.exports = {
         });
         createUserQuery.on('end', function(results) {
           client.end();
-          // auth.createSession(req, res, userData);
-          // console.log('created user session during signup', req.session);
-          // res.redirect('/');
         });
       }
     });
@@ -93,7 +90,7 @@ module.exports = {
       res.status(201).json(allUsers);
     });
   },
-  signin: function(req, res) {
+  signin: function(req, res, next) {
    var client = new pg.Client(connectionString);
    client.connect();
 
@@ -138,7 +135,11 @@ module.exports = {
           client.end();
           auth.createSession(req, res, allUserData);
           // req.session.user = allUserData;
+
+          console.log('created user session', req.session);
+          // res.redirect('/');
           res.send(allUserData);
+          // next();
          });
         }
       });
