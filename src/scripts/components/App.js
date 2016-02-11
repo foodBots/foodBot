@@ -155,6 +155,17 @@ export default class App extends React.Component {
         this.setState({cart: cart, total: newTotal})
       },
 
+      orderAgain: (element)=> {
+        let recent = {
+          recipeid: element.recipeid,
+          name: element.recipename,
+          price: element.price,
+          image: element.recipeimage
+        }
+        console.log(element, "the element passed up the chain")
+        this.setState({cart: this.state.cart.concat(recent), recentItem: recent})
+      },
+
       addToCart: () => {
        let recent = {
           recipeid: this.state.activeItemId,
@@ -454,8 +465,7 @@ export default class App extends React.Component {
             userphoto={this.state.photo}
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
-            addToCart = {this.state.addToCart.bind(this)}/>
-
+            orderAgain = {this.state.orderAgain.bind(this)}/>
         </div>
       )
     }
