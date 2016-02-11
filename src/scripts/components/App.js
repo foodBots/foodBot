@@ -30,10 +30,12 @@ export default class App extends React.Component {
     })
     //get init user req session.
     $.get('/foodBot/auth/signin').done((result)=> {
-      // console.log('init results', result);
+      console.log('init results', result);
       const returnedId = result.id;
       //initialize profile
       this.state.id = returnedId;
+      this.state.name = result.userData.name;
+      this.state.photo = result.userData.photo;
       this.state.currentView = 'Swipe Recipes';
       // $.post('')
       // const prof = {
@@ -420,7 +422,11 @@ export default class App extends React.Component {
           <MyRecipes
             chosenRecipes = {this.state.chosenRecipes}
             userid={this.state.id}
-            getChosenRecipes = {this.state.getChosenRecipes}/>
+            username={this.state.name}
+            userphoto={this.state.photo}
+            getChosenRecipes = {this.state.getChosenRecipes}
+            addToCart = {this.state.addToCart.bind(this)}/>
+         
         </div>
       )
     }

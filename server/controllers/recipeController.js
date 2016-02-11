@@ -31,9 +31,9 @@ var chooseRandomSearchQuery = function() {
 };
 
 var formatAPIPageSearch = function(number) {
-	var startQuery = number*10;
-	var endQuery = (number + 1) * 10;
-	var pageQueryString = "&from=" + startQuery + "&to=" + endQuery;
+	var startingPageQuery = number*10;
+	var endingPageQuery = (number + 1) * 10;
+	var pageQueryString = "&from=" + startingPageQuery + "&to=" + endingPageQuery;
 	return pageQueryString;
 };
 
@@ -44,22 +44,16 @@ var getRecipesFromYummly = function (uid) {
 
 		var foodQ = function () {
 			return new Promise (function (resolve, reject) {
-				console.log("FOODQ:");
 				var start = 0;
 				//Obviously because nothing in here HAS A SOURCEID OF 1.
-				var startQuery = client.query("SELECT Count(*) FROM recipes WHERE sourceid=2", function (err, result){
-					if (err) {
-						console.log("Error in selecting recipesource:", result);
-					} else if (result) {
-						start = parseInt(result.rows[0].count) + 2;
-					}
-				})
-        startQuery.on("end", function (){
           var randomSearchQuery = chooseRandomSearchQuery();
           console.log('randomSearchQuery:', randomSearchQuery);
 
           // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
             client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
+            	if (err) {
+            		console.log('Error in selecting a recipe search term:', err);
+            	}
               var foodName = result.rows[0].name;
               var foodPage = result.rows[0].page;
               foodPage+= 1;
@@ -71,7 +65,7 @@ var getRecipesFromYummly = function (uid) {
                   }
               });
           });
-        });
+        // });
       });
     }
 
@@ -128,7 +122,7 @@ var getRecipesFromYummly = function (uid) {
 
 				client.query("INSERT INTO Recipes (name, image, directionsUrl, sourceid, priceEstimate) VALUES ('" + recipe.label + "', '" + recipe.image + "', '" + recipe.url + "'," + 2 + ", " + estimatedPrice + ") RETURNING id", function (err, data) {
 						if (err){
-							console.log("Edamam recipe already saved in db", err)
+							console.log("Error: Edamam recipe already saved in db", err)
 						} else {
 							recipeID = data.rows[0].id;
 							next(recipeID)

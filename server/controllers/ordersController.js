@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 
 module.exports = {
   createOrder: function (req, res) {
-    console.log('createOrder controller RECIPES ARE GETTING PASSSED', req.body.recipes);
+    // console.log('createOrder controller RECIPES ARE GETTING PASSSED', req.body.recipes);
 
     var client = new pg.Client(connectionString);
     client.connect();
@@ -36,14 +36,16 @@ module.exports = {
       
       var updateQuery = "";
       var updatePromise = function(arrayValues) {
+          console.log("INSIDE UPDATE PROMISE FOR recipeCostQuery:", arrayValues);
           return new Promise(function(resolve, reject) {        
             arrayValues.forEach(function(recipe, index) {
-            updateQuery += "UPDATE userrecipes SET created = true where recipeid = "+recipe.recipeid+"; "  
+            updateQuery += "UPDATE userrecipes SET created = true, liked = true where recipeid = "+recipe.recipeid+"; "  
           })
           resolve(updateQuery)
           })
         }
-      recipeCostQuery.on('end', function() {                
+      recipeCostQuery.on('end', function() {
+        console.log('recipeCostQuery.on "END":');                
         updatePromise(req.body.recipes)
         .then(function(updateQuery) {          
           client.query(updateQuery, function(err, data) {
@@ -63,7 +65,7 @@ module.exports = {
       if(err) {
         console.log('error getting Orders', err);
       }
-      console.log('user Orders data', data);
+      // console.log('user Orders data', data);
       res.status(200).json(data);
     });
     query.on('end', function() {
