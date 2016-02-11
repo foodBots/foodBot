@@ -66,6 +66,7 @@ module.exports = {
 		makeConnect();
 		// Get User ID
 		var userid = req.params.id;
+		var sendData = {};
 
 		// Create Query for all recipes user has created or seenRecipe
 
@@ -82,11 +83,18 @@ module.exports = {
 			}
 			userRecipes.push(row);
 		});
-		userRecipesQuery.on("end", function () {
-			var sendData = {recipeView: userRecipes}
+		
+		var boughtUserMeals = client.query("select COUNT(*) from orders where profileid = "+userid+" ")
+
+		boughtUserMeals.on("row", function(row) {
+			sendData.orders = row.count
+		})
+
+		boughtUserMeals.on("end", function() {
+			sendData.recipeView = userRecipes
 			res.send(sendData)
 			client.end();
-		});
+		})		
 	},
 
 
