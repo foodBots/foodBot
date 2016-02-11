@@ -21,6 +21,8 @@ import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
 import PhotoUpload from './PhotoUpload'
 import Snackbar from 'material-ui/lib/snackbar';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 
 export default class MyRecipes extends React.Component {
@@ -59,6 +61,7 @@ export default class MyRecipes extends React.Component {
       uploadCount:0,
       open: false
     }
+
     this.increaseUploadCount = this.increaseUploadCount.bind(this);
   }
 
@@ -86,6 +89,10 @@ export default class MyRecipes extends React.Component {
     this.setState({currRecipeId: element.recipeid});
     $('.dz-default').trigger('click');
     //upload photo
+  }
+
+  handleClick(){
+    console.log("clicked")
   }
 
   handleAddToCart(element) {
@@ -144,14 +151,20 @@ export default class MyRecipes extends React.Component {
         cols={2}
         style={this.gridStyles}
         >
-      {this.props.chosenRecipes.map((tile,index) => (
-        <GridTile
-          key={index}
+      {this.props.chosenRecipes.map((tile,index) => (        
+        <GridTile                   
+          key={index}          
           title={<IconButton className="tile-icons" onTouchTap={this.handleTouchTap.bind(this)}><LocalGrocery color="white"/></IconButton>}
-          subtitle={tile.recipename}
+          className="hvr-grow"
+          subtitle={tile.recipename}          
           actionPosition="right"
           actionIcon={<IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton>}>
-          <img src={tile.userimage || tile.recipeimage} />
+          <div className="outer-box">
+          <img className="recipeImage" src={tile.userimage || tile.recipeimage}/>
+          <div className="inner-box" onClick={this.handleClick}>
+            <p>COMMENTS</p>
+          </div>       
+        </div>
         </GridTile>
       ))}
     </GridList>

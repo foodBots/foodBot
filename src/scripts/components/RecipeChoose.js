@@ -65,7 +65,7 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-          <img style={{width: "40vw", height: "70vh", overflow: "hidden"}} src ={element.image}/>
+          <img style={{"max-width": "100%", "max-height": "100%", overflow: "hidden"}} src ={element.image}/>
         </CardMedia>
         <CardText>
         <h4>Estimated Cost</h4>

@@ -2,9 +2,9 @@ import React from 'react';
 import {RaisedButton, LeftNav, DropDownMenu, MenuItem, Checkbox, TextField} from 'material-ui'
 import Catalyst from 'react-catalyst';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 import Header from './Header'
 
-injectTapEventPlugin();
 
 
 const styles = {
