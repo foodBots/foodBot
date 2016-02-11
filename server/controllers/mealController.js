@@ -33,8 +33,8 @@ module.exports = {
 				console.log("exploreUserMeals>>>>>>>>>>>>>", data.rows)				
 				res.send(data.rows)
 				client.end();
-			})
-		})
+			});
+		});
 	},
 
 	retrieveUserMeals : function (req, res){
@@ -89,13 +89,13 @@ module.exports = {
 
 		boughtUserMeals.on("row", function(row) {
 			sendData.orders = row.count
-		})
+		});
 
 		boughtUserMeals.on("end", function() {
 			sendData.recipeView = userRecipes
 			res.send(sendData)
 			client.end();
-		})		
+		});		
 	},
 
 
@@ -118,8 +118,8 @@ module.exports = {
 				else {
 					console.log("reject success")
 				}
-			})
-		})
+			});
+		});
 		liked.forEach(function(recipeID) {
 			client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, true)", function(err, data){
 				if (err) {"success fail"}
@@ -127,7 +127,7 @@ module.exports = {
 					console.log("success success")
 				}
 			})
-		})
+		});
 		res.sendStatus(201)
 	}
 }

@@ -84,7 +84,7 @@ export default class App extends React.Component {
         "Sign Out": "SignIn",
         "Sign Up": "SignUp",
         "PairChatRoom": "PairChatRoom",
-        "Buy Recipes": "RecipesBuy",
+        "My Cart": "RecipesBuy",
         "My Recipes": "MyRecipes"
       },
 
@@ -302,7 +302,7 @@ export default class App extends React.Component {
         event.preventDefault();
         console.log("Go to checkout")
         // this.state.saveMatch
-        this.state.redirect("Buy Recipes")
+        this.state.redirect("My Cart")
       },
 
       getChosenRecipes: (id) => {

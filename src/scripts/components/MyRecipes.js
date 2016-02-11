@@ -156,21 +156,13 @@ export default class MyRecipes extends React.Component {
         style={this.gridStyles}
         >
       {this.props.chosenRecipes.map((tile,index) => (        
-        <GridTile                   
-          key={index}          
+        <GridTile
+          key={index}
           title={<IconButton className="tile-icons" onTouchTap={this.handleTouchTap.bind(this)}><LocalGrocery color="white"/></IconButton>}
-          className="hvr-grow"
-          subtitle={tile.recipename}          
+          subtitle={tile.recipename}
           actionPosition="right"
           actionIcon={<IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton>}>
-          <div className="outer-box">
-          <img className="recipeImage" src={tile.userimage || tile.recipeimage}/>
-          <div className="inner-box" onClick={this.handleClick}>
-            <p>COMMENTS</p>
-          </div>       
-        </div>
           <img src={tile.userimage || tile.recipeimage} />
-
         </GridTile>
       ))}
     </GridList>

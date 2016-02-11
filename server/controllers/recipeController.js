@@ -40,9 +40,11 @@ getAPIrecipes = function() {
 
 		//update page number so we don't get the same thing	
 		return new Promise (function (resolve, reject) {
+				client.end();
+				client.connect();
         var randomSearchQuery = chooseRandomSearchQuery();
-        console.log(randomSearchQuery, ">>>>>>>>>>>>JASLDKJFASKJDF SEARCH<<<<<<<<<<<")
-          client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
+        console.log(randomSearchQuery, ">>>>>>>>>>>>JASLDKJFASKJDF SEARCH<<<<<<<<<<<");
+          client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ';', function (err, result) {
             if (err) {
             	reject(err)            
             } else {

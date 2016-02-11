@@ -272,7 +272,6 @@ ul > li {
 
 }
 
-<<<<<<< 64bbe8beaf679388ad45d69811bfcbe84976fb74
 .hvr-grow:hover #overlay {
   opacity:1;
 }
@@ -330,7 +329,7 @@ ul > li {
   max-width: 100%;
   max-height: 100%;
 }
-=======
+
 .avatar {
   padding-top: 3%;
   padding-left: 3%;
@@ -340,4 +339,3 @@ ul > li {
 .tile-subtitle {
   padding-bottom: 1%
 }
->>>>>>> user stockphoto changed, padding and resizing added to user data area

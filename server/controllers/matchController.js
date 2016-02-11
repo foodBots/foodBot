@@ -21,14 +21,13 @@ module.exports = {
 						if (res) {
 							res.sendStatus(200);
 						}
-					})
+					});
 				}
 
 				var foundMatch = function () {
 					var numberUID = Number(uid);
 					var matchUserID = result.rows[0].userone;
 					if ( numberUID !== matchUserID) {
-					// console.log("found a match!", "userone: ", typeof row.userone, "uid: ", typeof uid)
 						var addMatchToPairsProfileQuery = client.query("UPDATE Profiles SET match = '" + matchUserID + "' WHERE id ='" + numberUID + "'")
 						var addMatchToUsersProfileQuery = client.query("UPDATE Profiles SET match = '" + numberUID + "' WHERE id ='" + matchUserID + "'")
 						var removePairFromMatchesQueueQuery = client.query("DELETE FROM matchesQueue WHERE userone = '" + matchUserID + "'")
@@ -51,24 +50,20 @@ module.exports = {
 								foundMatch();
 							}
 						}
-					})
-				}
-				
+					});
+				}		
 				checkIfInMatchesQueue();
-
 			});
-	
 		}
 
 		var alreadyMatched = false;
 		var checkIfMatch = client.query("SELECT match FROM Profiles WHERE id =" + uid + "", function (err, result){
 			if (err) {
-				console.log(err, "Nothing found", result)
+				console.log(err, "Nothing found in profiles", result)
 			}
 			if (result.rows[0].match !== null) {
 				alreadyMatched = true;
 				res.sendStatus(409);
-
 			}
 			else{
 				newMatch();
@@ -88,10 +83,8 @@ module.exports = {
 
 		// Create Query for all recipes user has created or eaten
 		var removeMatchQuery = client.query("UPDATE Profiles SET match = null WHERE id = '" + uid + "'");
-		var removePairMatchQuery =  client.query("UPDATE Profiles SET match = null WHERE match = '" + uid + "'");
+		var removePairMatchQuery = client.query("UPDATE Profiles SET match = null WHERE match = '" + uid + "'");
 		res.sendStatus(200);
-
-
 	},
 
 	retrieveMatch: function (req, res){
