@@ -29,7 +29,6 @@ app.use(session({
 app.use( passport.initialize());
 // store passport authentication in the session
 app.use( passport.session());
-// app.use(cors());
 
 
 //Hot Reloading
@@ -43,7 +42,6 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.use(express.static(__dirname + '/dist'));
 
 require('./server/config/routes.js')(app, express);
-//(app, passport);
 
 var port = process.env.PORT || 3000;
 
@@ -56,7 +54,6 @@ app.listen(3000, function(err) {
     console.log(err);
     return;
   }
-
   console.log('Listening at http://localhost:3000');
 });
 

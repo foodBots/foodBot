@@ -43,7 +43,7 @@ class SignIn extends React.Component {
     })
     .fail((error) => {
       if(error.status === 400) {
-        alert("Sorry. wrong password. You should fix me too")
+        // alert("Sorry. wrong password. You should fix me too")
         this.setState({error:error.responseText});
         // console.log(error.responseText);
         // this.refs.signupForm.reset();

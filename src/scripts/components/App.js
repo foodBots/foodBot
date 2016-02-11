@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Header from './Header.js'
+import Spinner from './Spinner'
 import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
@@ -27,6 +28,7 @@ export default class App extends React.Component {
     $.get('/foodBot/auth/signin').done((result)=> {
       console.log('init results', result);
       const returnedId = result.id;
+      // console.log('who am i', returnedId);
       //initialize profile
       this.state.id = returnedId;
       this.state.name = result.userData.name;
@@ -59,6 +61,7 @@ export default class App extends React.Component {
     })
     .fail((error) => {
       console.log('error getting user session', error);
+      this.props.history.pushState(error, '/signin');
     })
   }
 
@@ -76,7 +79,7 @@ export default class App extends React.Component {
       // photo: this.state.location.
 
       //ROUTING LOGIC
-      currentView: 'Profile Settings',
+      currentView: 'default',
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
@@ -252,15 +255,15 @@ export default class App extends React.Component {
       },
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
-          .done((result) => {            
+          .done((result) => {
             var final = []
-            var r = result.reduce(function(acc, memo) {                            
+            var r = result.reduce(function(acc, memo) {
                 //if it exists in the hash, push only the ingredient data
                 if (acc[memo.id]) {
                   acc[memo.id].ingredients.push({
                     description: memo.description,
                     price: memo.price
-                  })                  
+                  })
                 } else {
                 //If it does not, rebuild it within the object
                   acc[memo.id] = {
@@ -268,7 +271,7 @@ export default class App extends React.Component {
                     name: memo.name,
                     image: memo.image,
                     ingredients: [],
-                    price: memo.priceestimate                    
+                    price: memo.priceestimate
                   }
                   acc[memo.id].ingredients.push({
                     description: memo.description,
@@ -278,7 +281,7 @@ export default class App extends React.Component {
                 return acc;
               }, {})
 
-            for (var key in r) {              
+            for (var key in r) {
                 final.push(r[key])
             }
           this.setState({recipes: final});
@@ -453,7 +456,9 @@ export default class App extends React.Component {
       )
     }
     else {
-      <NotFound />
+      return(
+        <Spinner />
+      )
     }
   }
 }

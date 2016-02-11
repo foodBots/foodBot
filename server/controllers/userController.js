@@ -4,11 +4,11 @@ var auth = require('../config/authOperations.js');
 var Promise = require('bluebird');
 
 module.exports = {
-  checkCreds: function(req, res) {
-    console.log("1. First checking to see that we even get inside")
-    console.log("3.req.session stuff is...", req.session.user)
-    res.send(req.session.user)
-  },
+  // checkCreds: function(req, res) {
+  //   console.log("1. First checking to see that we even get inside")
+  //   console.log("3.req.session stuff is...", req.session.user)
+  //   res.send(req.session.user)
+  // },
 
   // endSession: function(req, res) {
   //   console.log("session ending")
@@ -133,7 +133,7 @@ module.exports = {
         //     matchRec.push(data)
         //   });
         userQuery.on('end', function(data) {
-          console.log("I got to the end of sign in");
+          // console.log("I got to the end of sign in");
           client.end();
           auth.createSession(req, res, allUserData);
           // req.session.user = allUserData;

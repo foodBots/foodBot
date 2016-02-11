@@ -16,7 +16,9 @@ var passport = require('passport');
 
 module.exports = function(app, express) {
 
-  //app.get('/', userController.checkCreds);
+  // app.get('/', auth.checkUser, function(req,res) {
+  //   res.redirect('/');
+  // });
 
   app.post('/foodBot/auth/signup', userController.signup);
   // app.get('/foodBot/auth/signin', userController.endSession);
