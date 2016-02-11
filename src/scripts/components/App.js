@@ -84,7 +84,7 @@ export default class App extends React.Component {
         "Sign Out": "SignIn",
         "Sign Up": "SignUp",
         "PairChatRoom": "PairChatRoom",
-        "Buy Recipes": "RecipesBuy",
+        "My Cart": "RecipesBuy",
         "My Recipes": "MyRecipes"
       },
 
@@ -302,14 +302,17 @@ export default class App extends React.Component {
         event.preventDefault();
         console.log("Go to checkout")
         // this.state.saveMatch
-        this.state.redirect("Buy Recipes")
+        this.state.redirect("My Cart")
       },
 
       getChosenRecipes: (id) => {
         $.get('/foodBot/meals/' + id).
           done((data) => {
           console.log('chosen recipe data', data);
-          this.setState({chosenRecipes: data.recipeView})
+          this.setState({
+            chosenRecipes: data.recipeView,
+            orders: data.orders
+          })
         })
       },
 
@@ -405,17 +408,17 @@ export default class App extends React.Component {
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
           <SoMoWindow
-          //Actions
-          close ={this.state.close.bind(this)}
-          isModalOpen={this.state.isModalOpen}
-          addToCart={this.state.addToCart.bind(this)}
-          addToLiked={this.state.addToLiked.bind(this)}
-          name={this.state.name}
-          activeItem={this.state.activeItem}
-          activeItemId={this.state.activeItemId}
-          activeProfId={this.state.activeProfId}
-          activeImage={this.state.activeImage}
-          activeItemPrice={this.state.activeItemPrice}/>
+            //Actions
+            close ={this.state.close.bind(this)}
+            isModalOpen={this.state.isModalOpen}
+            addToCart={this.state.addToCart.bind(this)}
+            addToLiked={this.state.addToLiked.bind(this)}
+            name={this.state.name}
+            activeItem={this.state.activeItem}
+            activeItemId={this.state.activeItemId}
+            activeProfId={this.state.activeProfId}
+            activeImage={this.state.activeImage}
+            activeItemPrice={this.state.activeItemPrice}/>
           </div>
       )
     }
@@ -443,6 +446,7 @@ export default class App extends React.Component {
             username={this.state.name}
             userphoto={this.state.photo}
             getChosenRecipes = {this.state.getChosenRecipes}
+            orders = {this.state.orders}
             addToCart = {this.state.addToCart.bind(this)}/>
          
         </div>

@@ -329,3 +329,13 @@ ul > li {
   max-width: 100%;
   max-height: 100%;
 }
+
+.avatar {
+  padding-top: 3%;
+  padding-left: 3%;
+  padding-right: 0px;
+}
+
+.tile-subtitle {
+  padding-bottom: 1%
+}
