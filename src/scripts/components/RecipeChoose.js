@@ -4,6 +4,12 @@ import Header from './Header.js'
 import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib/card';
 import $ from 'jquery';
 import RaisedButton from 'material-ui/lib/raised-button';
+import Badge from 'material-ui/lib/badge';
+import Delete from 'material-ui/lib/svg-icons/action/delete';
+import Kitchen from 'material-ui/lib/svg-icons/places/kitchen';
+import LocalDining from 'material-ui/lib/svg-icons/maps/local-dining';
+import IconButton from 'material-ui/lib/icon-button';
+
 
 
 import firebase from 'firebase'
@@ -21,11 +27,14 @@ export default class Recipe extends React.Component {
       // minHeight: '300px',
       minWidth: '300px',
       overflow: 'hidden'
+      'margin-top': '20px'
     }
     this.buttonStyles = {
-      display: 'block',
-      textAlign: 'center',
-      width: '450px'
+      width: '48px', 
+      height: '40px'
+    }
+    this.buttonBackgroundStyle = {
+      width: '100px'
     }
   }
 
@@ -70,17 +79,21 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
+<<<<<<< 1b8e727ab207d1698466491511a2e15be9b94748
           <img style={{"max-width": "300px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
+=======
+          <Badge
+            style = {{position: 'absolute'}}
+            badgeContent={"$" + element.price}
+            primary={true}
+            badgeStyle={{top: 12, right: 12, width: '35px', height: '35px', 'fontSize': '15px'}}
+          >
+          </Badge>
+          <img src = {element.img}/>
+>>>>>>> Improved Card Style & Modal Style
         </CardMedia>
         <CardText>
-        <h4>Estimated Cost</h4>
-          <strong>${element.price}</strong>
         </CardText>
-        <CardActions>
-          <RaisedButton label="No" primary={true} onClick={this.next.bind(this, element)} />
-          <RaisedButton label="Save for Later" primary={true} onClick={this.yes.bind(this, element)} />
-          <RaisedButton label="Add to Cart" secondary={true} onClick={this.addToCart.bind(this, element)} />
-        </CardActions>
         <h3>Ingredients</h3>
         <ul>
           {element.ingredients.map((item, i) => {
@@ -88,6 +101,11 @@ export default class Recipe extends React.Component {
             })
           }
         </ul>
+        <CardActions>
+          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
+        </CardActions>
         </Card>
       </div>
     )
