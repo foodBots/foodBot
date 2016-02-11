@@ -23,11 +23,6 @@ let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shopp
 export default class App extends React.Component {
 
   componentDidMount() {
-    base.syncState('user' + this.state.id + 'shoppingCart', {
-      context: this,
-      state: 'cart',
-      asArray: true
-    })
     //get init user req session.
     $.get('/foodBot/auth/signin').done((result)=> {
       // console.log('init results', result);
@@ -35,6 +30,11 @@ export default class App extends React.Component {
       //initialize profile
       this.state.id = returnedId;
       this.state.currentView = 'Swipe Recipes';
+      base.syncState('user' + this.state.id + 'shoppingCart', {
+        context: this,
+        state: 'cart',
+        asArray: true
+      })
       // $.post('')
       // const prof = {
       //   diet: '',

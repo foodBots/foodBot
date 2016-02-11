@@ -73,16 +73,39 @@ module.exports = {
         newQuery.on('end', function() {
           console.log('inserting profile query ended, should redirect now');
           auth.createSession(req, res, userData);
-          next();
+          res.sendStatus(201);
+          client.end();
+          // next();
           // res.redirect('/');
         });
       }
     });
     updateOrNewQuery.on('end', function() {
-      console.log('ended?');
+      console.log('add user profile ended');
       // next();
       client.end();
       // res.sendStatus(201);
+    });
+  },
+  storeProfile: function(profile, cb) {
+    var client = new pg.Client(connectionString);
+    client.connect();
+    var updateOrNewQuery = client.query("SELECT * FROM Profiles WHERE id='"+profile.id+"';", function(err, data) {
+      if (data.rowCount > 0) {
+        console.log("profile exists", data);
+        client.end();
+      } else {
+        var newQuery = client.query("INSERT INTO Profiles (id, name, foodie) VALUES ("+profile.id+",'"+profile.name+"',true)", function(err, data) {
+          if (err) {
+            console.log('error store profile', err);
+            // res.sendStatus(403);
+            client.end();
+          }
+          console.log("stored new profile", data);
+          // res.sendStatus(201);
+          client.end();
+        });
+      }
     });
   },
   retrieveAllUsers: function(req, res, next) {

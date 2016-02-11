@@ -5,7 +5,8 @@ var isLoggedIn = function(req) {
 exports.checkUser = function(req, res, next){
   console.log('in check user',  req.session);
   if (!req.isAuthenticated()) {
-    res.redirect('/signin');
+    console.log('not authenticataed');
+    res.redirect('/foodBot/auth/logout');
   } else {
     // console.log('checkUser success', req.session);
     return next();
@@ -14,11 +15,6 @@ exports.checkUser = function(req, res, next){
 };
 
 exports.createSession = function(req, res, newUser) {
-  // return req.session.regenerate(function() {
-  //     req.session.user = newUser;
-  //     console.log('created User', req.session);
-  //     res.redirect('/');
-  //   });
   req.session.user = newUser;
-  // console.log('created session id', req.session.id);
+  console.log('Auth.createSession', req.session, newUser);
 };

@@ -6,8 +6,6 @@ var profileController = require('../controllers/profileController.js');
 var mealController = require('../controllers/mealController.js');
 var photoController = require('../controllers/photoController.js');
 var ordersController = require('../controllers/ordersController.js');
-
-
 var purchaseController = require('../controllers/purchaseController.js');
 
 var helpers = require('./helpers.js');
@@ -15,7 +13,6 @@ var auth = require('./authOperations.js');
 var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var keys = require('./apiKeys.js');
 var passport = require('passport');
-// var LocalStorage = require('node-localstorage').LocalStorage;
 
 module.exports = function(app, express) {
 
@@ -25,12 +22,11 @@ module.exports = function(app, express) {
   // app.get('/foodBot/auth/signin', userController.endSession);
 
   app.post('/foodBot/auth/signin', userController.signin);
-  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile, function(req,res) {
-    console.log('redirect after adding profile');
-    res.redirect('/');
-  });
+  app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
 
   app.get('/foodBot/auth/signin', function(req, res) {
+
+    // console.log('initial user after signin', req.session.user);
     res.json(req.session.user);
   });
 
@@ -41,7 +37,7 @@ module.exports = function(app, express) {
 
   app.get('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.retrieveMyRecipes);
 
-  app.get('/foodBot/meals/explore/:id', /*auth.checkUser,*/ mealController.exploreUserMeals);
+  app.get('/foodBot/meals/explore/:id', auth.checkUser, mealController.exploreUserMeals);
 
   app.post('/foodBot/meals/:id', /*auth.checkUser,*/ mealController.addUserMeal);
 
@@ -55,20 +51,18 @@ module.exports = function(app, express) {
   app.put('/foodBot/profile/:id', profileController.updateUserProfile);
   app.get('/foodBot/profile', /*auth.checkUser,*/ profileController.retrieveAllUsers);
 
-  app.get('/foodBot/photos/:id', photoController.getPhotos);
-  app.post('/foodBot/photos/:id', photoController.multer.single('file'), photoController.uploadPhotos);
+  app.get('/foodBot/photos/:id', /*auth.checkUser,*/ photoController.getPhotos);
+  app.post('/foodBot/photos/:id', /*auth.checkUser,*/ photoController.multer.single('file'), photoController.uploadPhotos);
 
-  app.get('/foodBot/orders/:userid', ordersController.getOrder);
-  app.post('/foodBot/orders/:userid', ordersController.createOrder);
+  app.get('/foodBot/orders/:userid', /*auth.checkUser,*/ ordersController.getOrder);
+  app.post('/foodBot/orders/:userid', /*auth.checkUser,*/ ordersController.createOrder);
 
 
   passport.serializeUser(function(user, done) {
-    // console.log('serialze', user);
     done(null, user.email);
   });
 
   passport.deserializeUser(function(user, done) {
-    // console.log('deserialize', user);
     done(null, user);
   });
 
@@ -89,7 +83,6 @@ module.exports = function(app, express) {
   app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect: '/foodBot/auth/google' }),
     function(req, res) {
-      // console.log('got here');
       var userObj = {};
       userController.storeUser(req.user, function(err, userData) {
         if (err) {
@@ -99,17 +92,13 @@ module.exports = function(app, express) {
             name: req.user.displayName,
             id: userData.id,
             photos: req.user.photos[0].value,
-            route: "Swipe Recipes"
-          }
-
-        req.DBid = userObj.id;
-        req.session.user = userObj;
-
-        // console.log('session id',req.session.id, 'userid', req.DBid, 'req.session.user', req.session.user);
-        // res.status(200).json(userObj);
-        // res.redirect('/?user=' + userObj.id);
-        res.redirect('/');
-        // next();
+            route: 'Swipe Recipes'
+          };
+          req.DBid = userObj.id;
+          req.session.user = userObj;
+          //initial profile for auth users
+          profileController.storeProfile(userObj);
+          res.redirect('/');
         }
       });
     });
