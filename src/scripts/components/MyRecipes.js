@@ -50,6 +50,9 @@ export default class MyRecipes extends React.Component {
     this.avatar = {
       paddingTop: "3%",
       paddingLeft: "2%"
+
+    this.button = {
+      margin: 12
     }
 
     this.raisedbutton = {

@@ -39,8 +39,6 @@ getAPIrecipes = function() {
 		client.end();
 		client.connect();
 		//1. Creates random search query.
-
-		//update page number so we don't get the same thing
 		return new Promise (function (resolve, reject) {
 				client.end();
 				client.connect();
@@ -49,7 +47,7 @@ getAPIrecipes = function() {
           client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ';', function (err, result) {
             if (err) {
             	reject(err)
-            } else {
+            } else {            
             var foodName = result.rows[0].name;
             var foodPage = result.rows[0].page;
             foodPage+= 1;
@@ -229,7 +227,7 @@ module.exports = {
 							if (err) {
 								console.log("had trouble finding it", err)
 							}
-							getAPIrecipes();
+							// getAPIrecipes();
 							res.json(sendData.rows)
 					})
 				})
