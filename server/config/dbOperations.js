@@ -8,7 +8,7 @@ module.exports = {
     'id SERIAL NOT NULL PRIMARY KEY,' +
     'name VARCHAR(255),' +
     'email VARCHAR(255) NOT NULL,' +
-    "photo varchar(455) DEFAULT 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiLi7Ln69zKAhUNxWMKHZo6CKMQjRwIBw&url=http%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fcooks-people&bvm=bv.113370389,d.cGc&psig=AFQjCNFk8JDd74HqUtWZAypvRUyzolx3UA&ust=1454631766701909'," +
+    "photo varchar(455) DEFAULT 'https://d30y9cdsu7xlg0.cloudfront.net/png/2958-200.png'," +
     'googleID varchar(255) UNIQUE,' +
     'password varchar(455)' +
     ')',

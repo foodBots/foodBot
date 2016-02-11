@@ -9,20 +9,19 @@ import CameraEnhance from 'material-ui/lib/svg-icons/action/camera-enhance';
 import IconButton from 'material-ui/lib/icon-button';
 import Comment from 'material-ui/lib/svg-icons/communication/comment';
 import LocalGrocery from 'material-ui/lib/svg-icons/maps/local-grocery-store';
-import Create from 'material-ui/lib/svg-icons/content/create'
+import Edit from 'material-ui/lib/svg-icons/editor/mode-edit'
 import Star from 'material-ui/lib/svg-icons/toggle/star';
 import ActionAndroid from 'material-ui/lib/svg-icons/action/android';
 import Avatar from 'material-ui/lib/avatar';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 
-
-import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
 import PhotoUpload from './PhotoUpload'
 import Snackbar from 'material-ui/lib/snackbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+
 
 
 export default class MyRecipes extends React.Component {
@@ -47,8 +46,9 @@ export default class MyRecipes extends React.Component {
       }
     }
 
-    this.button = {
-    margin: 12,
+    this.avatar = {
+      paddingTop: "3%",
+      paddingLeft: "2%"
     }
 
     this.raisedbutton = {
@@ -106,8 +106,12 @@ export default class MyRecipes extends React.Component {
       <div className="myprofile-container" >
         <div className="row">
           <div className="avatar col-xs-3 " >
-            <Avatar src={this.props.userphoto} 
-            size={90}
+            <Avatar 
+              src={this.props.userphoto} 
+              size={110}
+              style = {this.avatar}
+              paddingTop="3%"
+              paddingLeft="2%"
             />
           </div>
           <div className="user-info col-xs-6" >
@@ -133,7 +137,7 @@ export default class MyRecipes extends React.Component {
               <div className = "user-edit col-xs-10">
                 <RaisedButton
                   linkButton={true} 
-                  icon={<Create />}
+                  icon={<Edit />}
                   label="Edit Profile"
                   primary={true}
                   labelPosition="before"
@@ -165,6 +169,8 @@ export default class MyRecipes extends React.Component {
             <p>COMMENTS</p>
           </div>       
         </div>
+          <img src={tile.userimage || tile.recipeimage} />
+
         </GridTile>
       ))}
     </GridList>
@@ -185,6 +191,10 @@ export default class MyRecipes extends React.Component {
   }
 }
 /*
+    <OverlayTrigger trigger="hover" placement="bottom" overlay={<Popover title="Popover bottom"><strong>Holy guacamole!</strong> Check this info.</Popover>}>
+      <Button bsStyle="default">Hover</Button>
+    </OverlayTrigger>
+
  For example, style={{marginRight: spacing + 'em'}} when using JSX. This DOM node was rendered by `MyRecipes`.
 
 

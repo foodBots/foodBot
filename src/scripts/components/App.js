@@ -400,7 +400,6 @@ export default class App extends React.Component {
             className="myrecipe-container"
             id={this.state.id}
             getExploreRecipes={this.state.getExploreRecipes}
-            exploreRecipes={this.state.exploreRecipes}
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
