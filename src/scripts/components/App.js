@@ -309,7 +309,10 @@ export default class App extends React.Component {
         $.get('/foodBot/meals/' + id).
           done((data) => {
           console.log('chosen recipe data', data);
-          this.setState({chosenRecipes: data.recipeView})
+          this.setState({
+            chosenRecipes: data.recipeView,
+            orders: data.orders
+          })
         })
       },
 
@@ -442,6 +445,7 @@ export default class App extends React.Component {
             username={this.state.name}
             userphoto={this.state.photo}
             getChosenRecipes = {this.state.getChosenRecipes}
+            orders = {this.state.orders}
             addToCart = {this.state.addToCart.bind(this)}/>
          
         </div>

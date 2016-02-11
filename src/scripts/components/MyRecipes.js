@@ -118,10 +118,10 @@ export default class MyRecipes extends React.Component {
             <div className="user-data row">
               <div className="user-meals col-xs-5" >
                 <div className="meals-quant row" >
-                  <strong>95</strong>
+                  <strong>{this.props.orders}</strong>
                 </div>
                 <div className="meals-label row" >
-                  <span>meals</span>
+                  <span>cooked</span>
                 </div>
               </div>
               <div className="user-posts col-xs-5" >
