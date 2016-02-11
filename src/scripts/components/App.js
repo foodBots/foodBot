@@ -95,10 +95,12 @@ export default class App extends React.Component {
       chosenRecipes: [],
       cart: [],
 
-      getTotal: () => {
-        let newTotal = 0;
-        this.state.cart.forEach((element) => newTotal += element.price)
-        this.setState({total: newTotal})
+      getTotal: () => {        
+        let newTotal = parseFloat(0) 
+        this.state.cart.forEach((element) => {          
+          newTotal += parseFloat(element.price)
+        })
+        this.setState({total: parseFloat(newTotal).toFixed(2)})
       },
 
       recentItem: "",
