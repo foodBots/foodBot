@@ -21,7 +21,11 @@ module.exports = function(app, express) {
   app.post('/foodBot/auth/signup', userController.signup);
   // app.get('/foodBot/auth/signin', userController.endSession);
 
-  app.post('/foodBot/auth/signin', userController.signin);
+  // app.post('/foodBot/auth/signin', recipeController.getAPIrecipes, userController.signin);
+  app.route('/foodBot/auth/signin')
+    // .get(recipeController.getAPIrecipes)
+    .post(userController.signin);
+
   app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
 
   app.get('/foodBot/auth/signin', function(req, res) {
