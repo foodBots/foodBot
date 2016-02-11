@@ -103,9 +103,11 @@ module.exports = {
        } else if (data.rows.length < 1) {
        res.status(400).json("Username or password is incorrect");
        } else {
-       var id = data.rows[0].id
+       var id = data.rows[0].id;
        var userData = {
-         email: data.rows[0].email
+         email: data.rows[0].email,
+         name: data.rows[0].name,
+         photo: data.rows[0].photo
        };
        var allUserData = {
          id: id,

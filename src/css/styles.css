@@ -240,5 +240,34 @@ ul > li {
   justify-content: flex-start;
   align-content: stretch;
   align-items: flex-start;
+}
+
+.myprofile-container, .user-dishes {
+  text-align: center;
+}
+
+.avatar {
+  padding-left: 20px;
+}
+
+.posts-quant, .meals-quant = {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.meals-label, .posts-label {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.user-data {
+  padding-top: 10px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.user-name {
+  padding-top: 15px;
 
 }
