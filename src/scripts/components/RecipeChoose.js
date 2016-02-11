@@ -45,7 +45,7 @@ export default class Recipe extends React.Component {
   }
 
   next(element) {
-    this.likeOrReject(element.id, false);
+    this.likeOrReject(element.id, false);    
     this.refs.ReactSwipe.swipe.next()
   }
 
@@ -60,12 +60,12 @@ export default class Recipe extends React.Component {
     this.refs.ReactSwipe.swipe.next()
   }
 
-  renderCard (element, index) {
+  renderCard (element, index){
     return (
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-          <img src = {element.img}/>
+          <img src = {element.image}/>
         </CardMedia>
         <CardText>
         <h4>Estimated Cost</h4>
@@ -78,9 +78,10 @@ export default class Recipe extends React.Component {
         </CardActions>
         <h3>Ingredients</h3>
         <ul>
-          <li>Cost number one</li>
-          <li>Cost number one</li>
-          <li>Cost number one</li>
+          {element.ingredients.map((item, i) => {
+            return <li>{item.description}: {item.price}</li>
+            })
+          }          
         </ul>
         </Card>
       </div>
@@ -88,11 +89,10 @@ export default class Recipe extends React.Component {
   }
 
   render() {
-    const recipes = this.props.recipes;
     return (
       <div>
-        <ReactSwipe key={recipes.length} ref="ReactSwipe" continuous={true} speed={800}>
-          {recipes.map((elem, index) => this.renderCard(elem, index))}
+        <ReactSwipe key={this.props.recipes.length} ref="ReactSwipe" continuous={true} speed={800}>
+          {this.props.recipes.map((elem, index) => this.renderCard(elem, index))}
         </ReactSwipe>
       </div>
     )

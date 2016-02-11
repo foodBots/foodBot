@@ -123,7 +123,7 @@ export default class App extends React.Component {
         let recent = {
           recipeid: element.id,
           name: element.name,
-          image: element.img,
+          image: element.image,
           price: element.price
         }
 
@@ -250,18 +250,36 @@ export default class App extends React.Component {
       },
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
-          .done((result) => {
-            let r = [];
-            r = result.recipes.map((currElement)=>{
-            let obj = {};
-            obj.id = currElement.id;
-            obj.name = currElement.name;
-            obj.img = currElement.image.replace('s90', 's300-c');
-            obj.ingredients = currElement.ingredients;
-            obj.price = currElement.priceestimate;
-            return obj;
-        });
-          this.setState({recipes: r});
+          .done((result) => {            
+            var final = []
+            var r = result.reduce(function(acc, memo) {                            
+                //if it exists in the hash, push only the ingredient data
+                if (acc[memo.id]) {
+                  acc[memo.id].ingredients.push({
+                    description: memo.description,
+                    price: memo.price
+                  })                  
+                } else {
+                //If it does not, rebuild it within the object
+                  acc[memo.id] = {
+                    id: memo.id,
+                    name: memo.name,
+                    image: memo.image,
+                    ingredients: [],
+                    price: memo.priceestimate                    
+                  }
+                  acc[memo.id].ingredients.push({
+                    description: memo.description,
+                    price: memo.price
+                  })
+                }
+                return acc;
+              }, {})
+
+            for (var key in r) {              
+                final.push(r[key])
+            }
+          this.setState({recipes: final});
         });
       },
       saveMatch: () => {

@@ -35,7 +35,7 @@ module.exports = {
       'recipesourceid varchar(255) UNIQUE,' +
       'sourceid int references RecipeSources(id) NOT NULL,' +
       'rating int,' +
-      'priceEstimate int' +
+      'priceEstimate decimal' +
     ')',
   
     createGroceryPriceTable: 'CREATE TABLE IF NOT EXISTS GroceryPrices' +
@@ -43,7 +43,7 @@ module.exports = {
        'id SERIAL NOT NULL PRIMARY KEY, ' +
        'name varchar(255), ' +
        'description varchar(1000),' +
-       'price int NOT NULL' +
+       'price decimal NOT NULL' +
     ')' ,
 
   createIngredientsTable: 'CREATE TABLE IF NOT EXISTS Ingredients' +
@@ -53,7 +53,6 @@ module.exports = {
       'quantity real,' +
       'measure varchar(50),' +
       'description varchar(1000),' + 
-      'recipeid int references Recipes(id),' +
       'groceryid int references GroceryPrices(id)' +
     ')',
 
