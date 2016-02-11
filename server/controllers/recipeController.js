@@ -47,13 +47,13 @@ var getApiRecipes = function (uid) {
 			//update page number so we don't get the same thing	
 			return new Promise (function (resolve, reject) {
           var randomSearchQuery = chooseRandomSearchQuery();
-          console.log('1. randomSearchQuery:', randomSearchQuery);
+          console.log(randomSearchQuery, ">>>>>>>>>>>>JASLDKJFASKJDF SEARCH<<<<<<<<<<<")
 
-          // var userCookingTime = client.query("SELECT cookingTime from Profiles WHERE id = '" + uid + "'", function (err, data) {
             client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
               var foodName = result.rows[0].name;
               var foodPage = result.rows[0].page;
               foodPage+= 1;
+              console.log(result, ">>>>>>>>>>>>JASLDKJFASKJDF RESULT<<<<<<<<<<<")
                 request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
                   if (err) {console.log('Error in request to edemam', err);} 
                   else {
@@ -73,7 +73,7 @@ var getApiRecipes = function (uid) {
 
 			
 			var addIngriedientToDB = function (item, recipeID) {
-				console.log("getting INGRIEDIENTS", recipeID)
+				console.log("3. getting INGRIEDIENTS", recipeID)
 				return new Promise (function (resolve, reject) {
 					request("http://www.SupermarketAPI.com/api.asmx/COMMERCIAL_SearchByProductName?APIKEY=APIKEY&ItemName=" + item.food + "", function (err, response, xml) {
 						parseString(xml, function (err, result) {
@@ -101,7 +101,6 @@ var getApiRecipes = function (uid) {
 										if (err) {
 											console.log("Error in inserting to GroceryPrices:", err);								
 										} else {
-											console.log("productdata",productData)
 											var groceryid = productData.rows[0].id;
 											estimatedPrice = choice.Pricing[0];
 											// console.log("GroceryPrices result:", productData);
@@ -136,7 +135,6 @@ var getApiRecipes = function (uid) {
 						if (err){
 							console.log("Edamam recipe already saved in db", err)
 						} else {
-							console.log("recipeid", data)
 							recipeID = data.rows[0].id;
 							next(recipeID)
 							//Points to ForEACH over all ingredients => Insert Recipes into DB
@@ -163,7 +161,7 @@ var getApiRecipes = function (uid) {
 						arr.push(addIngriedientToDB(ingredient, recipeID))
 					})
 					Promise.all(arr).then(function () {
-						console.log(recipeID, "2.inside the promise and trying to do the thing where I add recipeprice")
+						console.log(recipeID, "5.inside the promise and trying to do the thing where I add recipeprice")
 						addRecipeEstimatedPrice(recipeID)
 					})			
 				})
@@ -175,7 +173,9 @@ var getApiRecipes = function (uid) {
 			})
 		});
 	}
-
+		//Make API call regardless => to seed database
+		// getApiRecipes(uid);
+		
 module.exports = {
 	retrieveSuggestedRecipes: function (req, res) {	
 		var client = new pg.Client(connectionString);
@@ -186,10 +186,6 @@ module.exports = {
 	
 		var userAllergies = [];
 		var recipeResults = [];
-
-		//Make API call regardless => to seed database
-		getApiRecipes(uid);
-
 	
 		//1. Checks userrecipe table and returns all recipes that haven't been seen
 		var recipeidQuery = client.query("SELECT id FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ") LIMIT " + amtOfRecipes + "", function (err, result) {

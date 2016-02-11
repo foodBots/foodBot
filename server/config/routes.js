@@ -31,7 +31,6 @@ module.exports = function(app, express) {
   });
 
   app.get('/foodBot/auth/signin', function(req, res) {
-    console.log('initial user after signin', req.session.user);
     res.json(req.session.user);
   });
 

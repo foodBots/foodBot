@@ -138,7 +138,6 @@ module.exports = {
           client.end();
           auth.createSession(req, res, allUserData);
           // req.session.user = allUserData;
-          console.log('created user session', req.session);
           res.send(allUserData);
          });
         }
