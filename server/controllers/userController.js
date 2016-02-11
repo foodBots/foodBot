@@ -116,7 +116,6 @@ module.exports = {
 
        var profileQuery = client.query("SELECT * FROM PROFILES AS P where P.id='"+id+"';")
         profileQuery.on('row', function(data) {
-          console.log("data from profile query", data);
           allUserData.profileData = data;
         });
 
