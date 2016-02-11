@@ -20,9 +20,7 @@ var parseString = require('xml2js').parseString;
 var client = new pg.Client(connectionString);
 
 getAPIrecipes = function() {
-	
-	client.connect();
-	var APIrecipes;
+		var APIrecipes;
 
 	var chooseRandomSearchQuery = function() {
 	  var searchTermsQuantity = searchTerms.retrieveNumberOfSearchTerms();
@@ -44,8 +42,10 @@ getAPIrecipes = function() {
 		return new Promise (function (resolve, reject) {
         var randomSearchQuery = chooseRandomSearchQuery();
         console.log(randomSearchQuery, ">>>>>>>>>>>>JASLDKJFASKJDF SEARCH<<<<<<<<<<<")
-
           client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ' ', function (err, result) {
+            if (err) {
+            	reject(err)            
+            } else {
             var foodName = result.rows[0].name;
             var foodPage = result.rows[0].page;
             foodPage+= 1;
@@ -56,7 +56,8 @@ getAPIrecipes = function() {
                   client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPage + "WHERE ID = " + randomSearchQuery + ";")
                   resolve(JSON.parse(response.body).hits)
                 }
-            });
+            })
+           };
         });
       
     });
@@ -178,15 +179,23 @@ getAPIrecipes = function() {
 				})
 				Promise.all(arr).then(function () {
 					console.log(recipeID, "5.inside the promise and trying to do the thing where I add recipeprice")
-					addRecipeEstimatedPrice(recipeID)
+					addRecipeEstimatedPrice(recipeID)				
+					}).catch(function(err) {
+						insertRecipesIntoDB.on("end", function() {
+						console.log("ERROR. query ended")
+					})
 				})			
-			})
+			})			
 		}
 		
 		//Consider refactoring this whole function to make more sense
 		APIrecipes.forEach(function (item) {
 			insertRecipesIntoDB(item.recipe)			
 		})
+	}).catch(function(err) {
+			client.query.on("end", function() {
+				console.log("ended")
+			})
 	})
 }
 
