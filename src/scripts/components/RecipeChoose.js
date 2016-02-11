@@ -15,7 +15,12 @@ export default class Recipe extends React.Component {
     super(props);
     this.style = {
       textAlign: 'center',
-      height: '100vh'
+      height: '100vh',
+      maxWidth: '350px',
+      maxHeight: '600px',
+      // minHeight: '300px',
+      minWidth: '300px',
+      overflow: 'hidden'
     }
     this.buttonStyles = {
       display: 'block',
@@ -45,7 +50,7 @@ export default class Recipe extends React.Component {
   }
 
   next(element) {
-    this.likeOrReject(element.id, false);    
+    this.likeOrReject(element.id, false);
     this.refs.ReactSwipe.swipe.next()
   }
 
@@ -55,7 +60,7 @@ export default class Recipe extends React.Component {
   }
 
   addToCart (element) {
-    this.likeOrReject(element.id, true);        
+    this.likeOrReject(element.id, true);
     this.props.showModal(element)
     this.refs.ReactSwipe.swipe.next()
   }
@@ -65,7 +70,7 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-          <img style={{"max-width": "100%", "max-height": "100%", overflow: "hidden"}} src ={element.image}/>
+          <img style={{"max-width": "300px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
         </CardMedia>
         <CardText>
         <h4>Estimated Cost</h4>
@@ -81,7 +86,7 @@ export default class Recipe extends React.Component {
           {element.ingredients.map((item, i) => {
             return <li>{item.description}: {item.price}</li>
             })
-          }          
+          }
         </ul>
         </Card>
       </div>

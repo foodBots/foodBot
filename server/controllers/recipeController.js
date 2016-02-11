@@ -36,9 +36,11 @@ getAPIrecipes = function() {
 	};
 
 	var foodQ = function () {
+		client.end();
+		client.connect();
 		//1. Creates random search query.
 
-		//update page number so we don't get the same thing	
+		//update page number so we don't get the same thing
 		return new Promise (function (resolve, reject) {
 				client.end();
 				client.connect();
@@ -46,14 +48,14 @@ getAPIrecipes = function() {
         console.log(randomSearchQuery, ">>>>>>>>>>>>JASLDKJFASKJDF SEARCH<<<<<<<<<<<");
           client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ';', function (err, result) {
             if (err) {
-            	reject(err)            
+            	reject(err)
             } else {
             var foodName = result.rows[0].name;
             var foodPage = result.rows[0].page;
             foodPage+= 1;
             console.log(result, ">>>>>>>>>>>>JASLDKJFASKJDF RESULT<<<<<<<<<<<")
               request("https://api.edamam.com/search?q=" + foodName + formatAPIPageSearch(foodPage) + "&app_id=21198cff&app_key=a70d395eb9f3cf9dae36fb4b5e638958", function (err, response, body) {
-                if (err) {console.log('Error in request to edemam', err);} 
+                if (err) {console.log('Error in request to edemam', err);}
                 else {
                   client.query("UPDATE RecipeSearchTerms SET PAGE = " + foodPage + "WHERE ID = " + randomSearchQuery + ";")
                   resolve(JSON.parse(response.body).hits)
@@ -61,14 +63,14 @@ getAPIrecipes = function() {
             })
            };
         });
-      
+
     });
   }
 
 	foodQ().then(function (APIrecipes) {
 
 		//Add ingredients to DB and make SUPER call
-		
+
 		var addIngriedientToDB = function (item, recipeID) {
 			console.log("3. getting INGRIEDIENTS", recipeID)
 			return new Promise (function (resolve, reject) {
@@ -79,24 +81,24 @@ getAPIrecipes = function() {
 						}
 						else {
 							// Pick a better one than the first
-							
+
 							//Everything we're getting back from API
 							var productList = result.ArrayOfProduct_Commercial.Product_Commercial;
 
 							//We decided to get the fifth
 							var index = productList.length > 5 ? 5 : productList.length-1;
-							
+
 							//Finally choose the product
 							var choice = productList[index];
 
-							
-							//If search doesn't suck,  then insert 
+
+							//If search doesn't suck,  then insert
 							if (choice.Itemname[0] !== 'NOITEM') {
 								var description = choice.ItemDescription[0].length > 1000 ? choice.ItemDescription[0].substr(0,1000) : choice.ItemDescription[0];
 							// console.log("productList:", productList, "index:", index, "choice", choice);
 								client.query("INSERT INTO GroceryPrices (name, description, price) VALUES ('"+ choice.Itemname[0] + "','" + description + "'," + choice.Pricing[0] + ") RETURNING id;", function(err, productData) {
 									if (err) {
-										console.log("Error in inserting to GroceryPrices:", err);								
+										console.log("Error in inserting to GroceryPrices:", err);
 									} else {
 										var groceryid = productData.rows[0].id;
 										estimatedPrice = choice.Pricing[0];
@@ -104,7 +106,7 @@ getAPIrecipes = function() {
 										//insert into ingredients
 										var addIngredientsQuery = client.query("INSERT INTO ingredients (name, measure, quantity, description, groceryid) VALUES ('" + item.food + "','" + item.measure + "'," + item.quantity + ",'" + item.text + "'," + groceryid + ") RETURNING id;", function (err, data) {
 											if (err) { console.log("ERROR IN INSERT INGREDIENTS:", err)}
-											
+
 											else {
 												ingredientID = data.rows[0].id
 												//insert into join table
@@ -122,7 +124,7 @@ getAPIrecipes = function() {
 						}
 					});
 				})
-				
+
 			})
 		};
 
@@ -143,7 +145,7 @@ getAPIrecipes = function() {
 			})
 			// return recipeID;
 		}
-		
+
 		var addRecipeEstimatedPrice = function (recipeID) {
 			console.log("1. I'm attempting to addRecipeEstimatedPrice")
 			client.query("UPDATE recipes SET priceestimate = (SELECT SUM(price) from (select price from groceryprices left outer join ingredients on (groceryprices.id = ingredients.groceryid) left outer join recipeingriedients on (ingredients.id = recipeingriedients.ingredientid) where recipeingriedients.recipeid = " + recipeID + " ) as estimatedprice) Where id = " + recipeID + "", function (err,result ) {
@@ -168,7 +170,7 @@ getAPIrecipes = function() {
 		// 			})
 		// 		} catch (exception) {
 		// 			next(exception);
-		// 		}					
+		// 		}
 		// 	})();
 		// }
 
@@ -181,18 +183,18 @@ getAPIrecipes = function() {
 				})
 				Promise.all(arr).then(function () {
 					console.log(recipeID, "5.inside the promise and trying to do the thing where I add recipeprice")
-					addRecipeEstimatedPrice(recipeID)				
+					addRecipeEstimatedPrice(recipeID)
 					}).catch(function(err) {
 						insertRecipesIntoDB.on("end", function() {
 						console.log("ERROR. query ended")
 					})
-				})			
-			})			
+				})
+			})
 		}
-		
+
 		//Consider refactoring this whole function to make more sense
 		APIrecipes.forEach(function (item) {
-			insertRecipesIntoDB(item.recipe)			
+			insertRecipesIntoDB(item.recipe)
 		})
 	}).catch(function(err) {
 			client.query.on("end", function() {
@@ -203,29 +205,29 @@ getAPIrecipes = function() {
 
 module.exports = {
 
-	retrieveSuggestedRecipes: function (req, res) {	
+	retrieveSuggestedRecipes: function (req, res) {
 		var client = new pg.Client(connectionString);
-		client.connect();		
-		var uid = parseInt(req.params.id);		
+		client.connect();
+		var uid = parseInt(req.params.id);
 		//Hard-coded. Number of viable recipes
 		var amtOfRecipes = 40;
-	
+
 		var userAllergies = [];
 		var recipeResults = [];
-	
+
 		//1. Checks userrecipe table and returns all recipes that haven't been seen
 		var recipeidQuery = client.query("SELECT id FROM Recipes WHERE (Recipes.id) NOT IN ( SELECT recipeid FROM userRecipes WHERE profileid = " + uid + ") LIMIT " + amtOfRecipes + "", function (err, result) {
 			if (err) {
 				console.log("Error recipeController: 180", ERROR)
-			} else {			
-					//Compile recipes into an array					
+			} else {
+					//Compile recipes into an array
 					result.rows.forEach(function (row) {
 						recipeResults.push(row.id)
 					});
-				  Promise.all(recipeResults).then(function () {						
+				  Promise.all(recipeResults).then(function () {
 						client.query("select recipes.id, recipes.priceestimate, recipes.name, groceryprices.price, recipes.image, ingredients.description from recipes inner join recipeingriedients on (recipes.id = recipeingriedients.recipeid) inner join ingredients ON (ingredients.id = recipeingriedients.ingredientid) inner join groceryprices ON (groceryprices.id = ingredients.groceryid) where recipes.id = ANY($1);", [recipeResults], function (err, sendData) {
 							if (err) {
-								console.log("had trouble finding it", err)								
+								console.log("had trouble finding it", err)
 							}
 							getAPIrecipes();
 							res.json(sendData.rows)
