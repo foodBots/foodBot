@@ -31,10 +31,10 @@ module.exports = function(app, express) {
   app.post('/foodBot/profile/:id', /*auth.checkUser,*/ profileController.addUserProfile);
 
   app.get('/foodBot/auth/signin', function(req, res) {
-
     // console.log('initial user after signin', req.session.user);
     res.json(req.session.user);
   });
+  app.get('/foodBot/profile/:id', userController.retrieveOneUser);
 
   app.get('/foodBot/auth/logout', userController.logout);
   // app.get('/foodBot/', userController.checkCreds );
@@ -95,14 +95,19 @@ module.exports = function(app, express) {
           res.json(err);
         } else {
           userObj = {
-            name: req.user.displayName,
             id: userData.id,
-            photos: req.user.photos[0].value,
+            userData: {
+              email: req.user.email,
+              name: req.user.displayName,
+              photo: req.user.photos[0].value
+            },
+            profileData: {
+            },
             route: 'Swipe Recipes'
           };
           req.DBid = userObj.id;
           req.session.user = userObj;
-          //initial profile for auth users
+          //initialize profile for auth users with dummy data
           profileController.storeProfile(userObj);
           res.redirect('/');
         }

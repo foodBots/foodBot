@@ -28,11 +28,10 @@ export default class App extends React.Component {
     $.get('/foodBot/auth/signin').done((result)=> {
       console.log('init results', result);
       const returnedId = result.id;
-      // console.log('who am i', returnedId);
+      console.log('who am i', result);
       //initialize profile
       this.state.id = returnedId;
-      this.state.name = result.userData.name;
-      this.state.photo = result.userData.photo;
+
       this.state.currentView = 'Swipe Recipes';
       base.syncState('user' + this.state.id + 'shoppingCart', {
         context: this,
@@ -46,18 +45,20 @@ export default class App extends React.Component {
       //   foodie: true,
       //   allergies: []
       // };
-      // $.post('/foodBot/profile/'+ returnedId, prof)
-      // .done((result) => {
-      //   // user.route = 'Swipe Recipes';
-      //   // user.diet = this.state.diet;
-      //   // user.cookingTime = this.state.prep.value;
-      //   // user.foodie = this.state.chosenType === "foodie";
-      //   // user.allergies = this.state.allergies
-      //   console.log('retrieved user', result)
-      // })
-      // .fail((error) =>{
-      //   console.log('error creating profile', error);
-      // })
+      $.get('/foodBot/profile/'+ returnedId)
+      .done((result) => {
+        this.state.name = result.name;
+        this.state.photo = result.photo;
+        // user.route = 'Swipe Recipes';
+        // user.diet = this.state.diet;
+        // user.cookingTime = this.state.prep.value;
+        // user.foodie = this.state.chosenType === "foodie";
+        // user.allergies = this.state.allergies
+        // console.log('retrieved user by id', result)
+      })
+      .fail((error) =>{
+        console.log('error getting user by id profile', returnedId);
+      })
     })
     .fail((error) => {
       console.log('error getting user session', error);
@@ -451,7 +452,7 @@ export default class App extends React.Component {
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
             addToCart = {this.state.addToCart.bind(this)}/>
-         
+
         </div>
       )
     }

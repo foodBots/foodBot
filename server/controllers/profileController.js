@@ -73,7 +73,7 @@ module.exports = {
         newQuery.on('end', function() {
           console.log('inserting profile query ended, should redirect now');
           auth.createSession(req, res, userData);
-          res.sendStatus(201);
+          res.status(201).json(userData);
           client.end();
           // next();
           // res.redirect('/');
@@ -95,7 +95,7 @@ module.exports = {
         console.log("profile exists", data);
         client.end();
       } else {
-        var newQuery = client.query("INSERT INTO Profiles (id, name, foodie) VALUES ("+profile.id+",'"+profile.name+"',true)", function(err, data) {
+        var newQuery = client.query("INSERT INTO Profiles (id, name, foodie) VALUES ("+profile.id+",'"+profile.userData.name+"',true)", function(err, data) {
           if (err) {
             console.log('error store profile', err);
             // res.sendStatus(403);

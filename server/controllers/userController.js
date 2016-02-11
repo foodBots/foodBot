@@ -35,6 +35,8 @@ module.exports = {
           }
           userData.id = newData.rows[0].id;
           userData.email = newData.rows[0].email;
+          userData.name = newData.rows[0].name;
+          userData.photo = newData.rows[0].photo;
           res.status(201).json(userData);
         });
         createUserQuery.on('end', function(results) {
@@ -67,14 +69,21 @@ module.exports = {
       }
     });
   },
-  retrieveOneUser: function(email, next) {
+  retrieveOneUser: function(req, res) {
     var id = {};
     var client = new pg.Client(connectionString);
     client.connect();
-    var query = client.query("SELECT id FROM Users WHERE email = '"+email+"';");
-    query.on('row', function(data) {
-      id.id = data;
-      next(null, id);
+    var query = client.query("SELECT id, name, email, photo FROM Users WHERE id = '"+req.params.id+"';", function(err,data){
+      if (err) {
+        console.log('err getting user info on userid');
+      }
+      console.log('result getting user by id', req.params.id);
+      res.json(data.rows[0]);
+    });
+    query.on('end', function(data) {
+      client.end();
+      // id.id = data;
+      // next(null, id);
     });
   },
   retrieveAllUsers: function(req, res) {
