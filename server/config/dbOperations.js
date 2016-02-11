@@ -116,8 +116,6 @@ module.exports = {
     'price int' +
     ')',
 
-
-
   createRecipeSearchTerms: 'CREATE TABLE IF NOT EXISTS RecipeSearchTerms' +
     '(' +
       'id SERIAL NOT NULL PRIMARY KEY, ' +

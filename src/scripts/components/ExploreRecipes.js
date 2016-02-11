@@ -50,7 +50,7 @@ export default class RecipeLanding extends React.Component {
       <GridList
         cellHeight={250}
         style={this.gridStyles}>      
-      {this.props.getExploreRecipes.map((tile, index) => (
+      {this.props.exploreRecipes.map((tile, index) => (
         <GridTile          
           key={index}
           title={tile.name}

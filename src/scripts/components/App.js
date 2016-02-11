@@ -403,21 +403,22 @@ export default class App extends React.Component {
             className="myrecipe-container"
             id={this.state.id}
             getExploreRecipes={this.state.getExploreRecipes}
+            exploreRecipes={this.state.exploreRecipes}
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
           <SoMoWindow
-          //Actions
-          close ={this.state.close.bind(this)}
-          isModalOpen={this.state.isModalOpen}
-          addToCart={this.state.addToCart.bind(this)}
-          addToLiked={this.state.addToLiked.bind(this)}
-          name={this.state.name}
-          activeItem={this.state.activeItem}
-          activeItemId={this.state.activeItemId}
-          activeProfId={this.state.activeProfId}
-          activeImage={this.state.activeImage}
-          activeItemPrice={this.state.activeItemPrice}/>
+            //Actions
+            close ={this.state.close.bind(this)}
+            isModalOpen={this.state.isModalOpen}
+            addToCart={this.state.addToCart.bind(this)}
+            addToLiked={this.state.addToLiked.bind(this)}
+            name={this.state.name}
+            activeItem={this.state.activeItem}
+            activeItemId={this.state.activeItemId}
+            activeProfId={this.state.activeProfId}
+            activeImage={this.state.activeImage}
+            activeItemPrice={this.state.activeItemPrice}/>
           </div>
       )
     }
