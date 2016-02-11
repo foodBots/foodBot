@@ -254,6 +254,7 @@ export default class App extends React.Component {
         liked: [],
         rejected: []
       },
+      
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {

@@ -33,7 +33,8 @@ export default class MyRecipes extends React.Component {
   constructor(props) {
     super(props);
     this.styles = {
-      width:"400px"
+      width:"500px",
+      "align": "center"
     }
     this.gridStyles = {
       gridList: {
@@ -149,7 +150,7 @@ export default class MyRecipes extends React.Component {
         </div>
       </div>
       <h3 className="user-dishes">{this.props.username}'s Dishes</h3>
-    <div className="myrecipe-container" >
+    <div className="myrecipe-container" style={this.styles}>
     <GridList
         cellHeight={250}
         cols={2}
@@ -162,7 +163,7 @@ export default class MyRecipes extends React.Component {
           subtitle={tile.recipename}
           actionPosition="right"
           actionIcon={<IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton>}>
-          <img src={tile.userimage || tile.recipeimage} />
+          <img className="recipeImage" src={tile.userimage || tile.recipeimage}/>       
         </GridTile>
       ))}
     </GridList>
