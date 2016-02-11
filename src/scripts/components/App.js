@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Header from './Header.js'
+import Spinner from './Spinner'
 import SignIn from './SignIn'
 import ProfileMake from './ProfileMake'
 import RecipeChoose from './RecipeChoose'
@@ -27,10 +28,10 @@ export default class App extends React.Component {
     $.get('/foodBot/auth/signin').done((result)=> {
       console.log('init results', result);
       const returnedId = result.id;
+      console.log('who am i', result);
       //initialize profile
       this.state.id = returnedId;
-      this.state.name = result.userData.name;
-      this.state.photo = result.userData.photo;
+
       this.state.currentView = 'Swipe Recipes';
       base.syncState('user' + this.state.id + 'shoppingCart', {
         context: this,
@@ -44,21 +45,24 @@ export default class App extends React.Component {
       //   foodie: true,
       //   allergies: []
       // };
-      // $.post('/foodBot/profile/'+ returnedId, prof)
-      // .done((result) => {
-      //   // user.route = 'Swipe Recipes';
-      //   // user.diet = this.state.diet;
-      //   // user.cookingTime = this.state.prep.value;
-      //   // user.foodie = this.state.chosenType === "foodie";
-      //   // user.allergies = this.state.allergies
-      //   console.log('retrieved user', result)
-      // })
-      // .fail((error) =>{
-      //   console.log('error creating profile', error);
-      // })
+      $.get('/foodBot/profile/'+ returnedId)
+      .done((result) => {
+        this.state.name = result.name;
+        this.state.photo = result.photo;
+        // user.route = 'Swipe Recipes';
+        // user.diet = this.state.diet;
+        // user.cookingTime = this.state.prep.value;
+        // user.foodie = this.state.chosenType === "foodie";
+        // user.allergies = this.state.allergies
+        // console.log('retrieved user by id', result)
+      })
+      .fail((error) =>{
+        console.log('error getting user by id profile', returnedId);
+      })
     })
     .fail((error) => {
       console.log('error getting user session', error);
+      this.props.history.pushState(error, '/signin');
     })
   }
 
@@ -76,7 +80,7 @@ export default class App extends React.Component {
       // photo: this.state.location.
 
       //ROUTING LOGIC
-      currentView: 'Profile Settings',
+      currentView: 'default',
       componentRoute: {
         "Profile Settings": "ProfileMake",
         "Swipe Recipes": "RecipeChoose",
@@ -252,15 +256,15 @@ export default class App extends React.Component {
       },
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
-          .done((result) => {            
+          .done((result) => {
             var final = []
-            var r = result.reduce(function(acc, memo) {                            
+            var r = result.reduce(function(acc, memo) {
                 //if it exists in the hash, push only the ingredient data
                 if (acc[memo.id]) {
                   acc[memo.id].ingredients.push({
                     description: memo.description,
                     price: memo.price
-                  })                  
+                  })
                 } else {
                 //If it does not, rebuild it within the object
                   acc[memo.id] = {
@@ -268,7 +272,7 @@ export default class App extends React.Component {
                     name: memo.name,
                     image: memo.image,
                     ingredients: [],
-                    price: memo.priceestimate                    
+                    price: memo.priceestimate
                   }
                   acc[memo.id].ingredients.push({
                     description: memo.description,
@@ -278,7 +282,7 @@ export default class App extends React.Component {
                 return acc;
               }, {})
 
-            for (var key in r) {              
+            for (var key in r) {
                 final.push(r[key])
             }
           this.setState({recipes: final});
@@ -448,12 +452,14 @@ export default class App extends React.Component {
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
             addToCart = {this.state.addToCart.bind(this)}/>
-         
+
         </div>
       )
     }
     else {
-      <NotFound />
+      return(
+        <Spinner />
+      )
     }
   }
 }

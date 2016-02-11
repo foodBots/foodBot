@@ -179,7 +179,7 @@
   -ms-flex-pack: center;
   justify-content: center;
   flex-direction: column;
-  position: fixed;
+  /*position: fixed;*/
   top: 0;
   right: 0;
   bottom: 0;
@@ -295,7 +295,7 @@ ul > li {
 
 .outer-box {
   width: 100%;
-  height: 100%;  
+  height: 100%;
   display: block;
   position: relative;
 }

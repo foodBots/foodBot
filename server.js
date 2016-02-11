@@ -1,11 +1,13 @@
 var path = require('path');
 var express = require('express');
 var session = require('express-session');
+var cookieParser = require('cookie-parser');
 
 //Extras
 var bodyParser = require('body-parser');
 var db = require('./server/config/dbOperations.js');
 var User = require('./server/controllers/userController.js');
+var passport = require('passport');
 
 //Webpack
 // var webpack = require('webpack');
@@ -17,12 +19,18 @@ var app = express();
 //Body Parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(session({
   secret: 'FOOD1234567890BOT',
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
+  saveUninitialized: false
+}));
+// use passport
+app.use( passport.initialize());
+// store passport authentication in the session
+app.use( passport.session());
+// app.use(cors());
+
 
 //Hot Reloading
 // app.use(require('webpack-dev-middleware')(compiler, {
@@ -35,21 +43,21 @@ app.use(session({
 app.use(express.static(__dirname + '/dist'));
 
 require('./server/config/routes.js')(app, express);
+//(app, passport);
 
 var port = process.env.PORT || 3000;
 
 app.get('*', function(req, res) {
-  // console.log(path.join(__dirname, 'index.html'));
   res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
-app.listen(3000, function(err) {
+app.listen(port, function(err) {
   if (err) {
     console.log(err);
     return;
   }
 
-  console.log('Listening at http://postgres@localhost:3000');
+  console.log('Listening at http://localhost:'+port);
 });
 
 //postgres set up
@@ -62,13 +70,35 @@ client.connect();
 //create db tables
 
 var createUsersTable = client.query(db.createUsersTable);
-var createRecipesTable = client.query(db.createRecipesTable);
-var createProfilesTable = client.query(db.createProfilesTable);
-var createUserRecipesTable = client.query(db.createUserRecipesTable);
-var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
+
 var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
+
+var createRecipesTable = client.query(db.createRecipesTable);
+
+var createGroceriesTable = client.query(db.createGroceryPriceTable);
+
 var createIngredientsTable = client.query(db.createIngredientsTable);
-var createRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
-var createGroceriesTable = client.query(db.createGroceryPriceTable)
+
+var createRecipeIngredientsTable = client.query(db.createRecipeIngredientsTable);
+
+var createProfilesTable = client.query(db.createProfilesTable);
+
+var createUserRecipesTable = client.query(db.createUserRecipesTable);
+
+var createMatchesQueueTable = client.query(db.createMatchesQueueTable);
+
+var createUserPhotosTable = client.query(db.createUserPhotosTable);
+
+var createOrdersTable = client.query(db.createOrdersTable);
+
+var createRecipeCostTable = client.query(db.createRecipeCostTable);
+
+var createRecipeSourcesTable = client.query(db.createRecipeSourcesTable);
+var seedRecipeSourcesTable = client.query("SELECT * from RecipeSources", db.checkForSourceIds);
+
+var createRecipeSearchTerms = client.query(db.createRecipeSearchTerms);
+var seedRecipeSearchTerms = client.query('Select * from RecipeSearchTerms', db.checkForSeededResults);
+
+// client.end();
 
 module.exports = app;

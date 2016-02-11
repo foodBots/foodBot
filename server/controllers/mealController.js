@@ -11,7 +11,7 @@ var makeConnect = function() {
 
 module.exports = {
 
-	exploreUserMeals: function(req, res) {		
+	exploreUserMeals: function(req, res) {
 		makeConnect();
 		var uid = req.params.id
 		var foodie;
@@ -71,7 +71,7 @@ module.exports = {
 
 		// Create Query for all recipes user has created or seenRecipe
 
-		var userRecipesQuery = client.query("select ur.profileid, ur.recipeid, r.name as recipeName, r.image as recipeImage, r.rating, u.name as userImage from userrecipes ur left outer join userphotos u on ur.recipeid=u.recipeid inner join recipes r on r.id=ur.recipeid where ur.profileid="+userid+" AND ur.liked=true");
+		var userRecipesQuery = client.query("select ur.profileid, ur.recipeid, r.name as recipeName, r.image as recipeImage, r.rating, u.name as userImage from userrecipes ur left outer join userphotos u on ur.profileid=u.profileid inner join recipes r on ur.recipeid=r.id where ur.profileid="+userid+" AND ur.liked=true");
 		//TestQ2: Select name, ingredients, image, rating, directionsurl, liked from Recipes Inner Join UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid=17 AND liked=true;
 
 		// Instantiate User Recipes
@@ -111,7 +111,7 @@ module.exports = {
 		if (typeof rejected === "string") {
 			rejected = JSON.parse(rejected);
 			liked = JSON.parse(liked);
-		}		
+		}
 		rejected.forEach(function(recipeID) {
 			client.query("INSERT INTO userRecipes (profileid, recipeid, created, liked) VALUES (" + uid + "," + recipeID + ", false, false)", function(err, done) {
 				if (err) {"reject fail"}
