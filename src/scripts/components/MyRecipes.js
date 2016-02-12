@@ -148,7 +148,7 @@ export default class MyRecipes extends React.Component {
           </div>
         </div>
       </div>
-      <h3 className="user-dishes">{this.props.username}'s Meals</h3>
+      <h1 className="user-dishes"><strong>{this.props.username}'s Meals</strong></h1>
     <div className="myrecipe-container">
     <GridList
         cellHeight={250}

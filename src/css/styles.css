@@ -350,6 +350,18 @@ td {
   padding-right: 1%;
 }
 
-body {
-  background-color: #D9DFE9;  
+.navbar {
+  font-family: 'Work Sans', sans-serif;;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  color: #D9DFE9;
+  font-size: 24px;
+}
+
+
+.user-dishes {
+  font-weight: 500;
+  size: 48px;
 }
