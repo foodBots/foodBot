@@ -7,7 +7,9 @@ import PlayCircleOutline from 'material-ui/lib/svg-icons/av/play-circle-outline'
 import Kitchen from 'material-ui/lib/svg-icons/places/kitchen';
 import IconButton from 'material-ui/lib/icon-button';
 import ReactDOM from 'react-dom';
-import PairMessagesList from './PairMessagesList'
+import PairMessagesList from './PairMessagesList';
+import Avatar from 'material-ui/lib/avatar';
+import Snackbar from 'material-ui/lib/snackbar';
 
 
 export default class SoMoWindow extends React.Component {
@@ -21,12 +23,31 @@ export default class SoMoWindow extends React.Component {
           },
           activeItem: this.props.activeItem
         }
+
     }
     
     renderMessage(message, index){
         return (
-            <li className="message" key={index}>{this.props.username}: {message}</li>
+            <li className="somo-message" key={index}>
+                <div className="somo-name">
+                </div>
+            <h5><strong>{this.props.username}:</strong></h5>
+            <span>{message}</span>
+            </li>
         )
+    }
+
+    handleTouchTap () {
+      this.setState({
+        open: true,
+      });
+      this.props.addToCart();
+    }
+
+    handleRequestClose() {
+      this.setState({
+        open: false,
+      });
     }
 
     renderChats() {
@@ -44,36 +65,45 @@ export default class SoMoWindow extends React.Component {
             this.state.submitChat(this.refs.msg.value)
             ReactDOM.findDOMNode(this.refs.msg).value = "";
           }}>
-            <input placeholder="SAY SOMETHING" ref='msg' />
+            <input placeholder="Add a comment..." ref='msg' />
         </form>
       )
     }
 
     render(){        
         return (
-            <Modal 
-                show={this.props.isModalOpen} 
-                onHide={this.props.close}
-                container={this}
-                bsSize="large"
-                enforceFocus={true}>
-            <Modal.Header closeButton>
-                <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
-            </Modal.Header>
-            <Modal.Body>
-                <h2>Comment Window</h2>
-                 <PairMessagesList 
-                    name={this.props.name}
-                    activeItemId={this.props.activeItemId}
-                    activeProfId={this.props.activeProfId}
-                    activeItemPrice={this.props.activeItemPrice}/>
-            </Modal.Body>
-            <Modal.Footer>
-            <IconButton onTouchTap={this.props.close}><PlayCircleOutline color="#1DB272"/></IconButton>  
-            <IconButton onTouchTap={this.props.addToLiked}><Kitchen color="#335CFF"/></IconButton>
-            <IconButton onTouchTap={this.props.addToCart}><ShoppingCart color="#B2240B"/></IconButton> 
-            </Modal.Footer>
-            </Modal> 
+            <div>
+                <Modal 
+                    show={this.props.isModalOpen} 
+                    onHide={this.props.close}
+                    container={this}
+                    bsSize="large"
+                    enforceFocus={true}>
+                <Modal.Header closeButton>
+                    <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
+                </Modal.Header>
+                <Modal.Body>
+                    <h2 className="somo-comment-header">Comments:</h2>
+                     <PairMessagesList 
+                        userPhoto={this.props.userphoto}
+                        name={this.props.name}
+                        activeItemId={this.props.activeItemId}
+                        activeProfId={this.props.activeProfId}
+                        activeItemPrice={this.props.activeItemPrice}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <IconButton onTouchTap={this.props.close}><PlayCircleOutline color="#1DB272"/></IconButton>  
+                    <IconButton onTouchTap={this.props.addToLiked}><Kitchen color="#335CFF"/></IconButton>
+                    <IconButton onTouchTap={this.props.addToCart}><ShoppingCart color="#B2240B"/></IconButton> 
+                </Modal.Footer>
+                </Modal> 
+                <Snackbar
+                  open={this.state.open}
+                  message="Item added to cart"
+                  autoHideDuration={4000}
+                  onRequestClose={this.handleRequestClose.bind(this)}
+                />
+            </div>
         )
     }
 }
