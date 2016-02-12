@@ -331,6 +331,41 @@ td {
   padding-top: 1%;
 }
 
+.bubble {
+position: relative;
+width: 100%;
+height: 30px;
+padding: 0px;
+background: #FAFFD0;
+-webkit-border-radius: 11px;
+-moz-border-radius: 11px;
+border-radius: 11px;
+border: #48487F solid 2px; }
+
+.bubble:after {
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 15px 15px 15px 0;
+border-color: transparent #FAFFD0;
+display: block;
+width: 0;
+z-index: 1;
+left: -15px;
+top: 17px; }
+
+.bubble:before {
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 16px 16px 16px 0;
+border-color: transparent #48487F;
+display: block;
+width: 0;
+z-index: 0;
+left: -18px;
+top: 16px; }
+
 .comment-boxes {
   padding-bottom: 2%;
 }
