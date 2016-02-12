@@ -3,10 +3,11 @@ import ReactSwipe from 'react-swipe'
 import Header from './Header.js'
 import {Card, CardActions, CardText, CardHeader, CardTitle} from 'material-ui/lib/card';
 import $ from 'jquery';
+import Delete from 'material-ui/lib/svg-icons/action/delete';
+import LocalShipping from 'material-ui/lib/svg-icons/maps/local-shipping';
 import IconButton from 'material-ui/lib/icon-button';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Avatar from 'material-ui/lib/avatar';
-import Delete from 'material-ui/lib/svg-icons/action/delete';
 
 class RecipesBuy extends React.Component {
   componentWillMount(){
@@ -40,7 +41,7 @@ class RecipesBuy extends React.Component {
           style={{position: 'absolute'}}
           />
         <CardActions>
-        <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.props.removeOrder.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+        <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.removeOrder.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
         </CardActions>
         </Card>
       </div>
@@ -56,14 +57,15 @@ class RecipesBuy extends React.Component {
         {recipes.map((element, index) => this.renderCard(element, index))}
         <Card style={this.cardStyles}>
           <CardHeader
-            title={"Total Order: $"+this.props.total}/>
+            title={"Total Order: $" +this.props.total}/>
         </Card>
         <br />
-        <RaisedButton 
-            style={this.buttonStyles} 
-            secondary={true} 
-            label="Complete Order" 
-            onClick={this.props.orderCheckout}/>
+           <RaisedButton
+      label="Check Out Now"
+      primary={true}
+      onClick={this.props.orderCheckout}
+      icon={<LocalShipping />}
+    />
       </div>
     )
   }

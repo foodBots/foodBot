@@ -43,7 +43,6 @@ export default class Subtotal extends React.Component {
           </Modal.Body>
           <Modal.Footer>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.saveMatch}><PlayCircleOutline color="#1DB272"/></IconButton>  
-          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.removeFromCart}><Delete color="#1DB272"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.goCheckout}><ShoppingCart color="#B2240B"/></IconButton> 
           </Modal.Footer>
           </Modal> 
