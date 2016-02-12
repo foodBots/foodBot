@@ -3,6 +3,7 @@ var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/
 var Promise = require('bluebird');
 var request = require('request');
 var apiKeys = require('../config/apiKeys');
+var _ = require('lodash')
 
 var client = new pg.Client(connectionString);
 
@@ -220,14 +221,15 @@ module.exports = {
 			} else {
 					//Compile recipes into an array
 					result.rows.forEach(function (row) {
-						recipeResults.push(row.id)
+						recipeResults.push(row.id)								
 					});
-				  Promise.all(recipeResults).then(function () {
+					var shuffling = _.shuffle(recipeResults)
+
+				  Promise.all(shuffling).then(function () {
 						client.query("select recipes.id, recipes.priceestimate, recipes.name, groceryprices.price, recipes.image, ingredients.description from recipes inner join recipeingriedients on (recipes.id = recipeingriedients.recipeid) inner join ingredients ON (ingredients.id = recipeingriedients.ingredientid) inner join groceryprices ON (groceryprices.id = ingredients.groceryid) where recipes.id = ANY($1);", [recipeResults], function (err, sendData) {
 							if (err) {
 								console.log("had trouble finding it", err)
 							}
-							//getAPIrecipes();
 							res.json(sendData.rows)
 					})
 				})

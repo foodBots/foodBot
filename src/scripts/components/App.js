@@ -48,13 +48,16 @@ export default class App extends React.Component {
       $.get('/foodBot/profile/'+ returnedId)
       .done((result) => {
         this.state.name = result.name;
-        this.state.photo = result.photo;
+        // let photo = result.photo || 
+        let photo = "http://33.media.tumblr.com/f0d754dadf47a5aa79d6975735ee21fe/tumblr_inline_ne2bnsjzI41qfq25i.png"
         // user.route = 'Swipe Recipes';
         // user.diet = this.state.diet;
         // user.cookingTime = this.state.prep.value;
         // user.foodie = this.state.chosenType === "foodie";
         // user.allergies = this.state.allergies
         // console.log('retrieved user by id', result)
+        this.setState({name: result.name, photo: photo})
+
       })
       .fail((error) =>{
         console.log('error getting user by id profile', returnedId);

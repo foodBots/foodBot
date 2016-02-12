@@ -29,7 +29,7 @@ module.exports = {
 			})
 		}
 		getFoodieStatus(uid).then(function(foodie) {
-			client.query("SELECT recipes.id, recipes.priceestimate, users.name as username, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked from recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) JOIN users ON (profiles.id = users.id) WHERE liked=true AND created=true AND foodie="+foodie+";", function(err, data) {
+			client.query("SELECT recipes.id, recipes.priceestimate, users.name as username, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked from recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) JOIN users ON (profiles.id = users.id) WHERE liked=true AND created=true AND foodie="+foodie+" AND users.id != "+uid+";", function(err, data) {
 				res.send(data.rows)
 				client.end();
 			});
@@ -70,7 +70,7 @@ module.exports = {
 
 		// Create Query for all recipes user has created or seenRecipe
 
-		var userRecipesQuery = client.query("select ur.profileid, ur.recipeid, r.priceestimate as price, r.name as recipeName, r.image as recipeImage, r.rating, u.name as userImage from userrecipes ur left outer join userphotos u on ur.recipeid=u.recipeid inner join recipes r on r.id=ur.recipeid where ur.profileid="+userid+" AND ur.liked=true");
+		var userRecipesQuery = client.query("select ur.profileid, ur.recipeid, r.priceestimate as price, r.name as recipeName, r.image as recipeImage, r.rating, u.name as userImage from userrecipes ur left outer join userphotos u on ur.recipeid=u.recipeid inner join recipes r on r.id=ur.recipeid where ur.profileid="+userid+" AND ur.liked=true ORDER by ur.id");
 		//TestQ2: Select name, ingredients, image, rating, directionsurl, liked from Recipes Inner Join UserRecipes ON (Recipes.id = UserRecipes.recipeid) WHERE profileid=17 AND liked=true;
 
 		// Instantiate User Recipes
