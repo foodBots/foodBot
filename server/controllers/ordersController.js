@@ -4,18 +4,14 @@ var Promise = require('bluebird');
 
 module.exports = {
   createOrder: function (req, res) {
-    // console.log('createOrder controller RECIPES ARE GETTING PASSSED', req.body.recipes);
-
     var client = new pg.Client(connectionString);
     client.connect();
     var userId = req.params.userid;
     var sqlStr = "INSERT INTO Orders (profileid, total) VALUES (" + req.params.userid + "," + req.body.order.total+") RETURNING id;";
-    // console.log(sqlStr);
     var query = client.query("INSERT INTO Orders (profileid, total) VALUES (" + req.params.userid + "," + req.body.order.total+") RETURNING id;", function(err, data) {      
       if (err) {
         console.log('error inserting order', err);
       }
-      // console.log('inserted order data', data.rows[0].id);
       //build sql str;
       var s = "INSERT INTO RecipeCost (orderid, recipeid, price) VALUES ";      
       req.body.recipes.forEach(function(recipe, index) {

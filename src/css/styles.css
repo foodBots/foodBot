@@ -305,5 +305,10 @@ td {
     white-space: pre-wrap;
 }
 
+.somo-message {
+  padding-left: 2px;
+}
 
-
+.somo-name {
+  font-weight: 600;
+}

@@ -6,6 +6,7 @@ import $ from 'jquery';
 
 import { GridList, GridTile } from 'material-ui/lib/grid-list';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import Comment from 'material-ui/lib/svg-icons/communication/comment';
 import IconButton from 'material-ui/lib/icon-button';
 
 import { Modal, Button } from 'react-bootstrap';
@@ -55,7 +56,7 @@ export default class RecipeLanding extends React.Component {
           key={index}
           title={tile.name}
           subtitle={<span>by <b>{tile.rating}</b></span>}
-          actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><StarBorder color="white"/></IconButton>}>
+          actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><Comment color="white"/></IconButton>}>
           <img src={tile.image} />
         </GridTile>
       ))}

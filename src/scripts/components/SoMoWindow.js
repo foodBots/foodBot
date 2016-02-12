@@ -16,11 +16,12 @@ export default class SoMoWindow extends React.Component {
           },
           activeItem: this.props.activeItem
         }
+
     }
     
     renderMessage(message, index){
         return (
-            <li className="message" key={index}>{this.props.username}: {message}</li>
+            <li className="somo-message" key={index}><span className="somo-name"><strong>{this.props.username}: </strong></span><span> {message}</span></li>
         )
     }
 
@@ -39,7 +40,7 @@ export default class SoMoWindow extends React.Component {
             this.state.submitChat(this.refs.msg.value)
             ReactDOM.findDOMNode(this.refs.msg).value = "";
           }}>
-            <input placeholder="SAY SOMETHING" ref='msg' />
+            <input placeholder="e.g. Add extra garlic to this dish!" ref='msg' />
         </form>
       )
     }
@@ -56,7 +57,7 @@ export default class SoMoWindow extends React.Component {
                 <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
             </Modal.Header>
             <Modal.Body>
-                <h2>Comment Window</h2>
+                <h2>Comments:</h2>
                  <PairMessagesList 
                     name={this.props.name}
                     activeItemId={this.props.activeItemId}
