@@ -269,7 +269,7 @@ table {
   opacity:1;
 }
 
-.hvr-grow {
+.hvr-grow {    
     display: inline-block;
     vertical-align: middle;
     transform: translateZ(0);
@@ -407,5 +407,14 @@ top: 16px; }
 
 .myrecipe-explore {
   margin-bottom: 3%;
+}
+
+img {
+  max-height: 100%;
+  max-width: 100%;  
+}
+
+.iconbar {
+  float: right;
 }
 
