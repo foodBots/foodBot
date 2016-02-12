@@ -2,8 +2,9 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
 import ShoppingCart from 'material-ui/lib/svg-icons/action/shopping-cart';
+import Delete from 'material-ui/lib/svg-icons/action/delete';
 import Undo from 'material-ui/lib/svg-icons/content/undo';
-import ArrowBack from 'material-ui/lib/svg-icons/navigation/arrow-back';
+import PlayCircleOutline from 'material-ui/lib/svg-icons/av/play-circle-outline';
 import IconButton from 'material-ui/lib/icon-button';
 import SubtotalTable from './SubtotalTable'
 
@@ -11,6 +12,13 @@ export default class Subtotal extends React.Component {
 
     constructor(props) {
       super(props);
+      this.buttonStyles = {
+        width: '40px', 
+        height: '70px'
+      }
+      this.buttonBackgroundStyle = {
+        width: '80px',
+      }
     }
 
     render() {    
@@ -34,9 +42,9 @@ export default class Subtotal extends React.Component {
                 subtotal={this.props.total}/>
           </Modal.Body>
           <Modal.Footer>
-          <IconButton onTouchTap={this.props.saveMatch}><ArrowBack color="#1DB272"/></IconButton>  
-          <IconButton onTouchTap={this.props.removeFromCart}><Undo color="#1DB272"/></IconButton>
-          <IconButton onTouchTap={this.props.goCheckout}><ShoppingCart color="#B2240B"/></IconButton> 
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.saveMatch}><PlayCircleOutline color="#1DB272"/></IconButton>  
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.removeFromCart}><Delete color="#1DB272"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.goCheckout}><ShoppingCart color="#B2240B"/></IconButton> 
           </Modal.Footer>
           </Modal> 
       )

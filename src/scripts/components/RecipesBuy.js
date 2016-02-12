@@ -32,13 +32,10 @@ class RecipesBuy extends React.Component {
           title={element.name}
           avatar={element.image}
           subtitle={element.price}
-          actAsExpander={true}
-          showExpandableButton={true}/>
-        <CardText expandable={true}>
-          <CardActions>
-            <RaisedButton label="Remove" primary={true} onClick={this.props.removeOrder.bind(this, element)}/>
-          </CardActions>
-        </CardText>
+          />
+        <CardActions>
+          <RaisedButton label="Remove" primary={true} onClick={this.props.removeOrder.bind(this, element)}/>
+        </CardActions>
         </Card>
       </div>
     )
