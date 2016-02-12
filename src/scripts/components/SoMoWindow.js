@@ -25,14 +25,7 @@ export default class SoMoWindow extends React.Component {
         return (
             <li className="somo-message" key={index}>
                 <div className="somo-name">
-            <Avatar 
-              src={this.props.userphoto} 
-              size={110}
-              style = {this.avatar}
-              paddingTop="3%"
-              paddingLeft="2%"
-            />
-            </div>
+                </div>
             <h5><strong>{this.props.username}:</strong></h5>
             <span>{message}</span>
             </li>
@@ -85,8 +78,9 @@ export default class SoMoWindow extends React.Component {
                     <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
                 </Modal.Header>
                 <Modal.Body>
-                    <h2>Comments:</h2>
+                    <h2 className="somo-comment-header">Comments:</h2>
                      <PairMessagesList 
+                        userPhoto={this.props.userphoto}
                         name={this.props.name}
                         activeItemId={this.props.activeItemId}
                         activeProfId={this.props.activeProfId}

@@ -41,7 +41,8 @@ export default class MyRecipes extends React.Component {
         height: "100%",
         overflowY: 'auto',
         marginBottom: 24,
-        paddingTop: "10px"
+        paddingTop: "10px",
+        fontSize: "22px"
       }
     }
 
