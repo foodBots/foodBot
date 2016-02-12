@@ -57,7 +57,8 @@ export default class MyRecipes extends React.Component {
 
     this.raisedbutton = {
       width: '100%',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      backgroundColor: '#B2240B'
     }
 
     this.state = {
@@ -138,6 +139,7 @@ export default class MyRecipes extends React.Component {
               <div className = "user-edit col-xs-10">
                 <RaisedButton
                   icon={<Edit />}
+                  backgroundColor="#B2240B"
                   label="Edit Profile"
                   primary={true}
                   labelPosition="before"

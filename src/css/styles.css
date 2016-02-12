@@ -234,6 +234,10 @@ table {
   text-align: center;
 }
 
+.user-dishes {
+  margin-bottom: 3%;
+}
+
 .avatar {
   padding-left: 20px;
 }
@@ -395,8 +399,12 @@ top: 16px; }
   font-size: 24px;
 }
 
-
 .user-dishes {
   font-weight: 500;
   size: 48px;
 }
+
+.myrecipe-explore {
+  margin-bottom: 3%;
+}
+
