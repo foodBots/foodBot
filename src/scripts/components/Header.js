@@ -16,6 +16,8 @@ export default class Header extends React.Component {
   const collapsibleNav = navBar.querySelector('div.navbar-collapse');
   const btnToggle = navBar.querySelector('button.navbar-toggle');
 
+
+
   navBar.addEventListener('click', (evt) => {
     if (evt.target.tagName !== 'A' || evt.target.classList.contains('dropdown-toggle') || ! collapsibleNav.classList.contains('in')) {
       return;
@@ -26,23 +28,32 @@ export default class Header extends React.Component {
 }
 
   render() {
+    const icon = (
+      <span class="logo">
+        <div>
+          <img src="/favicon.ico" height="33" width="50" alt="text here" />
+          SWIPEBITE
+        </div>
+      </span>
+    );
+
     return (
     <Navbar inverse>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#">SWIPEBITE</a>
+        {icon}
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
         <NavItem eventKey={1} onClick={(event) => this.props.redirect(event.target.textContent)}>Swipe</NavItem>
-        <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Explore</NavItem>        
+        <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Cart</NavItem>
       </Nav>
       <Nav pullRight>
         <NavItem eventKey={1} onClick={(event) => this.props.redirect(event.target.textContent)}>Recipes</NavItem>
-        <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Cart</NavItem>
-        <NavItem eventKey={3} href="/signout"> Sign Out</NavItem>
+        <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Explore</NavItem>
+        <NavItem eventKey={3} href="/foodBot/auth/logout"> Sign Out</NavItem>
       </Nav>
     </Navbar.Collapse>
     </Navbar>

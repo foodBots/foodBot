@@ -48,7 +48,7 @@ getAPIrecipes = function() {
           client.query('SELECT * from RecipeSearchTerms WHERE id = ' + randomSearchQuery + ';', function (err, result) {
             if (err) {
             	reject(err)
-            } else {            
+            } else {
             var foodName = result.rows[0].name;
             var foodPage = result.rows[0].page;
             foodPage+= 1;
@@ -221,12 +221,12 @@ module.exports = {
 			} else {
 					//Compile recipes into an array
 					result.rows.forEach(function (row) {
-						recipeResults.push(row.id)								
+						recipeResults.push(row.id)
 					});
 					var shuffling = _.shuffle(recipeResults)
 
 				  Promise.all(shuffling).then(function () {
-						client.query("select recipes.id, recipes.priceestimate, recipes.name, groceryprices.price, recipes.image, ingredients.description from recipes inner join recipeingriedients on (recipes.id = recipeingriedients.recipeid) inner join ingredients ON (ingredients.id = recipeingriedients.ingredientid) inner join groceryprices ON (groceryprices.id = ingredients.groceryid) where recipes.id = ANY($1);", [recipeResults], function (err, sendData) {
+						client.query("select recipes.id, recipes.priceestimate, recipes.name, groceryprices.price, recipes.image, ingredients.description, directionsurl from recipes inner join recipeingriedients on (recipes.id = recipeingriedients.recipeid) inner join ingredients ON (ingredients.id = recipeingriedients.ingredientid) inner join groceryprices ON (groceryprices.id = ingredients.groceryid) where recipes.id = ANY($1);", [recipeResults], function (err, sendData) {
 							if (err) {
 								console.log("had trouble finding it", err)
 							}

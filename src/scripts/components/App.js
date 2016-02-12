@@ -288,7 +288,8 @@ export default class App extends React.Component {
                     name: memo.name,
                     image: memo.image,
                     ingredients: [],
-                    price: memo.priceestimate
+                    price: memo.priceestimate,
+                    directionsurl: memo.directionsurl
                   }
                   acc[memo.id].ingredients.push({
                     description: memo.description,

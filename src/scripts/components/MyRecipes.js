@@ -28,7 +28,7 @@ export default class MyRecipes extends React.Component {
   componentWillMount() {
     this.props.getChosenRecipes(this.props.userid);
   }
-  
+
   constructor(props) {
     super(props);
     this.styles = {
@@ -85,8 +85,8 @@ export default class MyRecipes extends React.Component {
   };
 
   handleProfChange() {
-    console.log(this.props, "here are props")
-    this.props.redirect("Profile")
+    // console.log(this.props, "here are props")
+    this.props.redirect("Profile");
   }
 
   increaseUploadCount() {
@@ -108,8 +108,8 @@ export default class MyRecipes extends React.Component {
       <div className="myprofile-container" >
         <div className="row">
           <div className="avatar col-xs-3 " >
-            <Avatar 
-              src={this.props.userphoto} 
+            <Avatar
+              src={this.props.userphoto}
               size={110}
               style = {this.avatar}
               paddingTop="3%"
@@ -144,7 +144,7 @@ export default class MyRecipes extends React.Component {
                   secondary={true}
                   labelPosition="before"
                   style = {this.raisedbutton}
-                  onClick={this.handleProfChange}/>
+                  onClick={this.handleProfChange.bind(this)}/>
               </div>
             </div>
           </div>
@@ -157,7 +157,7 @@ export default class MyRecipes extends React.Component {
         cols={2}
         style={this.gridStyles}
         >
-      {this.props.chosenRecipes.map((tile,index) => (        
+      {this.props.chosenRecipes.map((tile,index) => (
         <GridTile
           className="hvr-grow"
           key={index}
@@ -172,7 +172,7 @@ export default class MyRecipes extends React.Component {
             badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B', color: 'white', 'fontFamily': 'Roboto, sans-serif'}}
           >
           </Badge>
-          <img src={tile.userimage || tile.recipeimage}/>       
+          <img src={tile.userimage || tile.recipeimage}/>
         </GridTile>
       ))}
     </GridList>
