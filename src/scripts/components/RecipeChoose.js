@@ -20,11 +20,11 @@ export default class Recipe extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       open: false
     }
-  
+
     this.style = {
       textAlign: 'center',
       height: '100vh',
@@ -36,7 +36,7 @@ export default class Recipe extends React.Component {
       'marginTop': '20px'
     }
     this.buttonStyles = {
-      width: '40px', 
+      width: '40px',
       height: '50px'
     }
     this.buttonBackgroundStyle = {
@@ -103,28 +103,29 @@ export default class Recipe extends React.Component {
           >
           </Badge>
           <img style={{"maxWidth": "350px", "maxHeight": "390px ", "minHeight": "300px","minWidth":"300px", overflow: "hidden"}} src ={element.image}/>
-        </CardMedia>        
+        </CardMedia>
         <CardActions>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete color="#626569"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#4B78CB"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
         </CardActions>
         <CardHeader
-           style={{padding: "0px", height: "15px"}}
+           style={{padding: "0px", height: "10px"}}
            subtitle="Ingredients"/>
-        <CardText style={{overflow: "hidden"}}>
-        <table style={{width: "100%"}}>          
+        <CardText style={{overflow: "auto", maxHeight:"150px"}} >
+        <table style={{width: "100%"}}>
             {element.ingredients.map((item, i) => {
               return (
                 <tr>
-                <td style={{float: "left"}}>{item.description}</td>
+                <td style={{float: "left"}}>{item.description.substring(0,40)}</td>
                 <td style={{float: "right "}}>${item.price}</td>
                 </tr>
                 )
               })
-            }          
+            }
+            <tr><a href={element.directionsurl} target="_blank">Directions</a></tr>
         </table>
-        </CardText>        
+        </CardText>
         </Card>
       </div>
     )
@@ -139,7 +140,7 @@ export default class Recipe extends React.Component {
         <Snackbar
           open={this.state.open}
           message= {"Item added to favorites"}
-          autoHideDuration={4000}
+          autoHideDuration={400}
           onRequestClose={this.handleRequestClose.bind(this)}/>
       </div>
     )

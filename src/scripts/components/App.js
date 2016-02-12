@@ -48,7 +48,7 @@ export default class App extends React.Component {
       $.get('/foodBot/profile/'+ returnedId)
       .done((result) => {
         this.state.name = result.name;
-        // let photo = result.photo || 
+        // let photo = result.photo ||
         let photo = "http://33.media.tumblr.com/f0d754dadf47a5aa79d6975735ee21fe/tumblr_inline_ne2bnsjzI41qfq25i.png"
         // user.route = 'Swipe Recipes';
         // user.diet = this.state.diet;
@@ -97,9 +97,9 @@ export default class App extends React.Component {
       chosenRecipes: [],
       cart: [],
 
-      getTotal: () => {        
-        let newTotal = parseFloat(0) 
-        this.state.cart.forEach((element) => {          
+      getTotal: () => {
+        let newTotal = parseFloat(0)
+        this.state.cart.forEach((element) => {
           newTotal += parseFloat(element.price)
         })
         this.setState({total: parseFloat(newTotal).toFixed(2)})
@@ -269,7 +269,7 @@ export default class App extends React.Component {
         liked: [],
         rejected: []
       },
-      
+
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
@@ -288,7 +288,8 @@ export default class App extends React.Component {
                     name: memo.name,
                     image: memo.image,
                     ingredients: [],
-                    price: memo.priceestimate
+                    price: memo.priceestimate,
+                    directionsurl: memo.directionsurl
                   }
                   acc[memo.id].ingredients.push({
                     description: memo.description,
