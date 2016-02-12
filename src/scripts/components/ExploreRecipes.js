@@ -26,14 +26,15 @@ export default class RecipeLanding extends React.Component {
    
    this.gridStyles = {
     root: {
-     width: "100%"
+     width: "100%",
+     marginTop: "3%"
 
     },
     gridList: {
       width: "100%",
       height: "100%",
       overflowY: 'auto',
-      marginBottom: 24,
+      marginBottom: 24
     }
   }
 }
@@ -50,7 +51,7 @@ export default class RecipeLanding extends React.Component {
   render() {    
     return (
     <div className="myrecipe-container" style={this.gridStyles.root}>
-    <h1><strong>Explore Recipes</strong></h1>
+    <h1 className="myrecipe-explore"><strong>Explore Recipes</strong></h1>
       <GridList
         cellHeight={250}
         style={this.gridStyles}>      

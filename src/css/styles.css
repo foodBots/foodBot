@@ -395,8 +395,12 @@ top: 16px; }
   font-size: 24px;
 }
 
-
 .user-dishes {
   font-weight: 500;
   size: 48px;
 }
+
+.myrecipe-explore {
+  margin-bottom: 3%;
+}
+
