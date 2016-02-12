@@ -2,7 +2,9 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
 import ReactDOM from 'react-dom';
-import PairMessagesList from './PairMessagesList'
+import PairMessagesList from './PairMessagesList';
+import Avatar from 'material-ui/lib/avatar';
+import Snackbar from 'material-ui/lib/snackbar';
 
 
 export default class SoMoWindow extends React.Component {
@@ -21,8 +23,33 @@ export default class SoMoWindow extends React.Component {
     
     renderMessage(message, index){
         return (
-            <li className="somo-message" key={index}><span className="somo-name"><strong>{this.props.username}: </strong></span><span> {message}</span></li>
+            <li className="somo-message" key={index}>
+                <div className="somo-name">
+            <Avatar 
+              src={this.props.userphoto} 
+              size={110}
+              style = {this.avatar}
+              paddingTop="3%"
+              paddingLeft="2%"
+            />
+            </div>
+            <h5><strong>{this.props.username}:</strong></h5>
+            <span>{message}</span>
+            </li>
         )
+    }
+
+    handleTouchTap () {
+      this.setState({
+        open: true,
+      });
+      this.props.addToCart();
+    }
+
+    handleRequestClose() {
+      this.setState({
+        open: false,
+      });
     }
 
     renderChats() {
@@ -40,36 +67,44 @@ export default class SoMoWindow extends React.Component {
             this.state.submitChat(this.refs.msg.value)
             ReactDOM.findDOMNode(this.refs.msg).value = "";
           }}>
-            <input placeholder="e.g. Add extra garlic to this dish!" ref='msg' />
+            <input placeholder="Add a comment..." ref='msg' />
         </form>
       )
     }
 
     render(){        
         return (
-            <Modal 
-                show={this.props.isModalOpen} 
-                onHide={this.props.close}
-                container={this}
-                bsSize="large"
-                enforceFocus={true}>
-            <Modal.Header closeButton>
-                <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
-            </Modal.Header>
-            <Modal.Body>
-                <h2>Comments:</h2>
-                 <PairMessagesList 
-                    name={this.props.name}
-                    activeItemId={this.props.activeItemId}
-                    activeProfId={this.props.activeProfId}
-                    activeItemPrice={this.props.activeItemPrice}/>
-            </Modal.Body>
-            <Modal.Footer>
-            <RaisedButton label="Close" secondary={true} onClick={this.props.close}/>
-            <RaisedButton label="Save" secondary={true} onClick={this.props.addToLiked}/>                    
-            <RaisedButton label="Add to Cart" primary={true} onClick={this.props.addToCart} />
-            </Modal.Footer>
-            </Modal> 
+            <div>
+                <Modal 
+                    show={this.props.isModalOpen} 
+                    onHide={this.props.close}
+                    container={this}
+                    bsSize="large"
+                    enforceFocus={true}>
+                <Modal.Header closeButton>
+                    <h3>{this.props.activeItem} (${this.props.activeItemPrice})</h3>                      
+                </Modal.Header>
+                <Modal.Body>
+                    <h2>Comments:</h2>
+                     <PairMessagesList 
+                        name={this.props.name}
+                        activeItemId={this.props.activeItemId}
+                        activeProfId={this.props.activeProfId}
+                        activeItemPrice={this.props.activeItemPrice}/>
+                </Modal.Body>
+                <Modal.Footer>
+                <RaisedButton label="Close" secondary={true} onClick={this.props.close}/>
+                <RaisedButton label="Save" secondary={true} onClick={this.props.addToLiked}/>                    
+                <RaisedButton label="Add to Cart" primary={true} onTouchTap={this.handleTouchTap.bind(this)} />
+                </Modal.Footer>
+                </Modal> 
+                <Snackbar
+                  open={this.state.open}
+                  message="Item added to cart"
+                  autoHideDuration={4000}
+                  onRequestClose={this.handleRequestClose.bind(this)}
+                />
+            </div>
         )
     }
 }

@@ -8,6 +8,8 @@ import { GridList, GridTile } from 'material-ui/lib/grid-list';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Comment from 'material-ui/lib/svg-icons/communication/comment';
 import IconButton from 'material-ui/lib/icon-button';
+import Snackbar from 'material-ui/lib/snackbar';
+
 
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';

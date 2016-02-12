@@ -419,8 +419,10 @@ export default class App extends React.Component {
           <Explore
             className="myrecipe-container"
             id={this.state.id}
+            username={this.state.name}
             getExploreRecipes={this.state.getExploreRecipes}
             exploreRecipes={this.state.exploreRecipes}
+            name={this.state.name}
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
@@ -431,6 +433,7 @@ export default class App extends React.Component {
             addToCart={this.state.addToCart.bind(this)}
             addToLiked={this.state.addToLiked.bind(this)}
             name={this.state.name}
+            userphoto={this.state.photo}
             activeItem={this.state.activeItem}
             activeItemId={this.state.activeItemId}
             activeProfId={this.state.activeProfId}
