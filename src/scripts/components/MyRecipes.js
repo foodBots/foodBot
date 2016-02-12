@@ -15,14 +15,13 @@ import ActionAndroid from 'material-ui/lib/svg-icons/action/android';
 import Avatar from 'material-ui/lib/avatar';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
+import Badge from 'material-ui/lib/badge';
 
 import RaisedButton from 'material-ui/lib/raised-button';
 import PhotoUpload from './PhotoUpload'
 import Snackbar from 'material-ui/lib/snackbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-
-
 
 export default class MyRecipes extends React.Component {
 
@@ -42,7 +41,6 @@ export default class MyRecipes extends React.Component {
         height: "100%",
         overflowY: 'auto',
         marginBottom: 24,
-        // display: "inline"
         paddingTop: "10px"
       }
     }
@@ -83,6 +81,11 @@ export default class MyRecipes extends React.Component {
       open: false,
     });
   };
+
+  handleProfChange() {
+    console.log(this.props, "here are props")
+    this.props.redirect("Profile")
+  }
 
   increaseUploadCount() {
     this.setState({uploadCount: this.state.uploadCount+1});
@@ -138,7 +141,7 @@ export default class MyRecipes extends React.Component {
                   primary={true}
                   labelPosition="before"
                   style = {this.raisedbutton}
-                />
+                  onClick={this.handleProfChange}/>
               </div>
             </div>
           </div>
@@ -169,7 +172,7 @@ export default class MyRecipes extends React.Component {
       increaseUploadCount={this.increaseUploadCount}/>
     <Snackbar
       open={this.state.open}
-      message="Item added to cart"
+      message={"Item added to cart $" + this.props.activeItemPrice}
       autoHideDuration={4000}
       onRequestClose={this.handleRequestClose.bind(this)}/>
     </div>
