@@ -36,7 +36,7 @@ export default class PairMessagesList extends React.Component {
             this.state.submitChat(this.refs.msg.value)
             ReactDOM.findDOMNode(this.refs.msg).value = "";
           }}>
-        <input placeholder="SAY SOMETHING" ref='msg' />
+        <input placeholder="Add a comment..." ref='msg' />
       </form>
     )
   }
@@ -51,15 +51,15 @@ export default class PairMessagesList extends React.Component {
 
   renderMessage(message, index){    
     return (
-      <li className="message" key={index}>{message}</li>
+      <li className="message" key={index}><strong>{message}</strong></li>
     )
   }
 
   render() {
     return (      
-      <div>
-        {this.renderChats()}
+      <div className="comment-boxes">
         {this.renderInput()}
+        {this.renderChats()}
       </div>
 
     )

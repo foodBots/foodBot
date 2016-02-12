@@ -305,5 +305,18 @@ td {
     white-space: pre-wrap;
 }
 
+.somo-message {
+  padding-left: 2px;
+}
 
+.somo-name {
+  font-weight: 600;
+}
 
+.comment-boxes {
+  padding-bottom: 2%;
+}
+
+.comment-area {
+  padding-left: 1%;
+}
