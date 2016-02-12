@@ -66,7 +66,7 @@ export default class RecipeLanding extends React.Component {
             style = {{position: 'absolute'}}
             badgeContent={"$"+tile.priceestimate}
             primary={true}
-            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px'}}
+            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B'}}
           >
           </Badge>
           <img src={tile.image} />
