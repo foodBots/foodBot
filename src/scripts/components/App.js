@@ -24,7 +24,6 @@ let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shopp
 export default class App extends React.Component {
 
   componentDidMount() {
-    console.log('My theme obj',MyRawTheme);
     //get init user req session.
     $.get('/foodBot/auth/signin').done((result)=> {
       console.log('init results', result);
@@ -49,7 +48,7 @@ export default class App extends React.Component {
       $.get('/foodBot/profile/'+ returnedId)
       .done((result) => {
         this.state.name = result.name;
-        // let photo = result.photo || 
+        // let photo = result.photo ||
         let photo = "http://33.media.tumblr.com/f0d754dadf47a5aa79d6975735ee21fe/tumblr_inline_ne2bnsjzI41qfq25i.png"
         // user.route = 'Swipe Recipes';
         // user.diet = this.state.diet;
