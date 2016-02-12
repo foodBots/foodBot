@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Rebase from 're-base'
+import Rebase from 're-base';
+import Avatar from 'material-ui/lib/avatar';
+
 
 //This is the chatform
 let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shoppingCart')
@@ -36,30 +38,43 @@ export default class PairMessagesList extends React.Component {
             this.state.submitChat(this.refs.msg.value)
             ReactDOM.findDOMNode(this.refs.msg).value = "";
           }}>
-        <input placeholder="SAY SOMETHING" ref='msg' />
+        <input className="somo-input" placeholder="Add a comment..." ref='msg' />
       </form>
     )
   }
 
   renderChats() {
     return(    
-          <ul className="comment-area">
+          <div className="comment-area">
             {this.state.messages.map((message, index) => this.renderMessage(message, index))}
-          </ul>
+          </div>
     )
   }
 
   renderMessage(message, index){    
     return (
-      <li className="message" key={index}>{message}</li>
+      <div className="somo-message" key={index}>
+        <Avatar 
+          classname="avatar-comment"
+          src={this.props.userphoto} 
+          size={30}
+          style = {this.avatar}
+          paddingTop="3%"
+          paddingLeft="2%"
+          verticalAlign="middle"
+        />
+        <span className="somo-text">
+          <strong>{message}</strong>
+        </span>
+      </div>
     )
   }
 
   render() {
     return (      
-      <div>
-        {this.renderChats()}
+      <div className="comment-boxes">
         {this.renderInput()}
+        {this.renderChats()}
       </div>
 
     )

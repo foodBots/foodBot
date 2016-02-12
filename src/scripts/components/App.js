@@ -77,12 +77,12 @@ export default class App extends React.Component {
       //USER INFO
       id: 0,
       name: '',
-      // photo: this.state.location.
+      photo: '',
 
       //ROUTING LOGIC
       currentView: 'default',
       componentRoute: {
-        "Profile Settings": "ProfileMake",
+        "Profile": "ProfileMake",
         "Swipe": "RecipeChoose",
         "Explore": "ExploreRecipes",
         "Sign Out": "SignIn",
@@ -162,7 +162,7 @@ export default class App extends React.Component {
           image: element.recipeimage
         }
         console.log(element, "the element passed up the chain")
-        this.setState({cart: this.state.cart.concat(recent), recentItem: recent})
+        this.setState({cart: this.state.cart.concat(recent), recentItem: recent, activeItemPrice: element.price})
       },
 
       addToCart: () => {
@@ -419,8 +419,10 @@ export default class App extends React.Component {
           <Explore
             className="myrecipe-container"
             id={this.state.id}
+            username={this.state.name}
             getExploreRecipes={this.state.getExploreRecipes}
             exploreRecipes={this.state.exploreRecipes}
+            name={this.state.name}
             openSocialModal={this.state.openSocialModal.bind(this)}
             close={this.state.close.bind(this)}
             isModalOpen={this.state.isModalOpen}/>
@@ -431,6 +433,7 @@ export default class App extends React.Component {
             addToCart={this.state.addToCart.bind(this)}
             addToLiked={this.state.addToLiked.bind(this)}
             name={this.state.name}
+            userphoto={this.state.photo}
             activeItem={this.state.activeItem}
             activeItemId={this.state.activeItemId}
             activeProfId={this.state.activeProfId}
@@ -458,12 +461,14 @@ export default class App extends React.Component {
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <MyRecipes
+            redirect={this.state.redirect.bind(this)}
             chosenRecipes = {this.state.chosenRecipes}
             userid={this.state.id}
             username={this.state.name}
             userphoto={this.state.photo}
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
+            activeItemPrice = {this.state.activeItemPrice}
             orderAgain = {this.state.orderAgain.bind(this)}/>
         </div>
       )

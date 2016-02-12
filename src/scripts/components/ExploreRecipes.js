@@ -6,7 +6,10 @@ import $ from 'jquery';
 
 import { GridList, GridTile } from 'material-ui/lib/grid-list';
 import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
+import Comment from 'material-ui/lib/svg-icons/communication/comment';
 import IconButton from 'material-ui/lib/icon-button';
+import Snackbar from 'material-ui/lib/snackbar';
+
 
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -52,10 +55,11 @@ export default class RecipeLanding extends React.Component {
         style={this.gridStyles}>      
       {this.props.exploreRecipes.map((tile, index) => (
         <GridTile          
+          className="hvr-grow"
           key={index}
           title={tile.name}
-          subtitle={<span>by <b>{tile.rating}</b></span>}
-          actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><StarBorder color="white"/></IconButton>}>
+          subtitle={<span>by <b>{tile.username}</b></span>}
+          actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><Comment color="white"/></IconButton>}>
           <img src={tile.image} />
         </GridTile>
       ))}

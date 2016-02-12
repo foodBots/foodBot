@@ -161,6 +161,7 @@
   right: 0;
   bottom: 6;
   left: 0;
+  font-size: 22px;
 }
 
 .card-container {
@@ -272,6 +273,8 @@ table {
     -moz-osx-font-smoothing: grayscale;
     transition-duration: 0.3s;
     transition-property: transform;
+    font-size: 22px;
+    padding-bottom: 3%
 }
 
 .hvr-grow:hover,
@@ -305,5 +308,48 @@ td {
     white-space: pre-wrap;
 }
 
+.somo-message {
+  padding-left: 2px;
+}
 
+.somo-input {
+  border: 1px solid #ddd;
+  margin-left: 3%;
+}
 
+.somo-name {
+  font-weight: 600;
+  padding-left: 2%;
+}
+
+.somo-message {
+  border: 1px solid #e2e2e2;
+  margin: 3%;
+  background: #F6F6F6;
+  padding-left: 1%;
+  padding-bottom: 1%;
+  padding-top: 1%;
+}
+
+.comment-boxes {
+  padding-bottom: 2%;
+}
+
+.somo-text {
+  padding-left: 2%;
+  vertical-align: middle;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.somo-comment-header {
+  margin-left: 3%;
+}
+.avatar-comment {
+  padding-right: 1%;
+}
+
+body {
+  background-color: #D9DFE9;  
+}

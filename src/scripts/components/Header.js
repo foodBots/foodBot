@@ -42,7 +42,7 @@ export default class Header extends React.Component {
       <Nav pullRight>
         <NavItem eventKey={1} onClick={(event) => this.props.redirect(event.target.textContent)}>Recipes</NavItem>
         <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Cart</NavItem>
-        <NavItem eventKey={3} onClick={(event) => this.props.redirect(event.target.textContent)}>Sign Out</NavItem>
+        <NavItem eventKey={3} href="/signout"> Sign Out</NavItem>
       </Nav>
     </Navbar.Collapse>
     </Navbar>
