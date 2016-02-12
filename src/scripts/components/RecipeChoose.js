@@ -120,6 +120,11 @@ export default class Recipe extends React.Component {
         <ReactSwipe key={this.props.recipes.length} ref="ReactSwipe" continuous={true} speed={800}>
           {this.props.recipes.map((elem, index) => this.renderCard(elem, index))}
         </ReactSwipe>
+        <Snackbar
+          open={this.state.open}
+          message= {"Item added to favorites"}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose.bind(this)}/>
       </div>
     )
   }
