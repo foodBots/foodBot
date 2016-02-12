@@ -98,6 +98,7 @@ export default class Recipe extends React.Component {
           <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
+            backgroundColor="#B2240B"
             primary={true}
             badgeStyle={{top: 12, right: 12, width: '70px', height: '70px', 'fontSize': '20px'}}
           >
@@ -105,7 +106,7 @@ export default class Recipe extends React.Component {
           <img style={{"maxWidth": "350px", "maxHeight": "390px ", "minHeight": "300px","minWidth":"300px", overflow: "hidden"}} src ={element.image}/>
         </CardMedia>        
         <CardActions>
-          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete color="#626569"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
         </CardActions>
