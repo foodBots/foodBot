@@ -26,12 +26,12 @@ export default class Recipe extends React.Component {
       maxHeight: '600px',
       // minHeight: '300px',
       minWidth: '300px',
-      overflow: 'hidden'
+      overflow: 'hidden',
       'margin-top': '20px'
     }
     this.buttonStyles = {
-      width: '48px', 
-      height: '40px'
+      width: '40px', 
+      height: '50px'
     }
     this.buttonBackgroundStyle = {
       width: '100px'
@@ -79,9 +79,7 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-<<<<<<< 1b8e727ab207d1698466491511a2e15be9b94748
           <img style={{"max-width": "300px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
-=======
           <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
@@ -90,7 +88,6 @@ export default class Recipe extends React.Component {
           >
           </Badge>
           <img src = {element.img}/>
->>>>>>> Improved Card Style & Modal Style
         </CardMedia>
         <CardText>
         </CardText>
