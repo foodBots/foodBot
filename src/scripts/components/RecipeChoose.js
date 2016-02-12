@@ -9,6 +9,7 @@ import Delete from 'material-ui/lib/svg-icons/action/delete';
 import Kitchen from 'material-ui/lib/svg-icons/places/kitchen';
 import LocalDining from 'material-ui/lib/svg-icons/maps/local-dining';
 import IconButton from 'material-ui/lib/icon-button';
+import Snackbar from 'material-ui/lib/snackbar';
 
 
 
@@ -19,6 +20,11 @@ export default class Recipe extends React.Component {
 
   constructor(props) {
     super(props);
+    
+    this.state = {
+      open: false
+    }
+  
     this.style = {
       textAlign: 'center',
       height: '100vh',
@@ -41,6 +47,13 @@ export default class Recipe extends React.Component {
   componentWillMount() {
     this.props.getRecipes();
   }
+
+
+  handleRequestClose() {
+    this.setState({
+      open: false,
+    });
+  };
 
   likeOrReject(recipeId, like) {
 
@@ -65,6 +78,9 @@ export default class Recipe extends React.Component {
 
   yes (element) {
     this.likeOrReject(element.id, true);
+    this.setState({
+      open: true,
+    })
     this.refs.ReactSwipe.swipe.next()
   }
 
@@ -120,6 +136,11 @@ export default class Recipe extends React.Component {
         <ReactSwipe key={this.props.recipes.length} ref="ReactSwipe" continuous={true} speed={800}>
           {this.props.recipes.map((elem, index) => this.renderCard(elem, index))}
         </ReactSwipe>
+        <Snackbar
+          open={this.state.open}
+          message= {"Item added to favorites"}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose.bind(this)}/>
       </div>
     )
   }

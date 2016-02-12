@@ -40,7 +40,7 @@ class SignIn extends React.Component {
     .done((result) => {
       console.log(result, "result is....")
       user = result;
-      user.route = 'Swipe Recipes';
+      user.route = 'Swipe';
       this.props.history.pushState(user, '/');
     })
     .fail((error) => {
@@ -65,15 +65,15 @@ class SignIn extends React.Component {
     return (
       <div>
         <Navbar inverse>
-        <Navbar.Header>
-        <Navbar.Brand>
-          <a href="#">SWIPEBITE</a>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>      
-        </Navbar.Collapse>
-        </Navbar>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <a href="#">SWIPEBITE</a>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+    </Navbar.Collapse>
+    </Navbar>
         <div className="signin-container">
           <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
             <TextField type="text" ref="email" hintText="email" floatingLabelText="Enter email" errorText={this.state.error} onChange={this.clearError}/><br/>

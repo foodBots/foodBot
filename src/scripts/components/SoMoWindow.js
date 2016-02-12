@@ -17,6 +17,8 @@ export default class SoMoWindow extends React.Component {
     constructor(props){
         super(props)
         this.state = {
+          open: false,
+          openLike: false,
           messages: [],
           submitChat: (message) => {
             this.setState({messages: this.state.messages.concat(message)})          
@@ -44,9 +46,17 @@ export default class SoMoWindow extends React.Component {
       this.props.addToCart();
     }
 
+    handleTouchLike(){
+      this.setState({
+        openLike:true,
+      })
+      this.props.addToLiked()
+    }
+
     handleRequestClose() {
       this.setState({
         open: false,
+        openLike: false
       });
     }
 
@@ -93,7 +103,7 @@ export default class SoMoWindow extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <IconButton onTouchTap={this.props.close}><PlayCircleOutline color="#1DB272"/></IconButton>  
-                    <IconButton onTouchTap={this.props.addToLiked}><Kitchen color="#335CFF"/></IconButton>
+                    <IconButton onTouchTap={this.handleTouchLike.bind(this)}><Kitchen color="#335CFF"/></IconButton>
                     <IconButton onTouchTap={this.handleTouchTap.bind(this)}><ShoppingCart color="#B2240B"/></IconButton> 
                 </Modal.Footer>
                 </Modal> 
@@ -101,8 +111,12 @@ export default class SoMoWindow extends React.Component {
                   open={this.state.open}
                   message= {"Item added to cart $" + this.props.activeItemPrice}
                   autoHideDuration={4000}
-                  onRequestClose={this.handleRequestClose.bind(this)}
-                />
+                  onRequestClose={this.handleRequestClose.bind(this)}/>
+                 <Snackbar
+                  open={this.state.openLike}
+                  message= {"Item added to favorites"}
+                  autoHideDuration={4000}
+                  onRequestClose={this.handleRequestClose.bind(this)}/>
             </div>
         )
     }
