@@ -48,8 +48,8 @@ export default class App extends React.Component {
       $.get('/foodBot/profile/'+ returnedId)
       .done((result) => {
         this.state.name = result.name;
-        // let photo = result.photo ||
-        let photo = "http://33.media.tumblr.com/f0d754dadf47a5aa79d6975735ee21fe/tumblr_inline_ne2bnsjzI41qfq25i.png"
+        let photo = result.photo;
+        console.log(photo, "this is the photo")
         // user.route = 'Swipe Recipes';
         // user.diet = this.state.diet;
         // user.cookingTime = this.state.prep.value;
@@ -164,8 +164,10 @@ export default class App extends React.Component {
           price: element.price,
           image: element.recipeimage
         }
-        console.log(element, "the element passed up the chain")
-        this.setState({cart: this.state.cart.concat(recent), recentItem: recent, activeItemPrice: element.price})
+        console.log(element, "the element passed up the chain")        
+        this.setState({cart: this.state.cart.concat(recent), recentItem: recent, activeItemPrice: element.price}, ()=> {
+          this.state.getTotal().bind(this)
+        })
       },
 
       addToCart: () => {
@@ -178,7 +180,9 @@ export default class App extends React.Component {
         }
 
         console.log("the recent.....", recent)
-        this.setState({ cart: this.state.cart.concat(recent), recentItem: recent, isModalOpen: false})
+        this.setState({ cart: this.state.cart.concat(recent), recentItem: recent, isModalOpen: false}, () => {
+          this.state.getTotal().bind(this)
+        })
       },
 
       addToLiked: () => {
@@ -188,7 +192,13 @@ export default class App extends React.Component {
       },
 
       openSocialModal: (element) => {
+        console.log(element, "HERE IS THE ELEMENT")
         this.setState({ isModalOpen: true, activeItem: element.name, activeItemId: element.id, activeProfId: element.profileid, activeItemPrice: element.priceestimate, activeImage: element.image});
+      },
+
+      openMyModal: (element) => {
+        console.log(element, "HERE IS THE ELEMENT")
+        this.setState({ isModalOpen: true, activeItem: element.recipename, activeItemId: element.recipeid, activeProfId: element.profileid, activeItemPrice: element.price, activeImage: element.recipeimage});
       },
 
       orderCheckout: () => {
@@ -442,7 +452,8 @@ export default class App extends React.Component {
             activeItemId={this.state.activeItemId}
             activeProfId={this.state.activeProfId}
             activeImage={this.state.activeImage}
-            activeItemPrice={this.state.activeItemPrice}/>
+            activeItemPrice={this.state.activeItemPrice}
+            total={this.state.total}/>
           </div>
       )
     }
@@ -473,7 +484,22 @@ export default class App extends React.Component {
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
             activeItemPrice = {this.state.activeItemPrice}
-            orderAgain = {this.state.orderAgain.bind(this)}/>
+            orderAgain = {this.state.orderAgain.bind(this)}
+            total={this.state.total}
+            openMyModal={this.state.openMyModal.bind(this)}/>
+           <SoMoWindow
+            //Actions
+            close ={this.state.close.bind(this)}
+            isModalOpen={this.state.isModalOpen}
+            addToCart={this.state.addToCart.bind(this)}
+            addToLiked={this.state.addToLiked.bind(this)}
+            name={this.state.name}
+            userphoto={this.state.photo}
+            activeItem={this.state.activeItem}
+            activeItemId={this.state.activeItemId}
+            activeProfId={this.state.activeProfId}
+            activeImage={this.state.activeImage}
+            activeItemPrice={this.state.activeItemPrice}/>          
         </div>
       )
     }

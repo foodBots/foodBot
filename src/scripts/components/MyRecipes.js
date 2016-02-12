@@ -21,6 +21,7 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import PhotoUpload from './PhotoUpload'
 import Snackbar from 'material-ui/lib/snackbar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 injectTapEventPlugin();
 
 export default class MyRecipes extends React.Component {
@@ -31,12 +32,16 @@ export default class MyRecipes extends React.Component {
 
   constructor(props) {
     super(props);
-    this.styles = {
-      width:"500px",
-      "align": "center"
+    this.styles = {      
+      "align": "center",
+      "margin-left": "20px",
+      "margin-right": "20px",
+      "margin-top": "20px",
+      "margin-bottom": "20px",
     }
     this.gridStyles = {
       gridList: {
+        align: "center",
         width: "100%",
         height: "100%",
         overflowY: 'auto',
@@ -87,6 +92,10 @@ export default class MyRecipes extends React.Component {
   handleProfChange() {
     // console.log(this.props, "here are props")
     this.props.redirect("Profile");
+  }
+
+  handleComment(tile) {
+    this.props.openMyModal(tile);
   }
 
   increaseUploadCount() {
@@ -154,25 +163,26 @@ export default class MyRecipes extends React.Component {
     <div className="myrecipe-container">
     <GridList
         cellHeight={250}
-        cols={2}
+        cols={4}
         style={this.gridStyles}
         >
       {this.props.chosenRecipes.map((tile,index) => (
         <GridTile
+          style={this.styles}
           className="hvr-grow"
-          key={index}
-          title={<IconButton className="tile-icons" onTouchTap={this.handleTouchTap.bind(this, tile)}><LocalGrocery color="white"/></IconButton>}
-          subtitle={tile.recipename}
-          actionPosition="right"
-          actionIcon={<IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton>}>
+          key={index}                    
+          subtitle={<div className="iconbar"><IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton><IconButton className="tile-icons" onTouchTap={this.handleComment.bind(this, tile)}><Comment color="white"/></IconButton><IconButton className="tile-icons" onTouchTap={this.handleTouchTap.bind(this, tile)}><LocalGrocery color="white"/></IconButton></div>}
+          title={tile.recipename}
+          actionPosition="right">         
          <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$"+tile.price}
             color={'#122B40'}
-            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B', color: 'white', 'fontFamily': 'Roboto, sans-serif'}}
-          >
+            badgeStyle={{top: "1px", left: "210px", width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B', color: 'white', 'fontFamily': 'Roboto, sans-serif'}}>
           </Badge>
-          <img src={tile.userimage || tile.recipeimage}/>
+          <center>
+          <img src={tile.userimage || tile.recipeimage}/>       
+          </center>
         </GridTile>
       ))}
     </GridList>
@@ -182,7 +192,7 @@ export default class MyRecipes extends React.Component {
       increaseUploadCount={this.increaseUploadCount}/>
     <Snackbar
       open={this.state.open}
-      message={"Item added to cart $" + this.props.activeItemPrice}
+      message={"Item added to cart $" + this.props.total}
       autoHideDuration={4000}
       onRequestClose={this.handleRequestClose.bind(this)}/>
     </div>
@@ -190,3 +200,4 @@ export default class MyRecipes extends React.Component {
     )
   }
 }
+// 

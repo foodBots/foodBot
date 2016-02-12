@@ -54,6 +54,7 @@ export default class RecipeLanding extends React.Component {
     <h1 className="myrecipe-explore"><strong>Explore Recipes</strong></h1>
       <GridList
         cellHeight={250}
+        cols={4}
         style={this.gridStyles}>      
       {this.props.exploreRecipes.map((tile, index) => (
         <GridTile          
@@ -69,7 +70,9 @@ export default class RecipeLanding extends React.Component {
             badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B'}}
           >
           </Badge>
+          <center>
           <img src={tile.image} />
+          </center>
         </GridTile>
       ))}
     </GridList>
