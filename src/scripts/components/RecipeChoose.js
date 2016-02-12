@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactSwipe from 'react-swipe'
 import Header from './Header.js'
-import {Card, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib/card';
+import {Card, CardHeader, CardActions, CardText, CardMedia, CardTitle} from 'material-ui/lib/card';
 import $ from 'jquery';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Badge from 'material-ui/lib/badge';
@@ -27,7 +27,7 @@ export default class Recipe extends React.Component {
       // minHeight: '300px',
       minWidth: '300px',
       overflow: 'hidden',
-      'margin-top': '20px'
+      'marginTop': '20px'
     }
     this.buttonStyles = {
       width: '40px', 
@@ -79,8 +79,7 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-
-          <img style={{"max-width": "300px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
+          <img style={{"maxWidth": "300px", "maxHeight": "390px ", "minHeight": "300px","minWidth":"300px", overflow: "hidden"}} src ={element.image}/>
           <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
@@ -88,21 +87,28 @@ export default class Recipe extends React.Component {
             badgeStyle={{top: 12, right: 12, width: '35px', height: '35px', 'fontSize': '15px'}}
           >
           </Badge>
-        </CardMedia>
-        <CardText>
-        </CardText>
-        <h3>Ingredients</h3>
-        <ul>
-          {element.ingredients.map((item, i) => {
-            return <li>{item.description}: {item.price}</li>
-            })
-          }
-        </ul>
+        </CardMedia>        
         <CardActions>
-          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
-          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
         </CardActions>
+        <CardHeader
+           style={{padding: "0px", height: "15px"}}
+           subtitle="Ingredients"/>
+        <CardText style={{overflow: "hidden"}}>
+        <table style={{width: "100%"}}>          
+            {element.ingredients.map((item, i) => {
+              return (
+                <tr>
+                <td style={{float: "left"}}>{item.description}</td>
+                <td style={{float: "right"}}>${item.price}</td>
+                </tr>
+                )
+              })
+            }          
+        </table>
+        </CardText>        
         </Card>
       </div>
     )
