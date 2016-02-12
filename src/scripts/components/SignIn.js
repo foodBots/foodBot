@@ -5,6 +5,8 @@ import $ from 'jquery';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 import { Link } from 'react-router'
+import {Nav, Navbar, NavItem, NavDropdown, MenuItem} from "react-bootstrap";
+
 
 
 class SignIn extends React.Component {
@@ -62,7 +64,16 @@ class SignIn extends React.Component {
   render() {
     return (
       <div>
-        <Header />
+        <Navbar inverse>
+        <Navbar.Header>
+        <Navbar.Brand>
+          <a href="#">SWIPEBITE</a>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>      
+        </Navbar.Collapse>
+        </Navbar>
         <div className="signin-container">
           <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
             <TextField type="text" ref="email" hintText="email" floatingLabelText="Enter email" errorText={this.state.error} onChange={this.clearError}/><br/>

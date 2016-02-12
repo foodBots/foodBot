@@ -55,9 +55,10 @@ export default class RecipeLanding extends React.Component {
         style={this.gridStyles}>      
       {this.props.exploreRecipes.map((tile, index) => (
         <GridTile          
+          className="hvr-grow"
           key={index}
           title={tile.name}
-          subtitle={<span>by <b>{tile.rating}</b></span>}
+          subtitle={<span>by <b>{tile.username}</b></span>}
           actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><Comment color="white"/></IconButton>}>
           <img src={tile.image} />
         </GridTile>

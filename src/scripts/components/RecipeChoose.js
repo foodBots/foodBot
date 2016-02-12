@@ -79,14 +79,14 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-          <img style={{"maxWidth": "300px", "maxHeight": "390px ", "minHeight": "300px","minWidth":"300px", overflow: "hidden"}} src ={element.image}/>
           <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
             primary={true}
-            badgeStyle={{top: 12, right: 12, width: '35px', height: '35px', 'fontSize': '15px'}}
+            badgeStyle={{top: 12, right: 12, width: '70px', height: '70px', 'fontSize': '20px'}}
           >
           </Badge>
+          <img style={{"maxWidth": "350px", "maxHeight": "390px ", "minHeight": "300px","minWidth":"300px", overflow: "hidden"}} src ={element.image}/>
         </CardMedia>        
         <CardActions>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>

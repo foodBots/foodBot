@@ -29,7 +29,7 @@ module.exports = {
 			})
 		}
 		getFoodieStatus(uid).then(function(foodie) {
-			client.query("SELECT recipes.id, recipes.priceestimate, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked FROM recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) WHERE liked=true AND created=true AND foodie="+foodie+"", function(err, data) {
+			client.query("SELECT recipes.id, recipes.priceestimate, users.name as username, userRecipes.profileid, recipes.name, recipes.ingredients, recipes.image, recipes.directionsurl, liked from recipes INNER JOIN userrecipes ON (recipes.id = userrecipes.recipeid) INNER JOIN profiles ON (profiles.id = userRecipes.profileid) JOIN users ON (profiles.id = users.id) WHERE liked=true AND created=true AND foodie="+foodie+";", function(err, data) {
 				res.send(data.rows)
 				client.end();
 			});
