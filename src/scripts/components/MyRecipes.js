@@ -58,7 +58,7 @@ export default class MyRecipes extends React.Component {
     this.raisedbutton = {
       width: '100%',
       cursor: 'pointer',
-      backgroundColor: '#B2240B'
+      color: 'black'
     }
 
     this.state = {
@@ -139,9 +139,9 @@ export default class MyRecipes extends React.Component {
               <div className = "user-edit col-xs-10">
                 <RaisedButton
                   icon={<Edit />}
-                  backgroundColor="#B2240B"
+                  backgroundColor="#4B78CB"
                   label="Edit Profile"
-                  primary={true}
+                  secondary={true}
                   labelPosition="before"
                   style = {this.raisedbutton}
                   onClick={this.handleProfChange}/>
@@ -169,7 +169,7 @@ export default class MyRecipes extends React.Component {
             style = {{position: 'absolute'}}
             badgeContent={"$"+tile.price}
             color={'#122B40'}
-            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px'}}
+            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B', color: 'white', 'fontFamily': 'Roboto, sans-serif'}}
           >
           </Badge>
           <img src={tile.userimage || tile.recipeimage}/>       

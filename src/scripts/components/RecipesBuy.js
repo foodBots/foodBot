@@ -41,7 +41,7 @@ class RecipesBuy extends React.Component {
           style={{position: 'absolute'}}
           />
         <CardActions>
-        <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.removeOrder.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+        <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.props.removeOrder.bind(this, element)}><Delete  color="#626569"/></IconButton>
         </CardActions>
         </Card>
       </div>
@@ -64,6 +64,7 @@ class RecipesBuy extends React.Component {
       label="Check Out Now"
       primary={true}
       onClick={this.props.orderCheckout}
+      backgroundColor="#B2240B"
       icon={<LocalShipping />}
     />
       </div>

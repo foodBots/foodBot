@@ -76,19 +76,20 @@ class SignIn extends React.Component {
     </Navbar>
         <div className="signin-container">
           <form className="sign-in" ref="signinForm" onSubmit={this.signIn}>
-            <TextField type="text" ref="email" hintText="email" floatingLabelText="Enter email" errorText={this.state.error} onChange={this.clearError}/><br/>
-            <TextField type="password" ref="password" hintText="password" floatingLabelText="Enter password"  /><br/>
+            <TextField type="text" ref="email" hintText="email" floatingLabelText="Enter email" floatingLabelStyle={{color: "black"}} underlineFocusStyle={{borderColor: "#B2240B"}} errorText={this.state.error} onChange={this.clearError}/><br/>
+            <TextField type="password" ref="password" hintText="password" floatingLabelStyle={{color: "black"}} underlineFocusStyle={{borderColor: "#B2240B"}} floatingLabelText="Enter password"  /><br/>
             <RaisedButton style={this.buttonStyles} type="submit" label="Sign In" /><br/>
             <Link to='/signup/'>
             <RaisedButton
                 style={this.buttonStyles}
+                backgroundColor="#B2240B"
                 type="submit" label="Register"
                 secondary={true} linkButton={true}
                 onClick={(event) => console.log(event.target.textContent)}
                 />
               </Link>
               <br />
-              <RaisedButton style={this.buttonStyles} linkButton="true" href="http://localhost:3000/auth/google" label="Sign In with Google" />
+              <RaisedButton style={this.buttonStyles} secondary={true} linkButton="true" href="http://localhost:3000/auth/google" label="Sign In with Google" backgroundColor="#626569" fontColor="white"/>
           </form>
         </div>
       </div>

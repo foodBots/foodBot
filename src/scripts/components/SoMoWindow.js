@@ -102,8 +102,7 @@ export default class SoMoWindow extends React.Component {
                         activeItemPrice={this.props.activeItemPrice}/>
                 </Modal.Body>
                 <Modal.Footer>
-                    <IconButton onTouchTap={this.props.close}><PlayCircleOutline color="#1DB272"/></IconButton>  
-                    <IconButton onTouchTap={this.handleTouchLike.bind(this)}><Kitchen color="#335CFF"/></IconButton>
+                    <IconButton onTouchTap={this.handleTouchLike.bind(this)}><Kitchen color="#4B78CB"/></IconButton>
                     <IconButton onTouchTap={this.handleTouchTap.bind(this)}><ShoppingCart color="#B2240B"/></IconButton> 
                 </Modal.Footer>
                 </Modal> 
