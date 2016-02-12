@@ -21,17 +21,17 @@ export default class Recipe extends React.Component {
     super(props);
     this.style = {
       textAlign: 'center',
+      'margin-top': '20px',
       height: '100vh',
       maxWidth: '350px',
       maxHeight: '600px',
       // minHeight: '300px',
       minWidth: '300px',
-      overflow: 'hidden',
-      'marginTop': '20px'
+      overflow: 'hidden'
     }
     this.buttonStyles = {
-      width: '40px', 
-      height: '50px'
+      width: '48px', 
+      height: '40px'
     }
     this.buttonBackgroundStyle = {
       width: '100px'
@@ -79,36 +79,36 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-          <img style={{"maxWidth": "300px", "maxHeight": "390px ", "minHeight": "300px","minWidth":"300px", overflow: "hidden"}} src ={element.image}/>
           <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
             primary={true}
-            badgeStyle={{top: 12, right: 12, width: '35px', height: '35px', 'fontSize': '15px'}}
+            badgeStyle={{top: 12, right: 12, width: '70px', height: '70px', 'fontSize': '30px', opacity: '0.8'}}
           >
           </Badge>
-        </CardMedia>        
+          <img style={{"max-width": "350px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
+        </CardMedia>
         <CardActions>
-          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
-          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
         </CardActions>
         <CardHeader
-           style={{padding: "0px", height: "15px"}}
-           subtitle="Ingredients"/>
-        <CardText style={{overflow: "hidden"}}>
-        <table style={{width: "100%"}}>          
-            {element.ingredients.map((item, i) => {
-              return (
-                <tr>
-                <td style={{float: "left"}}>{item.description}</td>
-                <td style={{float: "right"}}>${item.price}</td>
-                </tr>
-                )
-              })
-            }          
-        </table>
-        </CardText>        
+          style={{padding: "0px", height: "15px"}}
+          subtitle="Ingredients"/>
+       <CardText style={{overflow: "hidden"}}>
+       <table style={{width: "100%"}}>          
+           {element.ingredients.map((item, i) => {
+             return (
+               <tr>
+               <td style={{float: "left"}}>{item.description}</td>
+               <td style={{float: "right"}}>${item.price}</td>
+               </tr>
+               )
+             })
+           }          
+       </table>
+       </CardText>
         </Card>
       </div>
     )

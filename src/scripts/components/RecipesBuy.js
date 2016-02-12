@@ -3,8 +3,10 @@ import ReactSwipe from 'react-swipe'
 import Header from './Header.js'
 import {Card, CardActions, CardText, CardHeader, CardTitle} from 'material-ui/lib/card';
 import $ from 'jquery';
+import IconButton from 'material-ui/lib/icon-button';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Avatar from 'material-ui/lib/avatar';
+import Delete from 'material-ui/lib/svg-icons/action/delete';
 
 class RecipesBuy extends React.Component {
   componentWillMount(){
@@ -19,9 +21,12 @@ class RecipesBuy extends React.Component {
       width: '70%'
     }
     this.buttonStyles = {
-      display: 'block',
-      textAlign: 'center',
-      width: '300px'
+      width: '30px', 
+      height: '30px'
+    }
+    this.buttonBackgroundStyle = {
+      left: '87%',
+      width: '100px'
     }
   }
   renderCard(element, index) {
@@ -31,14 +36,12 @@ class RecipesBuy extends React.Component {
         <CardHeader
           title={element.name}
           avatar={element.image}
-          subtitle={element.price}
-          actAsExpander={true}
-          showExpandableButton={true}/>
-        <CardText expandable={true}>
-          <CardActions>
-            <RaisedButton label="Remove" primary={true} onClick={this.props.removeOrder.bind(this, element)}/>
-          </CardActions>
-        </CardText>
+          subtitle={"$" + element.price}
+          style={{position: 'absolute'}}
+          />
+        <CardActions>
+        <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.props.removeOrder.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
+        </CardActions>
         </Card>
       </div>
     )
