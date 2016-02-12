@@ -17,7 +17,6 @@ export default class Header extends React.Component {
   const btnToggle = navBar.querySelector('button.navbar-toggle');
 
 
-
   navBar.addEventListener('click', (evt) => {
     if (evt.target.tagName !== 'A' || evt.target.classList.contains('dropdown-toggle') || ! collapsibleNav.classList.contains('in')) {
       return;
@@ -29,9 +28,9 @@ export default class Header extends React.Component {
 
   render() {
     const icon = (
-      <span class="logo">
+      <span>
         <div>
-          <img src="/favicon.ico" height="33" width="50" alt="text here" />
+          <img className="logo" src="./chefLogo.png" height="45" width="40" alt="text here" />
           SWIPEBITE
         </div>
       </span>
