@@ -14,13 +14,17 @@ export default class Subtotal extends React.Component {
       super(props);
       this.buttonStyles = {
         width: '40px', 
-        height: '70px'
+        height: '70px',
+        bottom: '10px',
+        position: 'relative'
       }
       this.buttonBackgroundStyle = {
         width: '80px',
       }
       this.raisedButton = {
-        verticalAlign: 'center'
+        position: "relative",
+        right: '120px',
+        bottom: "39px"
       }
     }
 

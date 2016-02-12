@@ -62,12 +62,20 @@ class SignIn extends React.Component {
   }
 
   render() {
+      const icon = (
+      <span>
+        <div>
+          <img className="logo" src="./chefLogo.png" height="45" width="40" alt="text here" />
+          SWIPEBITE
+        </div>
+      </span>
+    );
     return (
       <div>
         <Navbar inverse>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#">SWIPEBITE</a>
+        {icon}
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
