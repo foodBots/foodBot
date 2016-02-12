@@ -94,8 +94,8 @@ export default class MyRecipes extends React.Component {
     this.props.redirect("Profile");
   }
 
-  handleComment(){
-    console.log("open somodal")
+  handleComment(tile) {
+    this.props.openMyModal(tile);
   }
 
   increaseUploadCount() {
@@ -178,8 +178,7 @@ export default class MyRecipes extends React.Component {
             style = {{position: 'absolute'}}
             badgeContent={"$"+tile.price}
             color={'#122B40'}
-            badgeStyle={{top: "1px", left: "210px", width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B', color: 'white', 'fontFamily': 'Roboto, sans-serif'}}
-          >
+            badgeStyle={{top: "1px", left: "210px", width: '60px', height: '60px', 'fontSize': '20px', 'backgroundColor': '#B2240B', color: 'white', 'fontFamily': 'Roboto, sans-serif'}}>
           </Badge>
           <center>
           <img src={tile.userimage || tile.recipeimage}/>       
@@ -193,7 +192,7 @@ export default class MyRecipes extends React.Component {
       increaseUploadCount={this.increaseUploadCount}/>
     <Snackbar
       open={this.state.open}
-      message={"Item added to cart $" + this.props.activeItemPrice}
+      message={"Item added to cart $" + this.props.total}
       autoHideDuration={4000}
       onRequestClose={this.handleRequestClose.bind(this)}/>
     </div>

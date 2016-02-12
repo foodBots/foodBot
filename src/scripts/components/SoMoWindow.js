@@ -108,7 +108,7 @@ export default class SoMoWindow extends React.Component {
                 </Modal> 
                 <Snackbar
                   open={this.state.open}
-                  message= {"Item added to cart $" + this.props.activeItemPrice}
+                  message= {"Added to cart. Nom. $" + this.props.total}
                   autoHideDuration={4000}
                   onRequestClose={this.handleRequestClose.bind(this)}/>
                  <Snackbar

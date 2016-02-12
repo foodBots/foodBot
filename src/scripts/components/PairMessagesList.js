@@ -32,7 +32,6 @@ export default class PairMessagesList extends React.Component {
         }
         this.setState({messages: this.state.messages.concat(newMessage)})
       },
-      photo: "http://33.media.tumblr.com/f0d754dadf47a5aa79d6975735ee21fe/tumblr_inline_ne2bnsjzI41qfq25i.png"
     }
   }
   
