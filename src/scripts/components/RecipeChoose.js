@@ -21,16 +21,15 @@ export default class Recipe extends React.Component {
     super(props);
     this.style = {
       textAlign: 'center',
-      height: '100vh',
       maxWidth: '350px',
       maxHeight: '600px',
       // minHeight: '300px',
       minWidth: '300px',
-      overflow: 'hidden',
+      overflow: 'wide',
       'margin-top': '20px'
     }
     this.buttonStyles = {
-      width: '40px', 
+      width: '50px', 
       height: '50px'
     }
     this.buttonBackgroundStyle = {
@@ -79,15 +78,14 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
-          <img style={{"max-width": "300px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
           <Badge
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
             primary={true}
-            badgeStyle={{top: 12, right: 12, width: '35px', height: '35px', 'fontSize': '15px'}}
+            badgeStyle={{top: 12, right: 12, width: '60px', height: '60px', 'fontSize': '28px'}}
           >
           </Badge>
-          <img src = {element.img}/>
+          <img style={{"max-width": "350px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
         </CardMedia>
         <CardText>
         </CardText>
@@ -101,7 +99,7 @@ export default class Recipe extends React.Component {
         <CardActions>
           <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.next.bind(this, element)}><Delete  color="#1DB272"/></IconButton>
           <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.yes.bind(this, element)}><Kitchen color="#335CFF"/></IconButton>
-          <IconButton style = {this.buttonBackgroundStyle} iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
+          <IconButton style = {this.buttonBackgroundStyle}  iconStyle={this.buttonStyles} onTouchTap={this.addToCart.bind(this, element)}><LocalDining color="#B2240B"/></IconButton>
         </CardActions>
         </Card>
       </div>
