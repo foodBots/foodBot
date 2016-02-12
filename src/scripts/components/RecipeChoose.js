@@ -77,7 +77,7 @@ export default class Recipe extends React.Component {
             style = {{position: 'absolute'}}
             badgeContent={"$" + element.price}
             primary={true}
-            badgeStyle={{top: 12, right: 12, width: '70px', height: '70px', 'fontSize': '30px', opacity: '0.8'}}
+            badgeStyle={{top: 12, right: 12, width: '70px', height: '70px', 'fontSize': '20px', opacity: '0.8'}}
           >
           </Badge>
           <img style={{"max-width": "350px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>

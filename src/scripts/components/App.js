@@ -82,7 +82,7 @@ export default class App extends React.Component {
       //ROUTING LOGIC
       currentView: 'default',
       componentRoute: {
-        "Profile Settings": "ProfileMake",
+        "Profile": "ProfileMake",
         "Swipe": "RecipeChoose",
         "Explore": "ExploreRecipes",
         "Sign Out": "SignIn",
@@ -461,6 +461,7 @@ export default class App extends React.Component {
         <div>
           <Header redirect={this.state.redirect.bind(this)} />
           <MyRecipes
+            redirect={this.state.redirect.bind(this)}
             chosenRecipes = {this.state.chosenRecipes}
             userid={this.state.id}
             username={this.state.name}
