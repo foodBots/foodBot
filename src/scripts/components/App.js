@@ -24,6 +24,7 @@ let base = Rebase.createClass('https://dazzling-inferno-511.firebaseio.com/shopp
 export default class App extends React.Component {
 
   componentDidMount() {
+    console.log('My theme obj',MyRawTheme);
     //get init user req session.
     $.get('/foodBot/auth/signin').done((result)=> {
       console.log('init results', result);
@@ -97,9 +98,9 @@ export default class App extends React.Component {
       chosenRecipes: [],
       cart: [],
 
-      getTotal: () => {        
-        let newTotal = parseFloat(0) 
-        this.state.cart.forEach((element) => {          
+      getTotal: () => {
+        let newTotal = parseFloat(0)
+        this.state.cart.forEach((element) => {
           newTotal += parseFloat(element.price)
         })
         this.setState({total: parseFloat(newTotal).toFixed(2)})
@@ -269,7 +270,7 @@ export default class App extends React.Component {
         liked: [],
         rejected: []
       },
-      
+
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
