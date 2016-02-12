@@ -1,6 +1,11 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import RaisedButton from 'material-ui/lib/raised-button';
+import LocalShipping from 'material-ui/lib/svg-icons/maps/local-shipping';
+import ShoppingCart from 'material-ui/lib/svg-icons/action/shopping-cart';
+import PlayCircleOutline from 'material-ui/lib/svg-icons/av/play-circle-outline';
+import Kitchen from 'material-ui/lib/svg-icons/places/kitchen';
+import IconButton from 'material-ui/lib/icon-button';
 import ReactDOM from 'react-dom';
 import PairMessagesList from './PairMessagesList'
 
@@ -64,9 +69,9 @@ export default class SoMoWindow extends React.Component {
                     activeItemPrice={this.props.activeItemPrice}/>
             </Modal.Body>
             <Modal.Footer>
-            <RaisedButton label="Close" secondary={true} onClick={this.props.close}/>
-            <RaisedButton label="Save" secondary={true} onClick={this.props.addToLiked}/>                    
-            <RaisedButton label="Add to Cart" primary={true} onClick={this.props.addToCart} />
+            <IconButton onTouchTap={this.props.close}><PlayCircleOutline color="#1DB272"/></IconButton>  
+            <IconButton onTouchTap={this.props.addToLiked}><Kitchen color="#335CFF"/></IconButton>
+            <IconButton onTouchTap={this.props.addToCart}><ShoppingCart color="#B2240B"/></IconButton> 
             </Modal.Footer>
             </Modal> 
         )
