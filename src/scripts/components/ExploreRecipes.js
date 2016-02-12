@@ -49,7 +49,7 @@ export default class RecipeLanding extends React.Component {
   render() {    
     return (
     <div className="myrecipe-container" style={this.gridStyles.root}>
-    <h1>Explore Recipes</h1>
+    <h1><strong>Explore Recipes</strong></h1>
       <GridList
         cellHeight={250}
         style={this.gridStyles}>      
