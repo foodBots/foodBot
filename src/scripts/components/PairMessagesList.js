@@ -26,7 +26,11 @@ export default class PairMessagesList extends React.Component {
     this.state = {
       messages: [],
       submitChat: (message) => {
-        this.setState({messages: this.state.messages.concat(this.props.name+": "+message)})
+        let newMessage = {
+          message: this.props.name+": "+message,
+          avatar: this.props.photo
+        }
+        this.setState({messages: this.state.messages.concat(newMessage)})
       },
       photo: "http://33.media.tumblr.com/f0d754dadf47a5aa79d6975735ee21fe/tumblr_inline_ne2bnsjzI41qfq25i.png"
     }
@@ -57,7 +61,7 @@ export default class PairMessagesList extends React.Component {
       <div className="somo-message" key={index}>
         <Avatar 
           classname="avatar-comment"
-          src={this.state.photo} 
+          src={message.avatar} 
           size={50}
           style = {this.avatar}
           paddingTop="3%"
@@ -65,7 +69,7 @@ export default class PairMessagesList extends React.Component {
           verticalAlign="middle"
         />
         <span className="somo-text">
-          <strong>{message}</strong>
+          <strong>{message.message}</strong>
         </span>
       </div>
     )
