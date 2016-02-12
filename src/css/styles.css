@@ -213,20 +213,6 @@ table {
   width: 100%;
 }
 
-ul {
-  height: 100px;
-  border: solid;
-  border-color: gray;
-  max-height: 150px;
-  overflow-y:scroll;
-}
-
-ul > li {
-  text-align: left;
-  list-style-type: none;
-  flex: 0 0 auto;
-}
-
 .modal-lg {
   padding-top: 10%;
   width: 40%;

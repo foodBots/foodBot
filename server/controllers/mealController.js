@@ -105,7 +105,6 @@ module.exports = {
 		var liked = req.body.liked || [];
 
 		//note: if remove happens, you need to slice it off in the client side
-
 		// In case reject passed as string: '[1,2]' instead of array
 		if (typeof rejected === "string") {
 			rejected = JSON.parse(rejected);

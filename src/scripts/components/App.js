@@ -32,7 +32,7 @@ export default class App extends React.Component {
       //initialize profile
       this.state.id = returnedId;
 
-      this.state.currentView = 'Swipe Recipes';
+      this.state.currentView = 'Swipe';
       base.syncState('user' + this.state.id + 'shoppingCart', {
         context: this,
         state: 'cart',
@@ -83,13 +83,12 @@ export default class App extends React.Component {
       currentView: 'default',
       componentRoute: {
         "Profile Settings": "ProfileMake",
-        "Swipe Recipes": "RecipeChoose",
-        "Explore Recipes": "ExploreRecipes",
+        "Swipe": "RecipeChoose",
+        "Explore": "ExploreRecipes",
         "Sign Out": "SignIn",
         "Sign Up": "SignUp",
-        "PairChatRoom": "PairChatRoom",
-        "My Cart": "RecipesBuy",
-        "My Recipes": "MyRecipes"
+        "Cart": "RecipesBuy",
+        "Recipes": "MyRecipes"
       },
 
       chosenRecipes: [],
@@ -251,7 +250,7 @@ export default class App extends React.Component {
           type: 'POST',
           data: prof
         }).done((result)=> {
-          this.state.redirect("Swipe Recipes")
+          this.state.redirect("Swipe")
         })
         .fail((error) => {
           console.log('error updating profile');
@@ -320,7 +319,7 @@ export default class App extends React.Component {
         event.preventDefault();
         console.log("Go to checkout")
         // this.state.saveMatch
-        this.state.redirect("My Cart")
+        this.state.redirect("Cart")
       },
 
       getChosenRecipes: (id) => {
@@ -347,7 +346,7 @@ export default class App extends React.Component {
 
 
       redirect: (text) => {
-        if (this.state.currentView==="Swipe Recipes") {
+        if (this.state.currentView==="Swipe") {
           this.state.saveMatch();
         }
         console.log("route is", this.state.componentRoute[text])
