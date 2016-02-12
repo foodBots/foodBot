@@ -2,55 +2,52 @@
   Header
   <Header/>
 */
-
 import React from 'react';
+import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-
-//This should be destructured
-import AppBar from 'material-ui/lib/app-bar';
-import FontIcon from 'material-ui/lib/font-icon';
-import Colors from 'material-ui/lib/styles/colors';
-import ActionHome from 'material-ui/lib/svg-icons/action/home';
-import FlatButton from 'material-ui/lib/flat-button';
-
 //NavBar
-import IconButton from 'material-ui/lib/icon-button';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-
-const iconStyles = {
-  marginRight: 30,
-}
+import {Nav, Navbar, NavItem, NavDropdown, MenuItem} from "react-bootstrap";
 
 export default class Header extends React.Component {
+  componentDidMount() {
+  const navBar = ReactDOM.findDOMNode(this)
+  const collapsibleNav = navBar.querySelector('div.navbar-collapse');
+  const btnToggle = navBar.querySelector('button.navbar-toggle');
+
+  navBar.addEventListener('click', (evt) => {
+    if (evt.target.tagName !== 'A' || evt.target.classList.contains('dropdown-toggle') || ! collapsibleNav.classList.contains('in')) {
+      return;
+    }
+
+    btnToggle.click();
+  }, false);
+}
+
   render() {
     return (
-      <div>
-        <AppBar
-          title="FoodRobot"
-          className="headContainer"
-          iconElementRight={
-        <IconMenu
-          iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-          targetOrigin={{horizontal: 'right', vertical: 'top'}}
-          anchorOrigin={{horizontal: 'right', vertical: 'top'}}>
-        <MenuItem primaryText="Profile Settings" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="Swipe Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="Explore Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="My Cart" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="My Recipes" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-        <MenuItem primaryText="Sign out" href="/foodBot/auth/logout" />
-      </IconMenu>}/>
-    </div>
-
+    <Navbar inverse>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <a href="#">SWIPEBITE</a>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+      <Nav>
+        <NavItem eventKey={1} onClick={(event) => this.props.redirect(event.target.textContent)}>Swipe</NavItem>
+        <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Explore</NavItem>        
+      </Nav>
+      <Nav pullRight>
+        <NavItem eventKey={1} onClick={(event) => this.props.redirect(event.target.textContent)}>Recipes</NavItem>
+        <NavItem eventKey={2} onClick={(event) => this.props.redirect(event.target.textContent)}>Cart</NavItem>
+        <NavItem eventKey={3} onClick={(event) => this.props.redirect(event.target.textContent)}>Sign Out</NavItem>
+      </Nav>
+    </Navbar.Collapse>
+    </Navbar>
     )
   }
 }
 
 export default Header;
-
-// <MenuItem primaryText="Profile Settings" onClick={(event) => this.props.redirect(event.target.textContent)}/>
-

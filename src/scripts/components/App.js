@@ -32,7 +32,7 @@ export default class App extends React.Component {
       //initialize profile
       this.state.id = returnedId;
 
-      this.state.currentView = 'Swipe Recipes';
+      this.state.currentView = 'Swipe';
       base.syncState('user' + this.state.id + 'shoppingCart', {
         context: this,
         state: 'cart',
@@ -83,22 +83,23 @@ export default class App extends React.Component {
       currentView: 'default',
       componentRoute: {
         "Profile Settings": "ProfileMake",
-        "Swipe Recipes": "RecipeChoose",
-        "Explore Recipes": "ExploreRecipes",
+        "Swipe": "RecipeChoose",
+        "Explore": "ExploreRecipes",
         "Sign Out": "SignIn",
         "Sign Up": "SignUp",
-        "PairChatRoom": "PairChatRoom",
-        "My Cart": "RecipesBuy",
-        "My Recipes": "MyRecipes"
+        "Cart": "RecipesBuy",
+        "Recipes": "MyRecipes"
       },
 
       chosenRecipes: [],
       cart: [],
 
-      getTotal: () => {
-        let newTotal = 0;
-        this.state.cart.forEach((element) => newTotal += element.price)
-        this.setState({total: newTotal})
+      getTotal: () => {        
+        let newTotal = parseFloat(0) 
+        this.state.cart.forEach((element) => {          
+          newTotal += parseFloat(element.price)
+        })
+        this.setState({total: parseFloat(newTotal).toFixed(2)})
       },
 
       recentItem: "",
@@ -151,6 +152,17 @@ export default class App extends React.Component {
         let newTotal = this.state.total
         newTotal = newTotal - element.price
         this.setState({cart: cart, total: newTotal})
+      },
+
+      orderAgain: (element)=> {
+        let recent = {
+          recipeid: element.recipeid,
+          name: element.recipename,
+          price: element.price,
+          image: element.recipeimage
+        }
+        console.log(element, "the element passed up the chain")
+        this.setState({cart: this.state.cart.concat(recent), recentItem: recent})
       },
 
       addToCart: () => {
@@ -238,7 +250,7 @@ export default class App extends React.Component {
           type: 'POST',
           data: prof
         }).done((result)=> {
-          this.state.redirect("Swipe Recipes")
+          this.state.redirect("Swipe")
         })
         .fail((error) => {
           console.log('error updating profile');
@@ -254,6 +266,7 @@ export default class App extends React.Component {
         liked: [],
         rejected: []
       },
+      
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
@@ -306,7 +319,7 @@ export default class App extends React.Component {
         event.preventDefault();
         console.log("Go to checkout")
         // this.state.saveMatch
-        this.state.redirect("My Cart")
+        this.state.redirect("Cart")
       },
 
       getChosenRecipes: (id) => {
@@ -333,7 +346,7 @@ export default class App extends React.Component {
 
 
       redirect: (text) => {
-        if (this.state.currentView==="Swipe Recipes") {
+        if (this.state.currentView==="Swipe") {
           this.state.saveMatch();
         }
         console.log("route is", this.state.componentRoute[text])
@@ -451,8 +464,7 @@ export default class App extends React.Component {
             userphoto={this.state.photo}
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
-            addToCart = {this.state.addToCart.bind(this)}/>
-
+            orderAgain = {this.state.orderAgain.bind(this)}/>
         </div>
       )
     }

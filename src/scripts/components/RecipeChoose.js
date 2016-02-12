@@ -79,6 +79,7 @@ export default class Recipe extends React.Component {
       <div key={index} className="card-container">
         <Card style={this.style}>
         <CardMedia overlay={<CardTitle title={element.name}/>}>
+
           <img style={{"max-width": "300px", "max-height": "390px ", "min-height": "300px","min-width":"300px", overflow: "hidden"}} src ={element.image}/>
           <Badge
             style = {{position: 'absolute'}}
@@ -87,7 +88,6 @@ export default class Recipe extends React.Component {
             badgeStyle={{top: 12, right: 12, width: '35px', height: '35px', 'fontSize': '15px'}}
           >
           </Badge>
-          <img src = {element.img}/>
         </CardMedia>
         <CardText>
         </CardText>

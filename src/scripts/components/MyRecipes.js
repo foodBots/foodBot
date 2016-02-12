@@ -33,7 +33,8 @@ export default class MyRecipes extends React.Component {
   constructor(props) {
     super(props);
     this.styles = {
-      width:"400px"
+      width:"500px",
+      "align": "center"
     }
     this.gridStyles = {
       gridList: {
@@ -51,6 +52,10 @@ export default class MyRecipes extends React.Component {
       paddingLeft: "2%"
     }
 
+    this.button = {
+      margin: 12
+    }
+
     this.raisedbutton = {
       width: '100%',
       cursor: 'pointer'
@@ -65,11 +70,12 @@ export default class MyRecipes extends React.Component {
     this.increaseUploadCount = this.increaseUploadCount.bind(this);
   }
 
-  handleTouchTap () {
+  handleTouchTap (element) {
     this.setState({
       open: true,
     });
-    this.props.addToCart();
+    console.log(element, "here's the element")
+    this.props.orderAgain(element);
   };
 
   handleRequestClose() {
@@ -89,15 +95,6 @@ export default class MyRecipes extends React.Component {
     this.setState({currRecipeId: element.recipeid});
     $('.dz-default').trigger('click');
     //upload photo
-  }
-
-  handleClick(){
-    console.log("clicked")
-  }
-
-  handleAddToCart(element) {
-    console.log("ADDING TO CART", element.name, element.recipeid);
-    this.props.showModal(element)
   }
 
   render() {
@@ -148,8 +145,8 @@ export default class MyRecipes extends React.Component {
           </div>
         </div>
       </div>
-      <h3 className="user-dishes">{this.props.username}'s Dishes</h3>
-    <div className="myrecipe-container" >
+      <h3 className="user-dishes">{this.props.username}: Your Dishes</h3>
+    <div className="myrecipe-container">
     <GridList
         cellHeight={250}
         cols={2}
@@ -157,26 +154,25 @@ export default class MyRecipes extends React.Component {
         >
       {this.props.chosenRecipes.map((tile,index) => (        
         <GridTile
+          className="hvr-grow"
           key={index}
-          title={<IconButton className="tile-icons" onTouchTap={this.handleTouchTap.bind(this)}><LocalGrocery color="white"/></IconButton>}
+          title={<IconButton className="tile-icons" onTouchTap={this.handleTouchTap.bind(this, tile)}><LocalGrocery color="white"/></IconButton>}
           subtitle={tile.recipename}
           actionPosition="right"
           actionIcon={<IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton>}>
-          <img src={tile.userimage || tile.recipeimage} />
+          <img src={tile.userimage || tile.recipeimage}/>       
         </GridTile>
       ))}
     </GridList>
     <PhotoUpload
       userid={this.props.userid}
       recipeid={this.state.currRecipeId}
-      increaseUploadCount={this.increaseUploadCount}
-      />
+      increaseUploadCount={this.increaseUploadCount}/>
     <Snackbar
       open={this.state.open}
       message="Item added to cart"
       autoHideDuration={4000}
-      onRequestClose={this.handleRequestClose.bind(this)}
-    />
+      onRequestClose={this.handleRequestClose.bind(this)}/>
     </div>
     </div>
     )
