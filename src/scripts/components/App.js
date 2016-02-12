@@ -95,10 +95,12 @@ export default class App extends React.Component {
       chosenRecipes: [],
       cart: [],
 
-      getTotal: () => {
-        let newTotal = 0;
-        this.state.cart.forEach((element) => newTotal += element.price)
-        this.setState({total: newTotal})
+      getTotal: () => {        
+        let newTotal = parseFloat(0) 
+        this.state.cart.forEach((element) => {          
+          newTotal += parseFloat(element.price)
+        })
+        this.setState({total: parseFloat(newTotal).toFixed(2)})
       },
 
       recentItem: "",
@@ -151,6 +153,17 @@ export default class App extends React.Component {
         let newTotal = this.state.total
         newTotal = newTotal - element.price
         this.setState({cart: cart, total: newTotal})
+      },
+
+      orderAgain: (element)=> {
+        let recent = {
+          recipeid: element.recipeid,
+          name: element.recipename,
+          price: element.price,
+          image: element.recipeimage
+        }
+        console.log(element, "the element passed up the chain")
+        this.setState({cart: this.state.cart.concat(recent), recentItem: recent})
       },
 
       addToCart: () => {
@@ -254,6 +267,7 @@ export default class App extends React.Component {
         liked: [],
         rejected: []
       },
+      
       getRecipes: () => {
         $.get('/foodBot/recipes/' + this.state.id)
           .done((result) => {
@@ -451,8 +465,7 @@ export default class App extends React.Component {
             userphoto={this.state.photo}
             getChosenRecipes = {this.state.getChosenRecipes}
             orders = {this.state.orders}
-            addToCart = {this.state.addToCart.bind(this)}/>
-
+            orderAgain = {this.state.orderAgain.bind(this)}/>
         </div>
       )
     }
