@@ -9,6 +9,7 @@ import StarBorder from 'material-ui/lib/svg-icons/toggle/star-border';
 import Comment from 'material-ui/lib/svg-icons/communication/comment';
 import IconButton from 'material-ui/lib/icon-button';
 import Snackbar from 'material-ui/lib/snackbar';
+import Badge from 'material-ui/lib/badge';
 
 
 import { Modal, Button } from 'react-bootstrap';
@@ -60,6 +61,13 @@ export default class RecipeLanding extends React.Component {
           title={tile.name}
           subtitle={<span>by <b>{tile.username}</b></span>}
           actionIcon={<IconButton onTouchTap={this.handleTouchTap.bind(this, tile)}><Comment color="white"/></IconButton>}>
+           <Badge
+            style = {{position: 'absolute'}}
+            badgeContent={"$"+tile.priceestimate}
+            primary={true}
+            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px'}}
+          >
+          </Badge>
           <img src={tile.image} />
         </GridTile>
       ))}

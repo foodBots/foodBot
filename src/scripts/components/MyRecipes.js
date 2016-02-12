@@ -163,6 +163,13 @@ export default class MyRecipes extends React.Component {
           subtitle={tile.recipename}
           actionPosition="right"
           actionIcon={<IconButton className="tile-icons" onTouchTap={this.handleAction.bind(this, tile)}><CameraEnhance color="white"/></IconButton>}>
+         <Badge
+            style = {{position: 'absolute'}}
+            badgeContent={"$"+tile.price}
+            color={'#122B40'}
+            badgeStyle={{top: 12, left: 230, width: '60px', height: '60px', 'fontSize': '20px'}}
+          >
+          </Badge>
           <img src={tile.userimage || tile.recipeimage}/>       
         </GridTile>
       ))}
