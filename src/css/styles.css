@@ -234,6 +234,10 @@ table {
   text-align: center;
 }
 
+.user-dishes {
+  margin-bottom: 3%;
+}
+
 .avatar {
   padding-left: 20px;
 }
