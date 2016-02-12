@@ -77,7 +77,7 @@ export default class App extends React.Component {
       //USER INFO
       id: 0,
       name: '',
-      // photo: this.state.location.
+      photo: '',
 
       //ROUTING LOGIC
       currentView: 'default',
