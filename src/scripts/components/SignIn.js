@@ -40,7 +40,7 @@ class SignIn extends React.Component {
     .done((result) => {
       console.log(result, "result is....")
       user = result;
-      user.route = 'Swipe Recipes';
+      user.route = 'Swipe';
       this.props.history.pushState(user, '/');
     })
     .fail((error) => {
