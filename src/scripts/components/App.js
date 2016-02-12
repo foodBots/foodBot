@@ -202,7 +202,7 @@ export default class App extends React.Component {
             this.setState({cart: [], total: 0})
 
             //Needs to get My Recipes ASAP
-            this.state.redirect('My Recipes')})
+            this.state.redirect('Recipes')})
       },
 
       //PROFILE MAKE

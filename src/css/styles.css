@@ -34,6 +34,7 @@
   -webkit-transform: translateY(0);
           transform: translateY(0);
 }
+
 .count-leave {
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
@@ -293,4 +294,16 @@ table {
 .tile-subtitle {
   padding-bottom: 1%
 }
+
+table {
+  overflow-y: scroll;
+
+}
+
+td {
+  overflow-x: hidden;
+    white-space: pre-wrap;
+}
+
+
 
