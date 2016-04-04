@@ -4,8 +4,6 @@ var connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/
 module.exports = {
 
 	createMatch : function (req, res){
-		// TODO: Remove (Temporary for testing)
-		console.log("WE GOT NEXT", req.params, req.body)
 		var uid = req.params.id;
 
 		// Create Postgress Connection
@@ -74,7 +72,6 @@ module.exports = {
 	},
 
 	deleteMatch: function (req, res){
-		// TODO: Remove (Temporary for testing)
 		var uid = req.params.id;
 
 		// Create Postgress Connection
@@ -88,7 +85,6 @@ module.exports = {
 	},
 
 	retrieveMatch: function (req, res){
-
 		var uid = req.params.id;
 
 		var client = new pg.Client(connectionString);
